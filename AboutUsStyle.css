@@ -1,0 +1,73 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: url('https://d33wubrfki0l68.cloudfront.net/3697f8a424a77e6e5b422007590aedb27abca140/2cad2/static/constellations-4eee0ff82aba4d347fc46bb276834140.jpg') center/cover no-repeat fixed;
+}
+
+.about-us {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(0, 20, 42, 0.60); /* Updated squircle color */
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeInUp 1s ease-out, fadeIn 1s ease-out; /* Added fade-in animation */
+}
+
+.about-us p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #fff; /* Text color set to white */
+}
+
+.about-us h2 {
+  color: #fff; /* Text color set to white */
+}
+
+/* Add styles for the Go Back to Portfolio button */
+.about-us footer {
+  margin-top: 20px;
+}
+
+.about-us button {
+  background-color: #6c757d; /* Gray color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s; /* Add transform transition */
+}
+
+.about-us button:hover {
+  background-color: #495057; /* Darker gray on hover */
+  transform: scale(1.1); /* Scale up on hover */
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
