@@ -3,20 +3,29 @@ function toggleMenu() {
     dropdownMenu.classList.toggle('active');
 }
 
-window.onclick = function (event) {
-    if (!event.target.matches('.menu-icon')) {
-        var dropdownMenu = document.getElementById('dropdownMenu');
-        if (dropdownMenu.classList.contains('active')) {
-            dropdownMenu.classList.remove('active');
-        }
-    }
-};
-
-function toggleAboutUs() {
-    var aboutUsSection = document.getElementById('aboutUsSection');
-    aboutUsSection.classList.toggle('active');
+function showHome() {
+    hideAllSections();
+    document.getElementById('homeSection').style.display = 'block';
 }
 
-function goBackToPortfolio() {
-    window.location.href = 'file:///D:/0-VISUAL%20STUDIO%20CODE/PortfolioActivitySe%C3%B1agan.html#';
+function showMyInfo() {
+    hideAllSections();
+    document.getElementById('myInfoSection').style.display = 'block';
+}
+
+function showTestCodes() {
+    hideAllSections();
+    document.getElementById('testCodesSection').style.display = 'block';
+}
+
+function showAboutUs() {
+    hideAllSections();
+    document.getElementById('aboutUsSection').style.display = 'block';
+}
+
+function hideAllSections() {
+    var sections = document.querySelectorAll('.welcome-section');
+    sections.forEach(function (section) {
+        section.style.display = 'none';
+    });
 }
