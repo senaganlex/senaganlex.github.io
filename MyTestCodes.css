@@ -1,0 +1,141 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    background: url('https://removal.ai/wp-content/uploads/2021/09/black-background-10-hipwallpaper.png');
+}
+
+header {
+    background: rgba(89, 89, 89, 0.60);
+    color: #fff;
+    text-align: center;
+    padding: 1em;
+    position: relative;
+    margin-bottom: 20px; /* Add margin to the header */
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+h1 {
+    color: #fff;
+    text-align: center;
+    animation: fadeInUp 1s ease-out; /* Add fadeInUp animation */
+}
+
+#fileUploadContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px; /* Increase margin-top for more gap */
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+#uploadLabel {
+    position: relative;
+    overflow: hidden;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+#uploadLabel:hover {
+    background-color: #0056b3;
+}
+
+#fileInput {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+#uploadButton {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+#uploadButton:hover {
+    background-color: #218838;
+}
+
+#fileList {
+    list-style-type: none;
+    padding: 0;
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff; /* Set text color to white */
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px; /* Add margin-top for spacing */
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+#goBackButton {
+    background-color: #6c757d;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    animation: fadeIn 1s ease-out; /* Add fadeIn animation */
+}
+
+#goBackButton:hover {
+    background-color: #5a6268;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
