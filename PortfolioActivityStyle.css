@@ -1,0 +1,166 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://d33wubrfki0l68.cloudfront.net/3697f8a424a77e6e5b422007590aedb27abca140/2cad2/static/constellations-4eee0ff82aba4d347fc46bb276834140.jpg') center/cover no-repeat fixed;
+    background-size: cover;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1em;
+    position: relative;
+}
+
+.menu-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu-icon {
+    position: absolute;
+    margin-right: 10px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.menu-icon.clicked {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.bar {
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgba(0, 20, 42, 0.60);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #ddd;
+}
+
+main {
+    padding: 20px;
+}
+
+.welcome-section {
+    height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-text {
+    text-align: center;
+    position: relative;
+}
+
+.welcome-container {
+    display: inline-block;
+}
+
+.welcome-text h1 {
+    font-size: 90px;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.oval-platform {
+    background-color: rgba(0, 20, 42, 0.60);
+    border-radius: 50%;
+    padding: 30px;
+    margin: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeInOval 3s infinite;
+}
+
+@keyframes fadeInOval {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.platform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.platform a:hover {
+    color: #007bff;
+    transform: scale(1.1);
+}
+
+.icon-box:hover {
+    transform: scale(1.1);
+}
+
+.icon-box {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInSquircle 0.5s ease-out forwards;
+}
+
+@keyframes fadeInSquircle {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.icon-box img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.text-box {
+    color: #000;
+}
