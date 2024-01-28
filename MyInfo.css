@@ -1,0 +1,105 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: url('https://miro.medium.com/v2/resize:fit:1400/0*49yTsI0iWfRKKEL9.gif') center/cover no-repeat;
+  color: white; /* Set text color to white */
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  animation: fadeInUp 1s ease-out; /* Fade in animation */
+}
+
+.profile-info,
+#education,
+#skills,
+footer {
+  margin-bottom: 10px;
+  background: rgba(0, 20, 42, 0.60); /* Updated squircle color */
+  padding: 10px;
+  border-radius: 10px;
+  animation: fadeIn 1s ease-out; /* Fade in animation */
+}
+
+.profile-image img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  animation: scaleIn 1s ease-out; /* Scale in animation */
+}
+
+h1, h2, h3, p {
+  color: white; /* Set text color to white */
+  animation: fadeIn 1s ease-out; /* Fade in animation */
+}
+
+section {
+  background: rgba(0, 20, 42, 0.60); /* Updated squircle color */
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center; /* Center the text */
+  animation: fadeInUp 1s ease-out; /* Fade in animation */
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+footer button {
+  background-color: #333;
+  color: white; /* Set text color to white */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  animation: fadeInUp 1s ease-out; /* Fade in animation */
+}
+
+footer button:hover {
+  background-color: #555;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
