@@ -4,53 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Activity</title>
-    <link rel="stylesheet" href="PortfolioActivityStyle.css">
+    <title>Welcome to My Portfolio</title>
+    <link rel="stylesheet" href="styles/PortfolioActivityStyle.css">
 </head>
 
 <body>
-    <div id="app">
-        <header>
-            <div class="menu-container">
-                <div class="menu-icon" onclick="toggleMenu()">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
+    <header>
+        <div class="menu-container">
+            <div class="menu-icon" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+        <h1>Welcome To My Portfolio</h1>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="about-us-branch/">About Us</a>
+            <a href="my-info-branch/">My Info</a>
+            <a href="my-test-code-branch/">My Test Codes</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="welcome-section">
+            <div class="welcome-text">
+                <div class="oval-platform welcome-container">
+                    <h1>Hi! I'm Lex Mariun Señagan</h1>
                 </div>
             </div>
-            <h1>Welcome To My Portfolio</h1>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="#" onclick="showHome()">Home</a>
-                <a href="#" onclick="showMyInfo()">My Info</a>
-                <a href="#" onclick="showTestCodes()">My Test Codes</a>
-                <a href="#" onclick="showAboutUs()">About Us</a>
-            </div>
-        </header>
+        </section>
 
-        <main>
-            <section class="welcome-section" id="homeSection">
-                <div class="welcome-text">
-                    <div class="oval-platform welcome-container">
-                        <h1>Hi! I'm Lex Mariun Señagan</h1>
-                    </div>
-                </div>
-            </section>
+        <section class="platform">
+            <a href="https://www.facebook.com/lexmariun.senagan.5/" target="_blank" class="icon-box">
+                <img src="https://cdn-icons-png.flaticon.com/256/124/124010.png" alt="Facebook Icon">
+                <span class="text-box">Lex Mariun Señagan</span>
+            </a>
+            <a href="https://github.com/senaganlex" target="_blank" class="icon-box">
+                <img src="https://cdn-icons-png.flaticon.com/256/25/25231.png" alt="GitHub Icon">
+                <span class="text-box">GH/senaganlex</span>
+            </a>
+            <a href="https://mail.google.com/" target="_blank" class="icon-box">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-gmail-2981844-2476484.png?f=webp"
+                    alt="Gmail Icon">
+                <span class="text-box">senaganlex@gmail.com</span>
+            </a>
+        </section>
+    </main>
 
-            <section class="welcome-section" id="myInfoSection" style="display: none;">
-                <!-- Your My Info content here -->
-            </section>
-
-            <section class="welcome-section" id="testCodesSection" style="display: none;">
-                <!-- Your My Test Codes content here -->
-            </section>
-
-            <section class="welcome-section" id="aboutUsSection" style="display: none;">
-                <!-- Your About Us content here -->
-            </section>
-        </main>
-    </div>
-
-    <script src="PortfolioActivityScript.js" defer></script>
+    <script src="scripts/PortfolioActivityScript.js" defer></script>
 </body>
 
 </html>
