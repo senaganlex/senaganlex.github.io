@@ -174,6 +174,32 @@
         .buttons-container button:hover {
             background-color: #45a049;
         }
+
+        .platform {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .icon-box {
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-box img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .icon-box:hover {
+            color: #4CAF50;
+        }
     </style>
 </head>
 
@@ -212,6 +238,23 @@
                         <p class="text-box">Welcome to my portfolio! I like to code for fun and enjoy working on diverse projects. My goal is to create impactful and inventive solutions through programming. Explore my projects to learn more about my skills and experiences.</p>
                         <h2>Additional Context</h2>
                         <p class="text-box">As a developer, I value ongoing learning and keeping abreast of the most recent technological advancements. I find satisfaction in working collaboratively with others and am receptive to new possibilities. Please don't hesitate to contact me for inquiries or to initiate discussions about potential projects or collaborative ventures.</p>
+                        
+                        <!-- Added platform section -->
+                        <section class="platform">
+                            <a href="https://www.facebook.com/lexmariun.senagan.5/" target="_blank" class="icon-box">
+                                <img src="https://cdn-icons-png.flaticon.com/256/124/124010.png" alt="Facebook Icon">
+                                <span class="text-box">Lex Mariun Señagan</span>
+                            </a>
+                            <a href="https://github.com/senaganlex" target="_blank" class="icon-box">
+                                <img src="https://cdn-icons-png.flaticon.com/256/25/25231.png" alt="GitHub Icon">
+                                <span class="text-box">GH/senaganlex</span>
+                            </a>
+                            <a href="https://mail.google.com/" target="_blank" class="icon-box">
+                                <img src="https://cdn.iconscout.com/icon/free/png-256/free-gmail-2981844-2476484.png?f=webp"
+                                    alt="Gmail Icon">
+                                <span class="text-box">senaganlex@gmail.com</span>
+                            </a>
+                        </section>
                     </section>
                 `,
                 'my-info': `
