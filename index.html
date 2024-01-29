@@ -90,7 +90,7 @@
         }
 
         .text-box {
-            color: #YourDesiredColor; /* Change this to your desired text color */
+            color: white; /* Change this to your desired text color */
         }
 
         .my-info-section,
@@ -150,7 +150,29 @@
         }
 
         .text-box {
-            color: #YourDesiredColor; /* Change this to your desired text color */
+            color: white; /* Change this to your desired text color */
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .buttons-container button {
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .buttons-container button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -167,15 +189,7 @@
     </header>
 
     <main id="mainContent" class="animated-section">
-        <section class="welcome-section animated-section" id="welcomeSection">
-            <div class="big-text-section">
-                <h1>Hi, I'm Lex Mariun Señagan</h1>
-            </div>
-            <div class="welcome-text">
-                <h1>Welcome to my portfolio!</h1>
-                <p class="text-box">I like to code for fun and enjoy working on diverse projects. My goal is to create impactful and inventive solutions through programming. Explore my projects to learn more about my skills and experiences.</p>
-            </div>
-        </section>
+        <!-- Content will be dynamically loaded here -->
     </main>
 
     <script>
