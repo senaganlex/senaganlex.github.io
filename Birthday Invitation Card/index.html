@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Party Invitation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('https://static.vecteezy.com/system/resources/previews/035/757/600/large_2x/ai-generated-confetti-filled-with-balloons-over-a-dark-background-free-photo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            opacity: 0; /* Initial opacity for fade-in effect */
+            animation: fadeIn 2s forwards; /* Animation for fade-in effect */
+        }
+
+        #invitation {
+            max-width: 80%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .elegant-text {
+            font-size: 1.5em;
+            font-family: 'Cursive', sans-serif;
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 5px;
+            opacity: 0; /* Initial opacity for fade-in effect */
+            animation: fadeIn 2s forwards; /* Animation for fade-in effect */
+            animation-delay: 0.5s; /* Delay for a staggered effect */
+        }
+
+        .of-text {
+            font-size: 1em;
+            color: #ffc107;
+            margin: 0; /* Adjusted margin */
+            opacity: 0; /* Initial opacity for fade-in effect */
+            animation: fadeIn 2s forwards; /* Animation for fade-in effect */
+            animation-delay: 1s; /* Delay for a staggered effect */
+        }
+
+        p {
+            font-size: 1em;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            opacity: 0; /* Initial opacity for fade-in effect */
+            animation: fadeIn 2s forwards; /* Animation for fade-in effect */
+            animation-delay: 1.5s; /* Delay for a staggered effect */
+        }
+
+        #time {
+            font-size: 1.2em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            opacity: 0; /* Initial opacity for fade-in effect */
+            animation: fadeIn 2s forwards; /* Animation for fade-in effect */
+            animation-delay: 2s; /* Delay for a staggered effect */
+        }
+
+        #location-link {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #ffc107;
+            text-decoration: underline;
+            opacity: 0; /* Initial opacity for fade-in effect */
+            animation: fadeIn 2s forwards; /* Animation for fade-in effect */
+            animation-delay: 2.5s; /* Delay for a staggered effect */
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="invitation">
+        <h1 class="elegant-text">21st Birthday Party Celebration</h1>
+        <p class="elegant-text">of</p>
+        <p class="elegant-text">Lex Mariun Señagan</p>
+        <p>Embracing the joyous spirit of a birthday, we cordially invite you to join us in commemorating a special day of celebration. A birthday party is not merely an event; it is a moment of warmth, laughter, and cherished memories.</p>
+
+        <p>Amidst the elegance of our gathering, surrounded by close friends and cherished family, we will indulge in a celebration crafted with meticulous detail. Selecting a theme that reflects the essence of the occasion, adorning the space with tasteful decorations, and curating a delightful menu of exquisite food and beverages are but a few elements that will add to the grandeur of the day.</p>
+
+        <p>With careful planning and a touch of creativity, we aspire to make this birthday celebration an unforgettable experience, leaving an indelible mark on the hearts of all who grace us with their presence.</p>
+
+        <div id="time">Time for the Party to Start: <strong>12:00 PM</strong></div>
+        <a id="location-link" href="https://maps.app.goo.gl/6VARCWxsdskgiVhG9" target="_blank">Location: 10.375858, 123.912098</a>
+    </div>
+</body>
+
+</html>
