@@ -95,16 +95,3 @@ function loadContent(section) {
         console.error('Section not found:', section);
     }
 }
-
-function uploadFiles() {
-    const fileList = document.getElementById('fileList');
-    const fileInput = document.getElementById('fileInput');
-
-    fileList.innerHTML = '';
-
-    for (const file of fileInput.files) {
-        const listItem = document.createElement('li');
-        listItem.textContent = file.name;
-        fileList.appendChild(listItem);
-    }
-}
