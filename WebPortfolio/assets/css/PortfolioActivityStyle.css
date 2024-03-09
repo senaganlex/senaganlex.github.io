@@ -96,7 +96,7 @@ header h1 {
 }
 
 .text-box {
-    color: #FFFFFF; /* Change this to your desired text color */
+    color: #FFFFFF;
 }
 
 .textBox {
@@ -111,7 +111,7 @@ header h1 {
 }
 
 .buttons-container button {
-    background-color: #4CAF50; /* Green background */
+    background-color: #4CAF50;
     border: none;
     color: #FFFFFF;
     padding: 15px 32px;
@@ -126,7 +126,7 @@ header h1 {
 }
 
 .buttons-container button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #45a049;
 }
 
 #projectLinks {
@@ -161,8 +161,8 @@ header h1 {
 }
 
 .project-image {
-    width: 25%; /* Adjust size as needed */
-    margin: 0 10px; /* Adjust spacing between images */
+    width: 25%;
+    margin: 10px;
 }
 
 @keyframes fadeIn {
