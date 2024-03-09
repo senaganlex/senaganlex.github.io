@@ -17,17 +17,17 @@ function loadContent(section) {
                     <p class="text-box" style="text-align: center;">Welcome to my portfolio! I like to code for fun and enjoy working on diverse projects. My goal is to create impactful and inventive solutions through programming. Explore my projects to learn more about my skills and experiences.</p>
                     <h2 style="text-align: center;">Additional Context</h2>
                     <p class="text-box" style="text-align: center;">As a developer, I value ongoing learning and keeping abreast of the most recent technological advancements. I find satisfaction in working collaboratively with others and am receptive to new possibilities. Please don't hesitate to contact me for inquiries or to initiate discussions about potential projects or collaborative ventures.</p>
-                <div class="social-icons" style="text-align: center;">
-                <a href="https://www.facebook.com/lexmariun.senagan.5" target="_blank">
-                    <img src="image/facebook-logo-png-transparent-background.png" alt="Facebook Icon" style="width: 5%; margin: 0 10px;">
-                </a>
-                <a href="https://github.com/senaganlex" target="_blank">
-                    <img src="image/png-transparent-github-square-brands-icon.png" alt="GitHub Icon" style="width: 5%; margin: 0 10px;">
-                </a>
-                <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank">
-                    <img src="image/5968534.png" alt="Gmail Icon" style="width: 5%; margin: 0 10px;">
-                </a>
-               </div>
+                    <div class="social-icons" style="text-align: center;">
+                        <a href="https://www.facebook.com/lexmariun.senagan.5" target="_blank">
+                            <img src="https://github.com/senaganlex/senaganlex.github.io/raw/main/WebPortfolio/assets/image/facebook-logo-png-transparent-background.png" alt="Facebook Icon" style="width: 5%; margin: 0 10px;">
+                        </a>
+                        <a href="https://github.com/senaganlex" target="_blank">
+                            <img src="https://github.com/senaganlex/senaganlex.github.io/raw/main/WebPortfolio/assets/image/png-transparent-github-square-brands-icon.png" alt="GitHub Icon" style="width: 5%; margin: 0 10px;">
+                        </a>
+                        <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank">
+                            <img src="https://github.com/senaganlex/senaganlex.github.io/raw/main/WebPortfolio/assets/image/png-transparent-github-square-brands-icon.png" alt="Gmail Icon" style="width: 5%; margin: 0 10px;">
+                        </a>
+                    </div>
             </section>
         `,
         'my-info': `
@@ -37,7 +37,7 @@ function loadContent(section) {
                         <h1>Lex Mariun Señagan</h1>
                     </div>
                     <div class="profile-image">
-                        <img src="image/428247203_1061771555126453_8630503332247291442_n.jpg" alt="Profile Image" width="100" height="100">
+                        <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/WebPortfolio/assets/image/428247203_1061771555126453_8630503332247291442_n.jpg" alt="Profile Image" width="100" height="100">
                     </div>
                 </header>
                 <section class="info-details">
@@ -77,9 +77,9 @@ function loadContent(section) {
                         </p>
                     </div>
                     <div class="project-images fadeIn">
-                        <img src="image/IMG_20240229_164118.jpg" alt="Project Image 1" class="project-image">
-                        <img src="image/IMG_20240301_174625.jpg" alt="Project Image 2" class="project-image">
-                        <img src="image/IMG_20240301_175036.jpg" alt="Project Image 3" class="project-image">
+                        <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/WebPortfolio/assets/image/IMG_20240229_164118.jpg" alt="Project Image 1" class="project-image">
+                        <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/WebPortfolio/assets/image/IMG_20240301_174625.jpg" alt="Project Image 2" class="project-image">
+                        <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/WebPortfolio/assets/image/IMG_20240301_175036.jpg" alt="Project Image 3" class="project-image">
                     </div>
                 </div>
             </div>
