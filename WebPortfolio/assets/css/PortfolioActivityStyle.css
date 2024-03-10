@@ -2,7 +2,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: url('../assets/image/constellations-4eee0ff82aba4d347fc46bb276834140.jpg') center/cover no-repeat fixed;
+    background: url('https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/WebPortfolio/assets/image/constellations-4eee0ff82aba4d347fc46bb276834140.jpg') center/cover no-repeat fixed;
     background-size: cover;
     display: flex;
     flex-direction: column;
