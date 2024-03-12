@@ -57,7 +57,7 @@ header h1 {
 
 .my-info-section,
 .about-me,
-.my-experiences {
+.my-test-code-section {
     background: rgba(0, 0, 0, 0.3);
     padding: 20px;
     border-radius: 10px;
@@ -69,7 +69,7 @@ header h1 {
 
 .my-info-section::before,
 .about-me::before,
-.my-experiences::before {
+.my-test-code-section::before {
     position: absolute;
     top: 0;
     left: 0;
@@ -85,13 +85,13 @@ header h1 {
 }
 
 .my-info-section ul,
-.my-experiences ul {
+.my-test-code-section ul {
     list-style-type: none;
     padding: 0;
 }
 
 .my-info-section li,
-.my-experiences li {
+.my-test-code-section li {
     margin-bottom: 10px;
 }
 
@@ -114,11 +114,11 @@ header h1 {
     background-color: #4CAF50;
     border: none;
     color: #FFFFFF;
-    padding: 15px 24px; 
+    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
@@ -178,4 +178,3 @@ header h1 {
 
 .fadeIn {
     animation: fadeIn 1s ease-in-out;
-}
