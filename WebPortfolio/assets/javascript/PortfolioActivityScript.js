@@ -59,10 +59,10 @@ function loadContent(section) {
                 </section>
             </section>
         `,
-        'my-experiences': `
-        <section class="my-experiences">
+        'my-test-code': `
+        <section class="my-test-code-section">
             <section class="overlay-content fadeIn" style="text-align: center;">
-                <h2 style="text-align: center;">My Experiences</h2>
+                <h2 style="text-align: center;">My Test Code</h2>
                 <section class="text-box">
                     <p style="text-align: center;">
                         This are the websites I've worked on 
