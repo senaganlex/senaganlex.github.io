@@ -14,7 +14,7 @@ function loadContent(section) {
         'about-me': `
             <section class="about-me fadeIn" id="aboutMeSection">
                     <h2 style="text-align: center;">About Me</h2>
-                    <p class="text-box" style="text-align: center;">Welcome to my portfolio! I like to code for fun and enjoy working on diverse projects. My goal is to create impactful and inventive solutions through programming. Explore my projects to learn more about my skills and experiences.</p>
+                    <p class="text-box" style="text-align: center;">I find joy in coding recreationally and relish the opportunity to engage with diverse projects. My objective is to craft impactful and original solutions through programming. Dive into my projects to gain insights into my skills and journey.</p>
                     <h2 style="text-align: center;">Additional Context</h2>
                     <p class="text-box" style="text-align: center;">As a developer, I value ongoing learning and keeping abreast of the most recent technological advancements. I find satisfaction in working collaboratively with others and am receptive to new possibilities. Please don't hesitate to contact me for inquiries or to initiate discussions about potential projects or collaborative ventures.</p>
                     <section class="social-icons" style="text-align: center;">
