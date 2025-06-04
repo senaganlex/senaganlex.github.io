@@ -96,6 +96,13 @@ h1, h2 {
     margin-top: 20px;
 }
 
+.my-info-section img {
+    max-width: 100%; /* This already exists, but is crucial */
+    max-height: 150px; /* Add max-height to control vertical size */
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
 .project-image {
     width: 25%;
     margin: 10px;
