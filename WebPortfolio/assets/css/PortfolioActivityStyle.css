@@ -18,19 +18,81 @@ header {
     position: relative;
 }
 
-h1, h2 {
+header h1 {
     margin: 0;
     color: #FFFFFF;
 }
 
-.section-content {
+.welcome-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    margin: 20px;
+}
+
+.big-text-section {
+    text-align: center;
+    margin: 20px;
+}
+
+.big-text-section h1 {
+    font-size: 50px;
+    color: #FFFFFF;
+}
+
+.welcome-text h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.text-box {
+    color: #FFFFFF;
+}
+
+.my-info-section,
+.about-me,
+.my-test-code-section {
     background: rgba(0, 0, 0, 0.3);
     padding: 20px;
     border-radius: 10px;
     color: #FFFFFF;
     margin: 20px;
     max-width: 80%;
-    text-align: center; /* Center text consistently */
+    position: relative;
+}
+
+.my-info-section::before,
+.about-me::before,
+.my-test-code-section::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.my-info-section img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.my-info-section ul,
+.my-test-code-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.my-info-section li,
+.my-test-code-section li {
+    margin-bottom: 10px;
 }
 
 .text-box {
@@ -53,6 +115,7 @@ h1, h2 {
     border: none;
     color: #FFFFFF;
     padding: 15px 32px;
+    text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
@@ -77,6 +140,7 @@ h1, h2 {
     border: none;
     color: #FFFFFF;
     padding: 15px 32px;
+    text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
@@ -96,28 +160,9 @@ h1, h2 {
     margin-top: 20px;
 }
 
-.my-info-section img {
-    max-width: 100%; /* This already exists, but is crucial */
-    max-height: 150px; /* Add max-height to control vertical size */
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
 .project-image {
     width: 25%;
     margin: 10px;
-}
-
-.social-icons {
-    margin-top: 20px;
-}
-
-.social-icons a {
-    margin: 0 10px;
-}
-
-.social-icons img {
-    width: 5%;
 }
 
 @keyframes fadeIn {
@@ -133,17 +178,3 @@ h1, h2 {
 
 .fadeIn {
     animation: fadeIn 1s ease-in-out;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    margin-bottom: 10px;
-}
-
-strong {
-    font-weight: bold;
-}
