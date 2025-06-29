@@ -1,4 +1,4 @@
-function loadContent(section) {More actions
+function loadContent(section) {Add commentMore actions
     const sectionContentMap = {
         'welcome': `
             <section class="welcome-section" id="welcomeSection">
@@ -92,7 +92,7 @@ function loadContent(section) {More actions
     if (content) {
         document.getElementById('mainContent').innerHTML = content;
     } else {
-        console.error('Section not found:', section);
+        console.error('Section not found:', section);Add commentMore actions
     }
 }
 
