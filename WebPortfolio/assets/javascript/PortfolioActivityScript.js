@@ -1,6 +1,7 @@
 const mainContent = document.getElementById('mainContent');
-const sectionContentMap = {
-    'welcome': `
+
+const sectionContent = {
+    welcome: `
         <section class="section-content fadeIn">
             <h1 class="big-text">Hi, I'm Lex Mariun Señagan</h1>
             <h1 class="welcome-text">Welcome to my portfolio!</h1>
@@ -55,30 +56,4 @@ const sectionContentMap = {
             <p class="text-box">These are the websites I've worked on. If you have any suggestions or ideas for collaboration, don't hesitate to reach out. I'm always open to new coding challenges!</p>
             <section id="projectLinks" class="fadeIn">
                 <a href="https://senaganlex.github.io/Birthday%20Invitation%20Card/index.html" target="_blank" class="button">Birthday Invitation Card</a>
-                <a href="https://senaganlex.github.io/Projects/CalendarSenagan.html" target="_blank" class="button">Calendar Project</a>
-                <p class="textBox"><strong>These are some images of my OJT</strong></p>
-                <section class="project-images fadeIn">
-                    <img src="assets/image/IMG_20240229_164118.jpg" alt="Project Image 1" class="project-image">
-                    <img src="assets/image/IMG_20240301_174625.jpg" alt="Project Image 2" class="project-image">
-                    <img src="assets/image/IMG_20240301_175036.jpg" alt="Project Image 3" class="project-image">
-                </section>
-            </section>
-        </section>
-    `,
-};
-
-document.querySelector('.buttons-container').addEventListener('click', (event) => {
-    if (event.target.tagName === 'BUTTON') {
-        const section = event.target.dataset.section;
-        loadContent(section);
-    }
-});
-
-function loadContent(section) {
-    const content = sectionContentMap[section];
-    if (content) {
-        mainContent.innerHTML = content;
-    } else {
-        console.error(`Section "${section}" not found.`);
-    }
-}
+                <a href="https://senaganlex.github.io/Projects/CalendarSenagan.html" target="_blank" class="button">Calendar Project
