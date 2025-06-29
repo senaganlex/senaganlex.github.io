@@ -2,7 +2,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: url('https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/WebPortfolio/assets/image/constellations-4eee0ff82aba4d347fc46bb276834140.jpg') center/cover no-repeat fixed;
+    background: url('https://d33wubrfki0l68.cloudfront.net/3697f8a424a77e6e5b422007590aedb27abca140/2cad2/static/constellations-4eee0ff82aba4d347fc46bb276834140.jpg') center/cover no-repeat fixed;
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -18,45 +18,91 @@ header {
     position: relative;
 }
 
-h1 { /* More general selector */
+header h1 {
     margin: 0;
     color: #FFFFFF;
 }
 
-.section-content { /* General class for all section content */
+.welcome-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    margin: 20px;
+}
+
+.big-text-section {
+    text-align: center;
+    margin: 20px;
+}
+
+.big-text-section h1 {
+    font-size: 50px;
+    color: #FFFFFF;
+}
+
+.welcome-text h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.text-box {
+    color: #FFFFFF; /* Change this to your desired text color */
+}
+
+.my-info-section,
+.about-me,
+.my-test-code-section {
     background: rgba(0, 0, 0, 0.3);
     padding: 20px;
     border-radius: 10px;
     color: #FFFFFF;
     margin: 20px;
     max-width: 80%;
+    position: relative;
 }
 
-.section-content h1,
-.section-content h2,
-.section-content p { /* More general selectors */
-    color: #FFFFFF;
+.my-info-section::before,
+.about-me::before,
+.my-test-code-section::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    border-radius: 10px;
 }
 
-.section-content ul {
+.my-info-section img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.my-info-section ul,
+.my-test-code-section ul {
     list-style-type: none;
     padding: 0;
 }
 
-.section-content li {
+.my-info-section li,
+.my-test-code-section li {
     margin-bottom: 10px;
 }
 
-.big-text { /* Specific style for the welcome section */
-    font-size: 50px;
+.text-box {
+    color: #FFFFFF; /* Change this to your desired text color */
 }
 
-.welcome-text { /* Specific style for the welcome section */
-    font-size: 24px;
-    margin-bottom: 20px;
+.textBox {
+    font-weight: bold;
+    font-size: 28px;
 }
-
-/* ... rest of your styles, reorganized and simplified ... */
 
 .buttons-container {
     display: flex;
@@ -65,7 +111,7 @@ h1 { /* More general selector */
 }
 
 .buttons-container button {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* Green background */
     border: none;
     color: #FFFFFF;
     padding: 15px 32px;
@@ -80,11 +126,44 @@ h1 { /* More general selector */
 }
 
 .buttons-container button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+#projectLinks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: #FFFFFF;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+.button:hover {
     background-color: #45a049;
 }
 
+.project-images {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-/* ... and so on...  Consolidate and simplify similar styles */
+.project-image {
+    width: 25%; /* Adjust size as needed */
+    margin: 0 10px; /* Adjust spacing between images */
+}
 
 @keyframes fadeIn {
     0% {
