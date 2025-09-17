@@ -165,4 +165,135 @@ button:hover {
       canvas.height = window.innerHeight;
     });
   </script></body>
+</html>  font-weight: bold;
+}
+
+.card-body {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+  line-height: 1.8;
+}
+
+.card-footer {
+  padding: 15px;
+  background: #fff0f5;
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff758c, #ff7eb3);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-header">Happy 6th Monthsary My Byyyyyyyyyy ❤️</div>
+    <div class="card-body">
+      Every day that passes with you by my side feels like a blessing I never want to take for granted. I honestly can’t believe how quickly time flies when I’m with you, but at the same time, it feels like we’ve already shared so much more than what can fit in just these few months. You’ve brought so much love, peace, and joy into my life that I sometimes wonder how I ever managed before you came along.<br><br>I love how we can be completely ourselves with each other—laughing at the silliest jokes, sharing our little secrets, or even just enjoying the quiet moments together. With you, I’ve learned that love isn’t always about the grand gestures, but about the simple things: holding hands, a random “I miss you” text, or hearing your voice after a long day. Those small things mean the world to me because they remind me of how deeply connected we are.<br><br>
+
+  You’ve shown me patience, care, and understanding in ways I never thought I deserved. I’m so thankful for your heart and the way you love me so genuinely. Please know that I don’t take any of it for granted. I promise to continue cherishing you, supporting you in all your dreams, and being here no matter what challenges come our way.<br><br>
+
+  As we celebrate this 6th monthsary, I want to tell you once again how much I love you and more days, weeks, months, years, eternity for us. I'll be loving you till the end of time my byyyyyyyyyy, I Loveeeeeeeeeeeee Youuuuuuuuuuuuuuuuu Sooooooooo Muchhhhhhhh 😊
+</div>
+<div class="card-footer">
+  <button onclick="celebrate()">Celebrate ✨</button>
+</div>
+
+  </div><canvas id="confetti"></canvas>
+
+  <script>
+    // Confetti setup
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.style.position = 'fixed';
+    canvas.style.top = 0;
+    canvas.style.left = 0;
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function randomColor() {
+      const colors = ['#ff758c', '#ff7eb3', '#fad0c4', '#ff9a9e', '#fff'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createParticles() {
+      for (let i = 0; i < 150; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 6 + 2,
+          color: randomColor(),
+          speed: Math.random() * 3 + 2,
+        });
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+    }
+
+    function updateParticles() {
+      particles.forEach((p) => {
+        p.y += p.speed;
+        if (p.y > canvas.height) p.y = -10;
+      });
+    }
+
+    function animateParticles() {
+      drawParticles();
+      updateParticles();
+      requestAnimationFrame(animateParticles);
+    }
+
+    function celebrate() {
+      particles = [];
+      createParticles();
+      animateParticles();
+      playSound();
+    }
+
+    // Sound effect
+    function playSound() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      oscillator.type = 'triangle';
+      oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+      oscillator.connect(audioCtx.destination);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.3);
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script></body>
 </html>
