@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="assets/css/PortfolioActivityStyle.css" />
+</head>
+<body>
+    <header class="fadeIn">
+        <h1>Welcome to My Portfolio</h1>
+    </header>
 
+    <section class="welcome-section fadeIn">
+        <div class="welcome-text">
+            <h1>Hello, I'm Lex Mariun Señagan</h1>
+        </div>
+        <div class="text-box">
+            <p>Exploring technology, creativity, and innovation.</p>
+        </div>
+    </section>
+
+    <section class="big-text-section fadeIn">
+        <h1>Technology & Business Oriented Portfolio</h1>
+    </section>
+
+    <section class="my-info-section fadeIn">
+        <h2>My Information</h2>
+        <div class="profile-image">
+            <img src="assets/image/profile.png" alt="Profile Image" />
+        </div>
+        <ul>
+            <li><strong>Name:</strong> Lex Mariun Señagan</li>
+            <li><strong>Course:</strong> BSIT</li>
+            <li><strong>Specialization:</strong> Web Development</li>
+            <li><strong>Interests:</strong> Software, AI, UI/UX</li>
+        </ul>
+    </section>
+
+    <section class="about-me fadeIn">
+        <h2>About Me</h2>
+        <p>
+            I am a passionate technology enthusiast who enjoys creating functional,
+            user‑centered applications. My focus is on blending design and
+            development to produce sleek, intuitive digital experiences.
+        </p>
+    </section>
+
+    <section class="my-test-code-section fadeIn">
+        <h2>My Projects & Test Codes</h2>
+        <ul>
+            <li>Snake Game Project</li>
+            <li>Website UI Concepts</li>
+            <li>JavaScript Animations</li>
+        </ul>
+
+        <div class="buttons-container">
+            <button onclick="toggleProjects()">Show Projects</button>
+        </div>
+
+        <div id="projectLinks" style="display: none;">
+            <a href="#" class="button">Snake Game</a>
+            <a href="#" class="button">UI Demo</a>
+            <a href="#" class="button">JS Animation Tests</a>
+        </div>
+
+        <div class="project-images">
+            <img class="project-image" src="assets/image/project1.png" alt="Project 1" />
+            <img class="project-image" src="assets/image/project2.png" alt="Project 2" />
+            <img class="project-image" src="assets/image/project3.png" alt="Project 3" />
+        </div>
+    </section>
+
+    <script src="assets/javascript/PortfolioActivityScript.js"></script>
+</body>
+</html>
