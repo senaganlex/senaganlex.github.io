@@ -20,6 +20,9 @@ header {
     text-align: center;
     border-bottom: 1px solid #1f2937;
     animation: fadeIn 1s ease forwards;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 header h1 {
