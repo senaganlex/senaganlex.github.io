@@ -2,6 +2,17 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     loadContent("welcome");
+
+    // Attach click listeners to nav buttons
+    const navButtons = document.querySelectorAll('button[data-section]');
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const section = button.getAttribute('data-section');
+            loadContent(section);
+            navButtons.forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+        });
+    });
 });
 
 function loadContent(section) {
