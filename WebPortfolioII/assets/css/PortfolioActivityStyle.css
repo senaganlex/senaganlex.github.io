@@ -47,6 +47,10 @@ header h1 {
     transition: 0.3s;
 }
 
+.buttons-container button.active {
+    background: #238636;
+}
+
 .buttons-container button:hover {
     background: #388bfd;
     transform: scale(1.05);
@@ -72,7 +76,6 @@ main {
     object-fit: cover;
     border: 4px solid #1f6feb;
     box-shadow: 0 0 12px rgba(88,166,255,0.5);
-    animation: float 4s ease-in-out infinite;
 }
 
 .social-icons {
@@ -126,19 +129,23 @@ main {
     animation: fadeIn 1s ease forwards;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* New animations */
+.scaleUp {
+    transform: scale(0.95);
+    animation: scaleUp 0.8s ease forwards;
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.floatUpDown {
+    animation: float 4s ease-in-out infinite;
 }
 
 @keyframes float {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-10px); }
     100% { transform: translateY(0); }
 }
