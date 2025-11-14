@@ -14,15 +14,12 @@ body {
 }
 
 header {
-    background: rgba(20, 25, 31, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    text-align: center;
-    border-bottom: 1px solid #1f2937;
-    animation: fadeIn 1s ease forwards;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 9999;
+    background: #161b22 !important;
+    padding: 20px !important;
+    display: block !important;
 }
 
 header h1 {
