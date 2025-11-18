@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 8th Monthsary, My Love</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for fingerprint and fireworks */
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --primary: #944d7d; /* Deep Rose */
+            --secondary: #f4e8ff; /* Light Lavender */
+            --accent: #ff8c61; /* Coral */
+            --dark: #2c1a32; /* Dark Plum */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            background-image: radial-gradient(circle, var(--dark) 0%, #1a101f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .fingerprint-icon {
+            color: var(--primary);
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.3s ease;
+        }
+
+        .fingerprint-icon:hover {
+            transform: scale(1.05);
+            color: var(--accent);
+        }
+        
+        /* Pulse animation for the button */
+        .long-press-indicator {
+            height: 8px;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.1s linear;
+            border-radius: 9999px;
+            margin-top: 10px;
+        }
+
+        /* Firework container and particle styling */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .letter-content h1 {
+            font-family: 'Great Vibes', cursive;
+            color: var(--primary);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Initial state of the letter before unlock */
+        #letter-screen {
+            display: none;
+        }
+
+        /* Popping Message Style */
+        .popping-message {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(255, 140, 97, 0.8);
+            animation: popIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Entry Screen -->
+    <div id="entry-screen" class="flex flex-col items-center justify-center p-6 text-center transition-opacity duration-1000 ease-in-out">
+        <div class="max-w-md w-full p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20">
+            <h2 class="text-2xl font-bold mb-6 text-white tracking-widest uppercase">Secret Message Access</h2>
+            <p class="text-gray-300 mb-8">Long press the button for 2 seconds to unlock your monthsary letter.</p>
+
+            <!-- Fingerprint Button/Area -->
+            <div id="long-press-area" class="flex flex-col items-center justify-center p-4 rounded-full transition-all duration-300 active:scale-95"
+                 oncontextmenu="return false;">
+                
+                <!-- Fingerprint Icon (Simple SVG for visual effect) -->
+                <svg class="fingerprint-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                    <path d="M256 0c-48.5 0-87.9 39.4-87.9 87.9c0 24.8 10.4 47.3 27 63.3c-2.4 12.1-3.7 24.6-3.7 37.4c0 108.7 88.3 197 197 197c12.8 0 25.3-1.3 37.4-3.7c16 16.6 38.5 27 63.3 27c48.5 0 87.9-39.4 87.9-87.9c0-48.5-39.4-87.9-87.9-87.9c-24.8 0-47.3 10.4-63.3 27c-12.1-2.4-24.6-3.7-37.4-3.7c-108.7 0-197-88.3-197-197c0-12.8 1.3-25.3 3.7-37.4c-16.6-16-27-38.5-27-63.3zM256 32c-30.8 0-55.9 25.1-55.9 55.9c0 30.8 25.1 55.9 55.9 55.9s55.9-25.1 55.9-55.9c0-30.8-25.1-55.9-55.9-55.9zm192 416c-30.8 0-55.9-25.1-55.9-55.9c0-30.8 25.1-55.9 55.9-55.9s55.9 25.1 55.9 55.9c0 30.8-25.1 55.9-55.9 55.9z"/>
+                </svg>
+                <div id="press-indicator" class="long-press-indicator"></div>
+            </div>
+            <p id="press-text" class="text-sm mt-4 text-gray-400">Hold to start...</p>
+        </div>
+    </div>
+
+    <!-- Letter Screen (Hidden by default) -->
+    <div id="letter-screen" class="p-4 md:p-8 w-full max-w-4xl opacity-0 transition-opacity duration-1000 ease-in-out">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-12 border-4 border-white/50">
+            <div class="letter-content text-gray-800">
+                <h1 class="text-6xl md:text-8xl text-center mb-10 tracking-wider">Eight Months of Us</h1>
+                
+                <!-- Photo Placeholder -->
+                <div class="flex justify-center mb-8">
+                    <div id="photo-placeholder" class="w-48 h-48 md:w-64 md:h-64 border-4 border-gray-300 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                        <!-- 
+                            *** YOUR CUSTOMIZATION SPOT ***
+                            Replace the 'src' value below with your actual photo link (e.g., from Imgur, Dropbox, or a public hosting service).
+                            The 'object-cover' class ensures the image fills the circle neatly.
+                        -->
+                        <img src="https://placehold.co/600x600/DCDCDC/808080?text=Paste+Your+Link+Here" 
+                             alt="Monthsary Photo" 
+                             class="w-full h-full object-cover transition duration-500 hover:scale-105"
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x600/DCDCDC/808080?text=Photo+Error';"
+                        >
+                    </div>
+                </div>
+
+                <p class="text-lg leading-relaxed mb-6 italic text-center">
+                    To the one who makes every day feel like a dream, Happy 8th Monthsary!
+                </p>
+
+                <p class="mb-4 text-justify">
+                    My dearest love, eight months. It feels like just yesterday we started this beautiful journey, yet at the same time, I can’t imagine a single day without you now. You have become my gravity, my quiet comfort, and my brightest adventure all rolled into one. I remember the very first time I saw you—that moment feels etched into my mind, a perfect memory that marked the beginning of everything. Since then, every laugh we've shared, every late-night talk, every simple evening spent together, has built something truly incredible.
+                </p>
+                <p class="mb-4 text-justify">
+                    It’s in the small things, isn't it? The way you remember my favorite coffee order, the way your hand instinctively finds mine when we’re walking, or the sheer joy in your eyes when you talk about something you love. These are the moments that truly define our relationship for me—not the grand gestures, but the quiet, consistent love and thoughtfulness you pour into my life every single day. You don't just complete me; you challenge me to be better, kinder, and more patient, and I am so grateful for that growth.
+                </p>
+                <p class="mb-4 text-justify">
+                    When I look ahead, I don’t see just months or years, I just see **us**. I see us conquering silly little problems, supporting each other through big career goals, and still giggling over the same inside jokes years from now. I want to travel the world with you, build a home with you, and experience all the beautiful, mundane, and exciting things life has to offer, simply because everything is better when you're by my side. You possess a kindness and a strength that constantly astounds me, and I feel so lucky that I get to witness it up close.
+                </p>
+                <p class="mb-4 text-justify">
+                    Eight months ago, I was looking for someone to share my life with; today, I’ve found my best friend, my soulmate, and the most captivating person I've ever known. Thank you for making these past months the happiest of my life. Thank you for your patience, your endless support, and your truly beautiful heart. Every moment spent with you is a treasure, and I cherish the unique connection we share.
+                </p>
+                <p class="mb-8 text-justify">
+                    I know we still have so much to learn about each other and so many memories to make, but if the first eight months are anything to go by, our future is going to be absolutely spectacular. You are everything I never knew I was missing, and I fall deeper in love with you every morning. Happy Monthsary, my darling. Forever is looking pretty good with you.
+                </p>
+
+                <p class="text-xl font-semibold text-right mt-10 text-gray-700">- Your (very much in love) Partner</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firework Particle Container -->
+    <div id="fireworks-container" class="fireworks-container"></div>
+    
+    <!-- Popping Message Modal -->
+    <div id="pop-message" class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none opacity-0 transition-opacity duration-700">
+        <div class="popping-message text-center p-4 bg-white/20 backdrop-blur-md rounded-2xl shadow-xl">
+            I Love You Baby Happy 8th Monthsary
+        </div>
+    </div>
+
+<script>
+    const pressArea = document.getElementById('long-press-area');
+    const pressIndicator = document.getElementById('press-indicator');
+    const pressText = document.getElementById('press-text');
+    const entryScreen = document.getElementById('entry-screen');
+    const letterScreen = document.getElementById('letter-screen');
+    const popMessage = document.getElementById('pop-message');
+    const fireworksContainer = document.getElementById('fireworks-container');
+
+    const PRESS_DURATION = 2000; // 2 seconds
+    let pressTimer = null;
+    let startTime = 0;
+    let isPressed = false;
+    let isUnlocked = false;
+
+    // --- Firework/Particle Logic ---
+    function createParticle(x, y, color) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.backgroundColor = color;
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        fireworksContainer.appendChild(particle);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const velocity = Math.random() * 10 + 5;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+
+        let currentTime = 0;
+        const duration = 1000 + Math.random() * 500;
+        
+        function animate() {
+            if (currentTime >= duration) {
+                particle.remove();
+                return;
+            }
+
+            // Apply gravity/drag effect
+            const newX = x + vx * (currentTime / 1000);
+            const newY = y + vy * (currentTime / 1000) + 0.5 * 9.8 * ((currentTime / 1000) ** 2) * 50; 
+            
+            particle.style.transform = `translate(${newX - x}px, ${newY - y}px)`;
+            particle.style.opacity = (1 - currentTime / duration) * 0.8;
+            currentTime += 16; // Approx 60 FPS
+            requestAnimationFrame(animate);
+        }
+        
+        particle.style.opacity = 1;
+        animate();
+    }
+
+    function launchFireworks(count = 50, duration = 1500) {
+        const colors = ['#ff8c61', '#944d7d', '#f4e8ff', '#ffd700', '#ff6347'];
+
+        for (let i = 0; i < count; i++) {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.7; // Keep fireworks in the upper two-thirds
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Create a small explosion burst at the location
+            for (let j = 0; j < 10; j++) {
+                createParticle(x, y, color);
+            }
+        }
+    }
+
+    // --- Unlock Mechanism ---
+
+    function updateProgress() {
+        if (!isPressed || isUnlocked) return;
+
+        const elapsedTime = Date.now() - startTime;
+        const progress = Math.min(100, (elapsedTime / PRESS_DURATION) * 100);
+        
+        pressIndicator.style.width = `${progress}%`;
+        pressText.textContent = `Holding... ${Math.round(progress)}%`;
+
+        if (elapsedTime >= PRESS_DURATION) {
+            isUnlocked = true;
+            clearTimeout(pressTimer);
+            unlockLetter();
+            return;
+        }
+
+        requestAnimationFrame(updateProgress);
+    }
+
+    function handlePressStart() {
+        if (isUnlocked) return;
+        isPressed = true;
+        startTime = Date.now();
+        pressArea.classList.add('scale-95');
+        pressArea.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+        
+        // Start the visual progress update
+        requestAnimationFrame(updateProgress);
+
+        // Fail-safe timer in case requestAnimationFrame is not smooth
+        pressTimer = setTimeout(() => {
+            if (!isUnlocked) {
+                isUnlocked = true;
+                unlockLetter();
+            }
+        }, PRESS_DURATION + 50); // Add a small buffer
+    }
+
+    function handlePressEnd() {
+        if (isUnlocked) return;
+
+        isPressed = false;
+        clearTimeout(pressTimer);
+        pressArea.classList.remove('scale-95');
+        pressArea.style.backgroundColor = 'transparent';
+        
+        // Reset progress bar and text smoothly
+        pressIndicator.style.width = '0%';
+        pressText.textContent = 'Hold to start...';
+    }
+
+    function unlockLetter() {
+        // 1. Start Fireworks and Popping Message
+        launchFireworks(80);
+        popMessage.classList.add('opacity-100');
+        
+        // 2. Hide Entry Screen with a fade-out
+        entryScreen.style.opacity = '0';
+
+        setTimeout(() => {
+            entryScreen.style.display = 'none';
+            // 3. Show Letter Screen
+            letterScreen.style.display = 'block';
+            
+            // 4. Fade in the letter
+            setTimeout(() => {
+                letterScreen.style.opacity = '1';
+                
+                // 5. Fade out the popping message
+                setTimeout(() => {
+                    popMessage.classList.remove('opacity-100');
+                }, 2000); // Display pop message for 2 seconds
+            }, 50);
+        }, 1000); // Wait for entry screen fade-out
+    }
+
+
+    // --- Event Listeners (Handling Mouse and Touch) ---
+    pressArea.addEventListener('mousedown', (e) => {
+        if (e.button === 0) { // Only left click
+            handlePressStart();
+        }
+    });
+    pressArea.addEventListener('mouseup', handlePressEnd);
+    pressArea.addEventListener('mouseleave', handlePressEnd);
+
+    pressArea.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent default touch behavior (like scrolling)
+        handlePressStart();
+    }, { passive: false });
+
+    pressArea.addEventListener('touchend', handlePressEnd);
+    pressArea.addEventListener('touchcancel', handlePressEnd);
+
+    // Initial check to prevent right-click context menu interference
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target === pressArea || pressArea.contains(e.target)) {
+            e.preventDefault();
+        }
+    });
+
+</script>
+
+</body>
+</html>
