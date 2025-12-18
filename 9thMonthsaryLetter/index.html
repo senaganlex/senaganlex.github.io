@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 9th Monthsary! ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-light: #ffcad4;
+            --pink-mid: #f4acb7;
+            --pink-dark: #9d8189;
+            --heart-color: #ff4d6d;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--pink-light);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+        }
+
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart-particle {
+            position: absolute;
+            color: var(--heart-color);
+            font-size: 20px;
+            animation: float Up 5s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--pink-mid);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 110px solid var(--pink-dark);
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .envelope.open::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 180px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            transition: all 0.5s ease-in-out;
+            overflow-y: auto;
+            z-index: 1;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .envelope.open .letter {
+            bottom: 100px;
+            height: 400px;
+            width: 320px;
+            z-index: 5;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .letter h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--heart-color);
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+
+        .letter p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #444;
+            text-align: justify;
+        }
+
+        .click-me {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: var(--heart-color);
+            font-weight: bold;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
+        }
+
+        .hidden { display: none; }
+
+        .letter::-webkit-scrollbar { width: 5px; }
+        .letter::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="heartContainer"></div>
+
+    <div class="envelope-wrapper" onclick="openLetter()">
+        <div class="envelope" id="envelope">
+            <div class="letter">
+                <h1>Happy 9th Monthsary! 🌸</h1>
+                <p id="typewriter"></p>
+            </div>
+        </div>
+        <div class="click-me" id="clickHint">Tap to Open, Baby! ❤️</div>
+    </div>
+
+    <script>
+        const message = "Happy 9th monthsary my babyyyyyyyyyyyyyyyyyy ahhhhhhhhhhhhhhhhhhhhh❤️🥰 bitaw couple of months nalang rawr rawr na ackkkkkkkkk long live mani guyses pang fowewew naman ni kay love² man kaayu na ang yummy tasty very rawr nga baby na, from the point nga gi admire ang baby pag sulod sa watchdog until naabot sa point nga di na pwede ang baby mangitag lain😠 kay na ug naa lagi koy makit.an balita lagi ugma dritso so mao to peaceful raman atong RS pirmi kay goodboy man ko yes yes yes nya wala mana ma kuwangan ang baby sa pag receive ug love and diligan pud ay ahehe so unsa pay rason nga ma down atong vibes nga wala man tay away² what I ask for lang my baby kay if ever naay thing nga mag pa uncomfy nimo sulti dayon kay para ma solve dayun nako I mean mao man jud na akong expertise mo fix ug troubles and issues eyyyyyyyyyyy gi himong trabaho kaha na ey I mean yah responsibility man tika so it make sense right my baby so di na nato kaayu tas.on kay mapahilak napud tika daut so many more monthsary, anniversary (soon), till death do us part i'll always be yours my baby without fail mwuahhhhhhhhhhh I Loveeeeeeeeeeeeeeee Youuuuuuuuuuuuuu Myyyyyyyyyyy Babyyyyyyyyyyyyyyyyyyyyyyyyyyyyy😋🤭❤️🥰 ";
+
+        let i = 0;
+        let opened = false;
+
+        function openLetter() {
+            if (!opened) {
+                document.getElementById('envelope').classList.add('open');
+                document.getElementById('clickHint').classList.add('hidden');
+                setTimeout(typeWriter, 1000);
+                opened = true;
+                for(let i=0; i<20; i++) {
+                    setTimeout(createHeart, i * 100);
+                }
+            }
+        }
+
+        function typeWriter() {
+            if (i < message.length) {
+                document.getElementById("typewriter").innerHTML += message.charAt(i);
+                i++;
+
+                const letter = document.querySelector('.letter');
+                letter.scrollTop = letter.scrollHeight;
+                setTimeout(typeWriter, 40); 
+            }
+        }
+
+        function createHeart() {
+            const container = document.getElementById('heartContainer');
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            container.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 400);
+    </script>
+</body>
+</html>
