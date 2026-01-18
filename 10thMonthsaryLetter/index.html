@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 10th Monthsary!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a4a4a;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .bg-heart {
+            position: absolute;
+            color: #ff99ac;
+            font-size: 20px;
+            animation: floatUp linear infinite;
+            opacity: 0;
+            z-index: -1;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* --- ENVELOPE STAGE --- */
+        #envelope-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        #envelope-container:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #ff6b81;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #ff4757;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 3;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 190px solid #ff7b93;
+            z-index: 2;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .letter-preview {
+            position: absolute;
+            background: #fff;
+            width: 260px;
+            height: 160px;
+            bottom: 10px;
+            border-radius: 5px;
+            z-index: 1;
+            transition: transform 0.6s ease 0.6s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #ff4757;
+            text-align: center;
+        }
+
+        .envelope.open .letter-preview {
+            transform: translateY(-150px);
+            z-index: 4;
+        }
+
+        .sticker {
+            position: absolute;
+            top: 45px;
+            z-index: 4;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: opacity 0.3s;
+        }
+
+        .envelope.open .sticker {
+            opacity: 0;
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            color: #ff4757;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- FULL SCREEN LETTER STAGE --- */
+        #main-letter {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 240, 245, 0.95);
+            z-index: 20;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .letter-paper {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(255, 107, 129, 0.2);
+            border: 2px dashed #ffb7b2;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .letter-paper::-webkit-scrollbar {
+            width: 8px;
+        }
+        .letter-paper::-webkit-scrollbar-thumb {
+            background: #ffb7b2;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff4757;
+            text-align: center;
+            margin-bottom: 10px; /* Reduced slightly to fit photo */
+            font-size: 2rem;
+        }
+
+        /* --- NEW PHOTO AREA CSS --- */
+        .photo-frame {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .photo-frame img {
+            width: 250px; /* This creates the square look */
+            height: 250px; 
+            object-fit: cover; /* Ensures photo doesn't stretch weirdly */
+            border-radius: 10px;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .content-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #555;
+            white-space: pre-wrap; 
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #ff4757;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        /* --- INTERACTIVE BUTTONS --- */
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            opacity: 0; 
+            transition: opacity 1s;
+        }
+
+        .cute-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: #ff4757;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .cute-btn:hover {
+            transform: scale(1.1);
+            background: #ff6b81;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* --- CUTE MASCOT --- */
+        .mascot {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 80px;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-container"></div>
+
+    <div id="envelope-container" onclick="openEnvelope()">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="pocket"></div>
+            <div class="letter-preview">
+                For My Baby ❤️
+            </div>
+            <div class="sticker">💌</div>
+        </div>
+        <div class="instruction">Tap to Open</div>
+    </div>
+
+    <div id="main-letter">
+        <div class="letter-paper">
+            <h1>Happy 10th Monthsary!</h1>
+            
+            <div class="photo-frame">
+                <img src="assets/IMG_20251128_210333.jpg" alt="Our Photo">
+            </div>
+            <div id="typewriter-area" class="content-text"></div>
+            
+            <div class="btn-group" id="interaction-buttons">
+                <button class="cute-btn" onclick="blastConfetti()">Celebrate 🎉</button>
+                <button class="cute-btn" onclick="sendKiss()">Send Kiss 💋</button>
+            </div>
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Q0M2EzNjE1M2Q0M2EzNjE1M2Q0M2EzNjE1M2Q0M2EzNjE1/LpDmM2wSt6Hm5fKJVa/giphy.gif" alt="Cute Bear" class="mascot">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // --- CONFIGURATION ---
+        const message = `Happy 10th monthsary my babyyyyyyyyyyyyyyyyyy ahhhhhhhhhhhhhhhhhhhhh❤️🥰 another month with my baby and many more months to come and almost a year na time travels so fast my baby and mura rag ni timelaps ang everything from a moment nga shy type pa kaayu ang baby turn into more cutieeeeeeee last months is not so good para sa akong baby cause you've been so sad to some days which is di man unta dapat ma sad ang babyyyyyyyyyyy pero di man ko perfect di nako mapa happy constantly akong baby man though i'm always trying my best man to make you happy my baby and forever i will kay di mana dapat ma sad ang baby kay love² man kaayu na nakoooooooooooo superrrrrrrrrrr nya mag hilak man japon in silence haysssssssss pero sge lang i hope another month na together with you will keep you happy my baby, im always here for you my baby, till death do us part i'll always be yours my baby without fail mwuahhhhhhhhhhh I Loveeeeeeeeeeeeeeee Youuuuuuuuuuuuuu Myyyyyyyyyyy Babyyyyyyyyyyyyyyyyyyyyyyyyyyyyy😋🤭❤️🥰`;
+
+        // --- BACKGROUND HEARTS ---
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = Math.random() < 0.5 ? '❤️' : '🌸';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            
+            document.getElementById('bg-container').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // --- ENVELOPE INTERACTION ---
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            envelope.classList.add('open');
+
+            // Wait for animation, then show letter
+            setTimeout(() => {
+                document.getElementById('envelope-container').style.display = 'none';
+                document.getElementById('main-letter').style.display = 'flex';
+                startTypewriter();
+                blastConfetti();
+            }, 1500);
+        }
+
+        // --- TYPEWRITER EFFECT ---
+        function startTypewriter() {
+            const textArea = document.getElementById('typewriter-area');
+            let i = 0;
+            const speed = 30; // Speed of typing in ms
+
+            function type() {
+                if (i < message.length) {
+                    // Handle line breaks if text was pre-formatted, 
+                    // but user text is continuous so we just append chars
+                    textArea.innerHTML += message.charAt(i);
+                    i++;
+                    
+                    // Auto scroll to bottom
+                    const paper = document.querySelector('.letter-paper');
+                    paper.scrollTop = paper.scrollHeight;
+
+                    setTimeout(type, speed);
+                } else {
+                    // Finished typing
+                    textArea.innerHTML += '<span class="cursor"></span>';
+                    document.getElementById('interaction-buttons').style.opacity = '1';
+                }
+            }
+            type();
+        }
+
+        // --- INTERACTION BUTTONS ---
+        function blastConfetti() {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+            const random = (min, max) => Math.random() * (max - min) + min;
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function sendKiss() {
+            // Create a burst of kiss emojis
+            for (let i = 0; i < 20; i++) {
+                const kiss = document.createElement('div');
+                kiss.innerHTML = '💋';
+                kiss.style.position = 'fixed';
+                kiss.style.left = '50%';
+                kiss.style.top = '50%';
+                kiss.style.fontSize = '30px';
+                kiss.style.pointerEvents = 'none';
+                kiss.style.zIndex = '1000';
+                kiss.style.transition = 'all 1s ease';
+                document.body.appendChild(kiss);
+
+                // Randomize trajectory
+                const x = (Math.random() - 0.5) * window.innerWidth;
+                const y = (Math.random() - 0.5) * window.innerHeight;
+
+                setTimeout(() => {
+                    kiss.style.transform = `translate(${x}px, ${y}px) scale(2)`;
+                    kiss.style.opacity = '0';
+                }, 50);
+
+                setTimeout(() => kiss.remove(), 1000);
+            }
+        }
+    </script>
+</body>
+</html>
