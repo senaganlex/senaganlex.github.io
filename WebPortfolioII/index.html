@@ -5,40 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lex Mariun Señagan - Tech Portfolio</title>
     
-    <!-- 1. Load Tailwind CSS -->
+    <!-- Enhanced Tailwind CSS with additional utilities -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'gradient': 'gradient 8s ease infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'zoom-in': 'zoomIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
     
-    <!-- 2. Load "Inter" Font -->
+    <!-- Enhanced Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- 3. Favicon Link (New) -->
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Enhanced Favicon -->
     <link rel="icon" type="image/png" href="https://senaganlex.github.io/WebPortfolioII/assets/image/istockphoto-2086515931-612x612.png">
+    <link rel="apple-touch-icon" href="https://senaganlex.github.io/WebPortfolioII/assets/image/istockphoto-2086515931-612x612.png">
 
-    <!-- 4. Custom Styles & Animations -->
+    <!-- Enhanced Custom Styles & Animations -->
     <style>
         /* Set the default font for the page */
         body {
             font-family: 'Inter', sans-serif;
             /* Smooth scroll behavior */
             scroll-behavior: smooth;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            /* Hide scrollbar but keep scrolling functionality */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;     /* Firefox */
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        body::-webkit-scrollbar {
+            display: none;
         }
 
         /* Styling for the "active" navigation button */
         .nav-button.active {
-            background-color: #1d4ed8; /* A darker, active blue */
+            background-color: #1d4ed8;
             color: #ffffff;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+            transform: translateY(-2px);
         }
 
-        /* --- Animations --- */
+        /* Improved hover effects */
+        .nav-button:hover {
+            transform: translateY(-3px);
+            transition: all 0.3s ease;
+        }
+
+        /* --- Enhanced Animations --- */
 
         /* Simple fade-in and slide-up animation for content blocks */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -46,7 +81,6 @@
             }
         }
         .fade-in {
-            /* Apply the animation */
             animation: fadeIn 0.8s ease-out forwards;
         }
 
@@ -56,7 +90,7 @@
                 transform: translateY(0px);
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-15px);
             }
             100% {
                 transform: translateY(0px);
@@ -73,60 +107,540 @@
             100% { background-position: 0% 50%; }
         }
         .animated-gradient {
-            /* A tech-themed dark gradient */
-            background: linear-gradient(-45deg, #0d1117, #161b22, #0d1117, #21262d);
+            background: linear-gradient(-45deg, #0d1117, #1e3a8a, #0d1117, #1e40af);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            animation: gradientBG 12s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add a subtle overlay pattern */
+        .animated-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Gradient text effect */
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Card hover effects */
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Skill badge styles */
+        .skill-badge {
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Image hover effects */
+        .img-hover {
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .img-hover:hover {
+            transform: scale(1.05);
+        }
+
+        /* Image hover overlay effect */
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            cursor: pointer;
+        }
+
+        .img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 0.75rem;
+        }
+
+        .img-container:hover .img-overlay {
+            opacity: 1;
+        }
+
+        .img-overlay-text {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .img-container:hover .img-overlay-text {
+            transform: translateY(0);
+        }
+
+        /* Lightbox modal styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            /* Prevent lightbox from creating scrollbars */
+            overflow: hidden;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active .lightbox-content {
+            transform: scale(1);
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 0.5rem;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        /* Custom scrollbar - HIDDEN */
+        /* Commented out to prevent flickering */
+        /*
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        */
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Smooth scroll padding for anchor links */
+        html {
+            scroll-padding-top: 80px; /* Adjust based on your header height */
+        }
+
+        /* Prevent content shift when scrollbar disappears */
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .mobile-stack {
+                flex-direction: column;
+            }
+            
+            .mobile-center {
+                text-align: center;
+            }
+            
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .lightbox-prev {
+                left: 10px;
+            }
+            
+            .lightbox-next {
+                right: 10px;
+            }
+            
+            .lightbox-caption {
+                font-size: 0.9rem;
+                bottom: -50px;
+            }
+            
+            /* For mobile, we might want to show scrollbar for better UX */
+            /* Uncomment if you want scrollbars on mobile only */
+            /*
+            body::-webkit-scrollbar {
+                display: block;
+                width: 6px;
+            }
+            */
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body class="bg-gray-900 text-gray-200 min-h-screen">
 
-    <!-- Header Section -->
-    <header class="sticky top-0 z-50 w-full bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-gray-700/50">
-        <nav class="container mx-auto px-6 py-4 flex flex-wrap justify-between items-center">
+    <!-- Lightbox Modal for Full Images -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="lightbox-nav lightbox-prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="lightbox-nav lightbox-next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" class="lightbox-img" src="" alt="">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Enhanced Header Section with particle effect -->
+    <header class="sticky top-0 z-50 w-full bg-gray-900/90 backdrop-blur-md shadow-lg border-b border-gray-700/50">
+        <div id="particles" class="absolute inset-0 opacity-20"></div>
+        <nav class="container mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center relative z-10">
             <!-- Your Name/Logo -->
-            <h1 class="text-2xl font-bold text-blue-400">
-                Lex Mariun Señagan
-            </h1>
+            <div class="flex items-center mb-4 sm:mb-0">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 flex items-center justify-center mr-3">
+                    <span class="font-bold text-white">LS</span>
+                </div>
+                <h1 class="text-2xl font-bold text-white">
+                    <span class="gradient-text">Lex Mariun Señagan</span>
+                </h1>
+            </div>
             
             <!-- Navigation Buttons -->
-            <div class="flex gap-3 sm:gap-4 mt-3 sm:mt-0">
-                <button data-section="welcome" class="nav-button active bg-blue-600 text-white px-3 py-2 sm:px-4 rounded-lg text-sm sm:text-base font-medium transition duration-300 ease-in-out hover:bg-blue-500 hover:-translate-y-1">
-                    Welcome
+            <div class="flex flex-wrap gap-2 justify-center">
+                <button data-section="welcome" class="nav-button active bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-500 hover:shadow-lg flex items-center">
+                    <i class="fas fa-home mr-2"></i> Welcome
                 </button>
-                <button data-section="about-me" class="nav-button bg-gray-700 text-gray-200 px-3 py-2 sm:px-4 rounded-lg text-sm sm:text-base font-medium transition duration-300 ease-in-out hover:bg-gray-600 hover:-translate-y-1">
-                    About Me
+                <button data-section="about-me" class="nav-button bg-gray-700 text-gray-200 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-gray-600 hover:shadow-lg flex items-center">
+                    <i class="fas fa-user mr-2"></i> About
                 </button>
-                <button data-section="my-info" class="nav-button bg-gray-700 text-gray-200 px-3 py-2 sm:px-4 rounded-lg text-sm sm:text-base font-medium transition duration-300 ease-in-out hover:bg-gray-600 hover:-translate-y-1">
-                    My Info
+                <button data-section="my-info" class="nav-button bg-gray-700 text-gray-200 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-gray-600 hover:shadow-lg flex items-center">
+                    <i class="fas fa-file-alt mr-2"></i> Resume
                 </button>
-                <button data-section="my-test-code" class="nav-button bg-gray-700 text-gray-200 px-3 py-2 sm:px-4 rounded-lg text-sm sm:text-base font-medium transition duration-300 ease-in-out hover:bg-gray-600 hover:-translate-y-1">
-                    My Projects
+                <button data-section="my-test-code" class="nav-button bg-gray-700 text-gray-200 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-gray-600 hover:shadow-lg flex items-center">
+                    <i class="fas fa-code mr-2"></i> Projects
                 </button>
             </div>
         </nav>
     </header>
 
     <!-- Main Content Area -->
-    <!-- Content will be dynamically loaded here by JavaScript -->
-    <main id="mainContent" class="container mx-auto p-4 sm:p-8">
+    <main id="mainContent" class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <!-- JS will populate this -->
     </main>
 
-    <!-- Footer Section -->
-    <footer class="text-center p-6 mt-12 border-t border-gray-700/50 text-gray-500">
-        <p>&copy; 2025 Lex Mariun Señagan. All rights reserved.</p>
+    <!-- Enhanced Footer Section -->
+    <footer class="bg-gray-800 border-t border-gray-700/50 py-8 mt-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <h3 class="text-xl font-bold text-white mb-2">Lex Mariun Señagan</h3>
+                    <p class="text-gray-400">Tech Portfolio</p>
+                    <p class="text-gray-500 text-sm mt-2">Innovating through code and design</p>
+                </div>
+                
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="https://github.com/senaganlex" target="_blank" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-blue-400" title="GitHub">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                    <a href="https://www.facebook.com/lexmariun.senagan.5" target="_blank" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-blue-500" title="Facebook">
+                        <i class="fab fa-facebook text-2xl"></i>
+                    </a>
+                    <a href="mailto:your-email@gmail.com" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-red-500" title="Email">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </a>
+                </div>
+                
+                <div class="text-center">
+                    <button id="backToTop" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 flex items-center">
+                        <i class="fas fa-arrow-up mr-2"></i> Back to Top
+                    </button>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700/50 mt-8 pt-6 text-center text-gray-500">
+                <p>&copy; <span id="currentYear"></span> Lex Mariun Señagan. All rights reserved.</p>
+                <p class="text-sm mt-2">Built with passion and modern web technologies</p>
+            </div>
+        </div>
     </footer>
 
-
-    <!-- 5. JavaScript Logic -->
+    <!-- Enhanced JavaScript Logic -->
     <script>
+        // Lightbox functionality
+        let currentImageIndex = 0;
+        let images = [];
+        
+        // Lightbox functions
+        function openLightbox(imgSrc, imgAlt, index) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            
+            lightboxImg.src = imgSrc;
+            lightboxCaption.textContent = imgAlt;
+            currentImageIndex = index;
+            
+            setTimeout(() => {
+                lightbox.classList.add('active');
+            }, 10);
+            
+            // Prevent body scroll and hide scrollbars
+            document.body.classList.add('no-scroll');
+        }
+        
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            
+            // Re-enable body scroll
+            setTimeout(() => {
+                document.body.classList.remove('no-scroll');
+            }, 300);
+        }
+        
+        function navigateLightbox(direction) {
+            currentImageIndex += direction;
+            
+            // Loop through images
+            if (currentImageIndex < 0) {
+                currentImageIndex = images.length - 1;
+            } else if (currentImageIndex >= images.length) {
+                currentImageIndex = 0;
+            }
+            
+            const imgSrc = images[currentImageIndex].src;
+            const imgAlt = images[currentImageIndex].alt;
+            
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            
+            // Add fade transition
+            lightboxImg.style.opacity = '0';
+            
+            setTimeout(() => {
+                lightboxImg.src = imgSrc;
+                lightboxCaption.textContent = imgAlt;
+                lightboxImg.style.opacity = '1';
+            }, 300);
+        }
+        
+        // Keyboard navigation for lightbox
+        function handleKeydown(e) {
+            const lightbox = document.getElementById('lightbox');
+            if (!lightbox.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    navigateLightbox(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateLightbox(1);
+                    break;
+            }
+        }
+        
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Simple particle effect for header
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+            
+            const particleCount = 15;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 3 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = '#3b82f6';
+                particle.style.borderRadius = '50%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                particlesContainer.appendChild(particle);
+                
+                // Animate particle
+                animateParticle(particle);
+            }
+        }
+        
+        function animateParticle(particle) {
+            let x = parseFloat(particle.style.left);
+            let y = parseFloat(particle.style.top);
+            let xSpeed = (Math.random() - 0.5) * 0.3;
+            let ySpeed = (Math.random() - 0.5) * 0.3;
+            
+            function move() {
+                x += xSpeed;
+                y += ySpeed;
+                
+                // Bounce off edges
+                if (x < 0 || x > 100) xSpeed *= -1;
+                if (y < 0 || y > 100) ySpeed *= -1;
+                
+                particle.style.left = x + '%';
+                particle.style.top = y + '%';
+                
+                requestAnimationFrame(move);
+            }
+            move();
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
+            // Create particle effect
+            createParticles();
+            
             // Load the "welcome" section by default
             loadContent("welcome");
 
-            const navButtons = document.querySelectorAll('button[data-section]');
+            const navButtons = document.querySelectorAll('.nav-button');
             const mainContent = document.getElementById('mainContent');
 
             navButtons.forEach(button => {
@@ -135,8 +649,10 @@
                     loadContent(section);
 
                     // Update active button state
-                    navButtons.forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white'));
-                    navButtons.forEach(b => b.classList.add('bg-gray-700', 'text-gray-200'));
+                    navButtons.forEach(b => {
+                        b.classList.remove('active', 'bg-blue-600', 'text-white');
+                        b.classList.add('bg-gray-700', 'text-gray-200');
+                    });
                     
                     button.classList.add('active', 'bg-blue-600', 'text-white');
                     button.classList.remove('bg-gray-700', 'text-gray-200');
@@ -145,300 +661,617 @@
                     mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
+
+            // Back to top button
+            const backToTopBtn = document.getElementById('backToTop');
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Show/hide back to top button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('opacity-100', 'visible');
+                    backToTopBtn.classList.remove('opacity-0', 'invisible');
+                } else {
+                    backToTopBtn.classList.remove('opacity-100', 'visible');
+                    backToTopBtn.classList.add('opacity-0', 'invisible');
+                }
+            });
+            
+            // Lightbox event listeners
+            document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+            document.querySelector('.lightbox-prev').addEventListener('click', () => navigateLightbox(-1));
+            document.querySelector('.lightbox-next').addEventListener('click', () => navigateLightbox(1));
+            document.addEventListener('keydown', handleKeydown);
+            
+            // Close lightbox when clicking outside the image
+            document.getElementById('lightbox').addEventListener('click', (e) => {
+                if (e.target.id === 'lightbox') {
+                    closeLightbox();
+                }
+            });
         });
 
         function loadContent(section) {
             const main = document.getElementById("mainContent");
             
-            // This map stores all the HTML content for each section, styled with Tailwind
-            const sectionContentMap = {
-                'welcome': `
-                    <section class="welcome-section fade-in text-center rounded-xl p-8 md:p-16 overflow-hidden animated-gradient border border-gray-700 shadow-2xl">
-                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4">
-                            Hi, I'm Lex Mariun Señagan
-                        </h1>
-                        <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-                            Welcome to my digital resume & tech portfolio.
-                        </p>
-                        <div class="text-lg text-gray-300 mt-8 bg-gray-900/50 p-6 rounded-lg max-w-3xl mx-auto backdrop-blur-sm">
-                            <p>
-                                I enjoy working on tech-related and diverse projects. My goal is to create 
-                                impactful and innovative solutions. Explore my portfolio to learn more 
-                                about my skills and experience. I am highly confident in my design abilities 
-                                and in my flexibility when it comes to technological work.
-                            </p>
-                        </div>
-                    </section>
-                `,
-
-                'about-me': `
-                    <section class="about-me fade-in grid grid-cols-1 md:grid-cols-3 gap-8 items-center bg-gray-800/50 p-8 rounded-xl border border-gray-700">
-                        <!-- Profile Image Column -->
-                        <div class="flex justify-center md:col-span-1">
-                            <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/1Image.png" 
-                                 alt="Lex Mariun Señagan"
-                                 class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-blue-500 shadow-xl float-anim"
-                                 onerror="this.src='https://placehold.co/256x256/3b82f6/ffffff?text=Image+Not+Found'" />
-                        </div>
-                        
-                        <!-- About Me Text Column -->
-                        <div class="md:col-span-2">
-                            <h2 class="text-4xl font-bold text-blue-400 mb-6">About Me</h2>
-                            <p class="text-box bg-gray-800 p-6 rounded-lg text-gray-300 text-lg leading-relaxed mb-6">
-                                Welcome to my portfolio! As a developer and a designer, I value ongoing learning and staying updated with technological advancements.
-                                I enjoy collaborating with others and am always open to new opportunities.
-                            </p>
-                            
-                            <!-- Social Media Icons -->
-                            <h3 class="text-xl font-semibold text-gray-200 mb-4">Connect with me</h3>
-                            <div class="flex gap-6">
-                                <!-- GitHub -->
-                                <a href="https://github.com/senaganlex" target="_blank" class="text-gray-400 hover:text-white transition duration-300 transform hover:scale-110" title="GitHub">
-                                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.03-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.202 2.398.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
-                                </a>
-                                <!-- Facebook -->
-                                <a href="https://www.facebook.com/lexmariun.senagan.5" target="_blank" class="text-gray-400 hover:text-blue-500 transition duration-300 transform hover:scale-110" title="Facebook">
-                                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.772-1.63 1.562V12h2.773l-.443 2.89h-2.33V21.878A10.001 10.001 0 0022 12z" clip-rule="evenodd" /></svg>
-                                </a>
-                                <!-- Email -->
-                                <a href="mailto:your-email@gmail.com" target="_blank" class="text-gray-400 hover:text-red-500 transition duration-300 transform hover:scale-110" title="Email">
-                                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.003 5.884L1.998 5.88c-.18-.083-.352-.17-.512-.265A3.003 3.003 0 011.5 5.23V5c0-1.103.897-2 2-2h17c1.103 0 2 .897 2 2v.23c0 .14-.015.277-.042.41-.16.82-.497 1.58-.958 2.265-.004.005-.007.01-.011.015l-7.46 6.94c-.62.574-1.48.86-2.529.86-.96 0-1.82-.25-2.45-.76l-7.517-6.95zM1 11.13V20c0 1.103.897 2 2 2h18c1.103 0 2-.897 2-2V11.13l-8.05 7.43c-1.012.934-2.364 1.43-3.95 1.43s-2.938-.496-3.95-1.43L1 11.13z" /></svg>
-                                </a>
+            // Show loading animation
+            main.innerHTML = `
+                <div class="flex justify-center items-center h-64">
+                    <div class="text-center">
+                        <div class="loading mx-auto mb-4"></div>
+                        <p class="text-gray-400">Loading content...</p>
+                    </div>
+                </div>
+            `;
+            
+            // Load content after a short delay for better UX
+            setTimeout(() => {
+                const sectionContentMap = {
+                    'welcome': `
+                        <section class="welcome-section fade-in text-center rounded-xl p-6 md:p-12 overflow-hidden animated-gradient border border-gray-700 shadow-2xl relative">
+                            <div class="relative z-10">
+                                <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4">
+                                    Hi, I'm <span class="gradient-text">Lex Mariun Señagan</span>
+                                </h1>
+                                <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
+                                    Welcome to my digital resume & tech portfolio.
+                                </p>
+                                <div class="text-lg text-gray-300 bg-gray-900/70 p-6 md:p-8 rounded-xl max-w-3xl mx-auto backdrop-blur-sm border border-gray-700/50">
+                                    <p class="mb-4">
+                                        I enjoy working on tech-related and diverse projects. My goal is to create 
+                                        impactful and innovative solutions. Explore my portfolio to learn more 
+                                        about my skills and experience.
+                                    </p>
+                                    <p>
+                                        I am highly confident in my design abilities 
+                                        and in my flexibility when it comes to technological work.
+                                    </p>
+                                </div>
+                                <div class="mt-10 flex flex-wrap justify-center gap-4">
+                                    <button data-section="my-test-code" class="nav-button bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-500 transition-all duration-300 transform hover:scale-105 flex items-center">
+                                        <i class="fas fa-code mr-2"></i> View Projects
+                                    </button>
+                                    <button data-section="my-info" class="nav-button bg-gray-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 flex items-center">
+                                        <i class="fas fa-file-alt mr-2"></i> View Resume
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </section>
-                `,
+                        </section>
+                    `,
 
-                'my-info': `
-                    <section class="my-info-section fade-in">
-                        <h2 class="text-4xl font-bold text-center text-blue-400 mb-10">My Resume</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            
-                            <!-- Education Card -->
-                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-                                <h3 class="text-2xl font-semibold text-white mb-4">Education</h3>
-                                <ul class="space-y-4">
-                                    <li class="p-4 bg-gray-700/50 rounded-lg">
-                                        <p class="font-bold text-blue-300">CITE Technical Institute, Inc.</p>
-                                        <p class="text-gray-300">Diploma in Computer Engineering Technology </p>
-                                        <p class="text-sm text-gray-400">Purok 2, San Jose, Cebu City</p>
-                                    </li>
-                                    <li class="p-4 bg-gray-700/50 rounded-lg">
-                                        <p class="font-bold text-blue-300">Asian College of Technology</p>
-                                        <p class="text-gray-300">Bulacao Campus</p>
-                                    </li>
-                                    <li class="p-4 bg-gray-700/50 rounded-lg">
-                                        <p class="font-bold text-blue-300">University of the Visayas</p>
-                                        <p class="text-gray-300">Pardo Campus</p>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Skills Card -->
-                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-                                <h3 class="text-2xl font-semibold text-white mb-4">Core Skills</h3>
+                    'about-me': `
+                        <section class="about-me fade-in bg-gray-800/50 p-6 md:p-8 rounded-xl border border-gray-700">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                                <!-- Profile Image Column -->
+                                <div class="flex justify-center md:col-span-1">
+                                    <div class="relative">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/1Image.png" 
+                                             alt="Lex Mariun Señagan"
+                                             class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-blue-500 shadow-2xl float-anim img-hover"
+                                             onerror="this.src='https://placehold.co/400x400/1e293b/3b82f6?text=Lex+Mariun+Señagan'" />
+                                        <div class="absolute -bottom-2 -right-2 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                            <i class="fas fa-check-circle mr-1"></i> Available
+                                        </div>
+                                    </div>
+                                </div>
                                 
-                                <h4 class="text-lg font-semibold text-blue-300 mt-4 mb-2">Programming Languages</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">C</span>
-                                    <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">C#</span>
-                                    <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">C++</span>
-                                    <span class="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium">Java</span>
+                                <!-- About Me Text Column -->
+                                <div class="md:col-span-2">
+                                    <h2 class="text-4xl font-bold text-blue-400 mb-6 flex items-center">
+                                        <i class="fas fa-user mr-3"></i> About Me
+                                    </h2>
+                                    <div class="text-box bg-gray-800 p-6 rounded-lg text-gray-300 text-lg leading-relaxed mb-6 hover-card">
+                                        <p class="mb-4">
+                                            Welcome to my portfolio! As a developer and a designer, I value ongoing learning and staying updated with technological advancements.
+                                            I enjoy collaborating with others and am always open to new opportunities.
+                                        </p>
+                                        <p>
+                                            With experience in both software development and graphic design, I bring a unique perspective to every project,
+                                            ensuring both functionality and aesthetic appeal.
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Social Media Icons -->
+                                    <h3 class="text-xl font-semibold text-gray-200 mb-4">Connect with me</h3>
+                                    <div class="flex gap-6">
+                                        <!-- GitHub -->
+                                        <a href="https://github.com/senaganlex" target="_blank" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-blue-400" title="GitHub">
+                                            <div class="bg-gray-900 p-4 rounded-xl hover:bg-gray-800">
+                                                <i class="fab fa-github text-3xl"></i>
+                                            </div>
+                                            <p class="text-sm mt-2 text-center">GitHub</p>
+                                        </a>
+                                        <!-- Facebook -->
+                                        <a href="https://www.facebook.com/lexmariun.senagan.5" target="_blank" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-blue-500" title="Facebook">
+                                            <div class="bg-gray-900 p-4 rounded-xl hover:bg-gray-800">
+                                                <i class="fab fa-facebook text-3xl"></i>
+                                            </div>
+                                            <p class="text-sm mt-2 text-center">Facebook</p>
+                                        </a>
+                                        <!-- Email -->
+                                        <a href="mailto:your-email@gmail.com" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-red-500" title="Email">
+                                            <div class="bg-gray-900 p-4 rounded-xl hover:bg-gray-800">
+                                                <i class="fas fa-envelope text-3xl"></i>
+                                            </div>
+                                            <p class="text-sm mt-2 text-center">Email</p>
+                                        </a>
+                                        <!-- LinkedIn -->
+                                        <a href="#" class="text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-110 hover:text-blue-600" title="LinkedIn">
+                                            <div class="bg-gray-900 p-4 rounded-xl hover:bg-gray-800">
+                                                <i class="fab fa-linkedin text-3xl"></i>
+                                            </div>
+                                            <p class="text-sm mt-2 text-center">LinkedIn</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    `,
+
+                    'my-info': `
+                        <section class="my-info-section fade-in">
+                            <h2 class="text-4xl font-bold text-center text-blue-400 mb-10 flex items-center justify-center">
+                                <i class="fas fa-file-alt mr-3"></i> My Resume
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                
+                                <!-- Education Card -->
+                                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg hover-card">
+                                    <h3 class="text-2xl font-semibold text-white mb-4 flex items-center">
+                                        <i class="fas fa-graduation-cap mr-3 text-blue-400"></i> Education
+                                    </h3>
+                                    <ul class="space-y-4">
+                                        <li class="p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                                            <p class="font-bold text-blue-300">CITE Technical Institute, Inc.</p>
+                                            <p class="text-gray-300">Diploma in Computer Engineering Technology</p>
+                                            <p class="text-sm text-gray-400 mt-2"><i class="fas fa-map-marker-alt mr-1"></i> Purok 2, San Jose, Cebu City</p>
+                                        </li>
+                                        <li class="p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                                            <p class="font-bold text-blue-300">Asian College of Technology</p>
+                                            <p class="text-gray-300">Bulacao Campus</p>
+                                            <p class="text-sm text-gray-400 mt-2"><i class="fas fa-book-open mr-1"></i> Information Technology</p>
+                                        </li>
+                                        <li class="p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                                            <p class="font-bold text-blue-300">University of the Visayas</p>
+                                            <p class="text-gray-300">Pardo Campus</p>
+                                            <p class="text-sm text-gray-400 mt-2"><i class="fas fa-book-open mr-1"></i> Computer Studies</p>
+                                        </li>
+                                    </ul>
                                 </div>
 
-                                <h4 class="text-lg font-semibold text-blue-300 mt-6 mb-2">Web Development</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-green-700 text-white px-3 py-1 rounded-full text-sm font-medium">HTML</span>
-                                    <span class="bg-green-700 text-white px-3 py-1 rounded-full text-sm font-medium">CSS</span>
-                                    <span class="bg-green-700 text-white px-3 py-1 rounded-full text-sm font-medium">JavaScript</span>
+                                <!-- Skills Card -->
+                                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg hover-card">
+                                    <h3 class="text-2xl font-semibold text-white mb-4 flex items-center">
+                                        <i class="fas fa-tools mr-3 text-green-400"></i> Core Skills
+                                    </h3>
+                                    
+                                    <h4 class="text-lg font-semibold text-blue-300 mt-4 mb-2">Programming Languages</h4>
+                                    <div class="flex flex-wrap gap-3 mb-6">
+                                        <span class="skill-badge bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium">C</span>
+                                        <span class="skill-badge bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium">C#</span>
+                                        <span class="skill-badge bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium">C++</span>
+                                        <span class="skill-badge bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium">Java</span>
+                                        <span class="skill-badge bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium">Python</span>
+                                    </div>
+
+                                    <h4 class="text-lg font-semibold text-blue-300 mt-6 mb-2">Web Development</h4>
+                                    <div class="flex flex-wrap gap-3 mb-6">
+                                        <span class="skill-badge bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium">HTML</span>
+                                        <span class="skill-badge bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium">CSS</span>
+                                        <span class="skill-badge bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
+                                        <span class="skill-badge bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium">Tailwind CSS</span>
+                                    </div>
+
+                                    <h4 class="text-lg font-semibold text-blue-300 mt-6 mb-2">Photo Designing</h4>
+                                    <div class="flex flex-wrap gap-3 mb-6">
+                                        <span class="skill-badge bg-purple-700 text-white px-4 py-2 rounded-full text-sm font-medium">Adobe Photoshop</span>
+                                        <span class="skill-badge bg-purple-700 text-white px-4 py-2 rounded-full text-sm font-medium">Canva</span>
+                                        <span class="skill-badge bg-purple-700 text-white px-4 py-2 rounded-full text-sm font-medium">Figma</span>
+                                    </div>
+
+                                    <h4 class="text-lg font-semibold text-blue-300 mt-6 mb-2">3D Designing</h4>
+                                    <div class="flex flex-wrap gap-3">
+                                        <span class="skill-badge bg-yellow-700 text-white px-4 py-2 rounded-full text-sm font-medium">Tinkercad</span>
+                                        <span class="skill-badge bg-yellow-700 text-white px-4 py-2 rounded-full text-sm font-medium">Blender</span>
+                                    </div>
                                 </div>
 
-                                <h4 class="text-lg font-semibold text-blue-300 mt-6 mb-2">Photo Designing</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-green-700 text-white px-3 py-1 rounded-full text-sm font-medium">Adobe Photoshop</span>
-                                    <span class="bg-green-700 text-white px-3 py-1 rounded-full text-sm font-medium">Canva</span>
+                                <!-- Working Experience -->
+                                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg hover-card md:col-span-2">
+                                    <h3 class="text-2xl font-semibold text-white mb-4 flex items-center">
+                                        <i class="fas fa-briefcase mr-3 text-yellow-400"></i> Working Experience
+                                    </h3>
+                                    <ul class="space-y-4">
+                                        <li class="p-6 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                                            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                                <div>
+                                                    <p class="font-bold text-blue-300 text-xl">Watchdog Automation OPC</p>
+                                                    <p class="text-gray-300 mt-2">Working Experience: 1 year and 9 months</p>
+                                                    <p class="text-sm text-gray-400 mt-1"><i class="fas fa-map-marker-alt mr-1"></i> Paseo De Amores, Gun-Ob, Lapu-Lapu City</p>
+                                                </div>
+                                                <div class="mt-4 md:mt-0">
+                                                    <span class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
+                                                        <i class="fas fa-calendar-alt mr-1"></i> 2022 - 2024
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4">
+                                                <h4 class="text-gray-200 font-semibold mb-2">Key Responsibilities:</h4>
+                                                <ul class="list-disc list-inside text-gray-400 space-y-1">
+                                                    <li>Automation system configuration and maintenance</li>
+                                                    <li>Hardware troubleshooting and repair</li>
+                                                    <li>Industrial control system programming</li>
+                                                    <li>Team collaboration on engineering projects</li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
 
-                                <h4 class="text-lg font-semibold text-blue-300 mt-6 mb-2">3D Designing</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-green-700 text-white px-3 py-1 rounded-full text-sm font-medium">Tinkercad</span>
+                            </div>
+                        </section>
+                    `,
+
+                    'my-test-code': `
+                        <section class="my-test-code-section fade-in">
+                            <div class="text-center mb-12">
+                                <h2 class="text-4xl font-bold text-blue-400 mb-4 flex items-center justify-center">
+                                    <i class="fas fa-code mr-3"></i> My Projects
+                                </h2>
+                                <div class="text-box bg-gray-800 p-6 rounded-lg text-gray-300 text-lg max-w-2xl mx-auto">
+                                    <p>
+                                        These are some of the websites I've worked on. If you have suggestions or want to collaborate,
+                                        feel free to reach out!
+                                    </p>
+                                    <p class="text-sm text-blue-300 mt-4">
+                                        <i class="fas fa-mouse-pointer mr-2"></i> Hover over any image to view full size
+                                    </p>
                                 </div>
                             </div>
 
-                            <!-- Working Experience -->
-                            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-                                <h3 class="text-2xl font-semibold text-white mb-4">Working Experience</h3>
-                                <ul class="space-y-4">
-                                    <li class="p-4 bg-gray-700/50 rounded-lg">
-                                        <p class="font-bold text-blue-300">Watchdog Automation OPC</p>
-                                        <p class="text-gray-300">Working Experience: 1 year and 9 months </p>
-                                        <p class="text-sm text-gray-400">Paseo De Amores, Gun-Ob, Lapu-Lapu City</p>
-                                    </li>
-                                </ul>
+                            <!-- Project "Cards" -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                                <a href="https://senaganlex.github.io/Birthday%20Invitation%20Card/index.html" target="_blank" 
+                                   class="block bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-700 hover:shadow-2xl hover-card group">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 p-4 rounded-lg mr-4 group-hover:bg-blue-500 transition-colors duration-300">
+                                            <i class="fas fa-birthday-cake text-white text-2xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-bold text-blue-400 mb-2 group-hover:text-blue-300">Birthday Invitation Card</h3>
+                                            <p class="text-gray-400 group-hover:text-gray-300">A dynamic and interactive webpage for a birthday invitation with animations and responsive design.</p>
+                                            <div class="mt-4 flex items-center text-blue-400">
+                                                <span>View Project</span>
+                                                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://senaganlex.github.io/Projects/CalendarSenagan.html" target="_blank" 
+                                   class="block bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-700 hover:shadow-2xl hover-card group">
+                                    <div class="flex items-start">
+                                        <div class="bg-green-600 p-4 rounded-lg mr-4 group-hover:bg-green-500 transition-colors duration-300">
+                                            <i class="fas fa-calendar-alt text-white text-2xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-bold text-blue-400 mb-2 group-hover:text-blue-300">Calendar Project</h3>
+                                            <p class="text-gray-400 group-hover:text-gray-300">A functional calendar application built with web technologies featuring date selection and event tracking.</p>
+                                            <div class="mt-4 flex items-center text-blue-400">
+                                                <span>View Project</span>
+                                                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
 
-                        </div>
-                    </section>
-                `,
+                            <!-- CSS NC II Certificate -->
+                            <div class="mb-16">
+                                <h3 class="text-3xl font-bold text-center text-white mb-6 flex items-center justify-center">
+                                    <i class="fas fa-certificate mr-3 text-yellow-400"></i> CSS Certificate
+                                </h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                    <!-- Image 1 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/background.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Certificate Background"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Certificate+Background'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 2 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/NCII CSS.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="CSS NC II Certificate"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=CSS+NC+II+Certificate'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 3 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/background.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Certificate Details"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Certificate+Details'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                'my-test-code': `
-                    <section class="my-test-code-section fade-in">
-                        <div class="text-center">
-                            <h2 class="text-4xl font-bold text-blue-400 mb-4">My Projects</h2>
-                            <p class="text-box bg-gray-800 p-6 rounded-lg text-gray-300 text-lg max-w-2xl mx-auto">
-                                These are some of the websites I've worked on. If you have suggestions or want to collaborate,
-                                feel free to reach out!
-                            </p>
-                        </div>
+                            <!-- OJT Gallery -->
+                            <div class="mb-16">
+                                <h3 class="text-3xl font-bold text-center text-white mb-6 flex items-center justify-center">
+                                    <i class="fas fa-images mr-3 text-blue-400"></i> OJT Gallery
+                                </h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                    <!-- Image 1 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/IMG_20240229_164118.jpg" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="OJT Experience at Watchdog Automation - Working on automation systems"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/3b82f6?text=OJT+Experience+1'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 2 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/IMG_20240301_174625.jpg" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="OJT Team Collaboration - Working with engineering team"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/3b82f6?text=OJT+Experience+2'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 3 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/IMG_20240301_175036.jpg" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="OJT Project Setup - Configuring industrial control systems"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/3b82f6?text=OJT+Experience+3'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- Project "Cards" -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-                            <a href="https://senaganlex.github.io/Birthday%20Invitation%20Card/index.html" target="_blank" 
-                               class="block bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-700 hover:shadow-xl hover:scale-105">
-                                <h3 class="text-xl font-bold text-blue-400 mb-2">Birthday Invitation Card</h3>
-                                <p class="text-gray-400">A dynamic and interactive webpage for a birthday invitation.</p>
-                            </a>
+                            <!-- 3D Designing Section -->
+                            <div class="mb-16">
+                                <h3 class="text-3xl font-bold text-center text-white mb-6 flex items-center justify-center">
+                                    <i class="fas fa-cube mr-3 text-green-400"></i> 3D Designing (Tinkercad)
+                                </h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <!-- Image 1 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%201.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="3D Tinkercad Project - Front View of engineering model"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=3D+Tinkercad+Front+View'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 2 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%201.2.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="3D Tinkercad Project - Left Side View showing component details"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=3D+Tinkercad+Left+Side'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 3 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%201.3.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="3D Tinkercad Project - Right Side View with detailed assembly"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=3D+Tinkercad+Right+Side'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 4 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%202.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="3D Tinkercad Project 2 - Complex mechanical assembly"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=3D+Tinkercad+Project+2'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 5 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%202.2.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="3D Tinkercad Project 2.2 - Alternative angle of mechanical design"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=3D+Tinkercad+Project+2.2'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="img-container bg-gray-800 flex items-center justify-center">
+                                        <div class="text-center p-6">
+                                            <i class="fas fa-plus-circle text-4xl text-green-400 mb-4"></i>
+                                            <h4 class="text-xl font-bold text-white">More Projects</h4>
+                                            <p class="text-gray-400 mt-2">Additional 3D designs available</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Adobe Photoshop Designing -->
+                            <div class="mb-16">
+                                <h3 class="text-3xl font-bold text-center text-white mb-6 flex items-center justify-center">
+                                    <i class="fas fa-paint-brush mr-3 text-purple-400"></i> Adobe Photoshop Designing
+                                </h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <!-- Image 1 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/PSTI%201.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Photoshop Design - Corporate identity project with modern aesthetics"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/8b5cf6?text=Photoshop+Project+1'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 2 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/PSTI%202.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Photoshop Design - Marketing material with typography effects"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/8b5cf6?text=Photoshop+Project+2'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 3 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/PSTI%203.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Photoshop Design - Digital art with color manipulation"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/8b5cf6?text=Photoshop+Project+3'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 4 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/OPC%201.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Photoshop Design - Logo and branding concept"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/8b5cf6?text=Photoshop+Project+4'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 5 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/OPC%202.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Photoshop Design - Product mockup with realistic effects"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/8b5cf6?text=Photoshop+Project+5'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Image 6 -->
+                                    <div class="img-container">
+                                        <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/OPC%203.png" 
+                                             class="rounded-lg w-full h-64 object-cover transition-all duration-500 ease-in-out transform hover:scale-105" 
+                                             alt="Photoshop Design - Final composition with color grading"
+                                             onerror="this.src='https://placehold.co/600x400/1e293b/8b5cf6?text=Photoshop+Final+Design'">
+                                        <div class="img-overlay">
+                                            <div class="img-overlay-text">
+                                                <i class="fas fa-search-plus"></i> View Full Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+                    `,
+                };
+
+                const content = sectionContentMap[section];
+
+                if (content) {
+                    main.innerHTML = content;
+                    
+                    // Initialize lightbox functionality for this section
+                    if (section === 'my-test-code') {
+                        // Collect all images for lightbox navigation
+                        const allImages = main.querySelectorAll('.img-container img');
+                        images = Array.from(allImages).map((img, index) => ({
+                            src: img.src,
+                            alt: img.alt,
+                            index: index
+                        }));
+                        
+                        // Add click event to each image
+                        allImages.forEach((img, index) => {
+                            const container = img.closest('.img-container');
+                            if (container) {
+                                container.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    openLightbox(img.src, img.alt, index);
+                                });
+                            }
+                        });
+                    }
+                    
+                    // Re-attach event listeners to any buttons in the loaded content
+                    document.querySelectorAll('button[data-section]').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const section = button.getAttribute('data-section');
                             
-                            <a href="https://senaganlex.github.io/Projects/CalendarSenagan.html" target="_blank" 
-                               class="block bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-700 hover:shadow-xl hover:scale-105">
-                                <h3 class="text-xl font-bold text-blue-400 mb-2">Calendar Project</h3>
-                                <p class="text-gray-400">A functional calendar application built with web technologies.</p>
-                            </a>
-                        </div>
-
-                        <!-- CSS NC II Certificate -->
-                        <div class="mt-16">
-                            <h3 class="text-3xl font-bold text-center text-white mb-6">CSS Certificate</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <!-- Image 1 -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/background.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="OJT Image 2"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 2 -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/NCII CSS.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="OJT Image 1"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 3 -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/background.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="OJT Image 3"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                            </div>
-                        </div>
-
-                        <!-- OJT Gallery -->
-                        <div class="mt-16">
-                            <h3 class="text-3xl font-bold text-center text-white mb-6">OJT Gallery</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <!-- Image 1 -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/IMG_20240229_164118.jpg" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="OJT Image 1"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 2 -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/IMG_20240301_174625.jpg" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="OJT Image 2"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 3 -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/IMG_20240301_175036.jpg" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="OJT Image 3"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                            </div>
-                        </div>
-
-                        <!-- My Other Projects Header -->
-                        <div class="mt-16">
-                            <h3 class="text-3xl font-bold text-center text-white mb-6">My Other Projects</h3>
-                        </div>
-
-                        <!-- 3D Designing (Reverted to Tinkercad) -->
-                        <div class="mt-16">
-                            <h3 class="text-3xl font-bold text-center text-white mb-6">3D Designing (Tinkercad)</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <!-- Image 1 (Tinkercad FRONT VIEW - Reverted) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%201.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="3D Tinkercad Front View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 2 (Tinkercad LEFT SIDE VIEW - Reverted) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%201.2.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="3D Tinkercad Left Side View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 3 (Tinkercad RIGHT SIDE VIEW - Reverted) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%201.3.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="3D Tinkercad Right Side View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 4 (Tinkercad RIGHT SIDE VIEW - Reverted) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%202.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="3D Tinkercad Right Side View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 5 (Tinkercad RIGHT SIDE VIEW - Reverted) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/Tinkercad%20Project%202.2.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="3D Tinkercad Right Side View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                            </div>
-                        </div>
-
-                        <!-- Adobe Photoshop Designing (PSTI - CORRECTED, 6 IMAGES ADDED) -->
-                        <div class="mt-16">
-                            <h3 class="text-3xl font-bold text-center text-white mb-6">Adobe Photoshop Designing</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <!-- Image 1 (PSTI FRONT VIEW - Corrected) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/PSTI%201.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="Photoshop Project Front View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 2 (PSTI LEFT SIDE VIEW - Corrected) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/PSTI%202.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="Photoshop Project Left Side View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 3 (PSTI RIGHT SIDE VIEW - Corrected) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/PSTI%203.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="Photoshop Project Right Side View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-
-                                <!-- Image 4 (PSTI TOP VIEW - Added) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/OPC%201.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="Photoshop Project Top View"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 5 (PSTI RENDERED 1 - Added) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/OPC%202.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="Photoshop Project Rendered Image 1"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                                <!-- Image 6 (PSTI FINAL DESIGN - Added) -->
-                                <img src="https://senaganlex.github.io/WebPortfolioII/assets/image/OPC%203.png" 
-                                     class="rounded-lg shadow-lg w-full h-auto object-cover transition-all duration-300 ease-in-out transform hover:scale-105" 
-                                     alt="Photoshop Project Final Design"
-                                     onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=Image+Not+Found'" />
-                            </div>
-                        </div>
-                    </section>
-                `,
-            };
-
-            const content = sectionContentMap[section];
-
-            if (content) {
-                main.innerHTML = content;
-            } else {
-                main.innerHTML = '<p class="text-red-400">Error: Section not found.</p>';
-                console.error("Section not found:", section);
-            }
+                            // Update active button state
+                            navButtons.forEach(b => {
+                                b.classList.remove('active', 'bg-blue-600', 'text-white');
+                                b.classList.add('bg-gray-700', 'text-gray-200');
+                            });
+                            
+                            // Find and click the corresponding nav button
+                            const targetNavButton = document.querySelector(`.nav-button[data-section="${section}"]`);
+                            if (targetNavButton) {
+                                targetNavButton.click();
+                            }
+                        });
+                    });
+                } else {
+                    main.innerHTML = '<div class="text-center py-20"><p class="text-red-400 text-xl">Error: Section not found.</p></div>';
+                    console.error("Section not found:", section);
+                }
+            }, 300); // Small delay for better UX
         }
     </script>
 </body>
-
 </html>
-
