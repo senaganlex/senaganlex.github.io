@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy 11th Monthsary ❤️</title>
+  <meta name="description" content="An interactive 11th monthsary love letter with a modern aesthetic." />
+  <style>
+    :root{
+      --bg: 245 245 255;
+      --fg: 20 22 35;
+      --primary: 255 90 120; /* strawberry */
+      --accent: 100 120 255; /* periwinkle */
+      --glass: 255 255 255 / 0.12;
+      --ring: 255 90 120;
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      color:#ffffff;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(255,180,200,.25), transparent 60%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(150,180,255,.22), transparent 60%),
+                  linear-gradient(180deg, #0b0d1d 0%, #111233 40%, #180f2e 100%);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      overflow-x:hidden;
+    }
+
+    /* Force readable white text */
+    .brand h1,
+    .sub,
+    .hero p,
+    .badge,
+    .month-note,
+    header,
+    footer {
+      color:#ffffff !important;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    /* Strong contrast enhancement */
+    .hero .title,
+    #heroLead,
+    .brand h1 {
+      text-shadow: 0 4px 18px rgba(0,0,0,0.75);
+    }
+
+    /* Slightly darken card background for better readability */
+    .card{
+      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.35));
+    }
+    /* floating blobs */
+    .blob{position:fixed; filter: blur(60px); opacity:.4; mix-blend-mode:screen; pointer-events:none}
+    .blob.one{ width:520px;height:520px; background:radial-gradient(circle at 30% 30%, rgba(255,90,160,.75), transparent 60%); top:-80px; left:-80px; animation: drift 16s ease-in-out infinite}
+    .blob.two{ width:520px;height:520px; background:radial-gradient(circle at 70% 50%, rgba(170,120,255,.75), transparent 60%); bottom:-120px; right:-120px; animation: drift 20s ease-in-out infinite reverse}
+    @keyframes drift{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(20px,-14px) rotate(12deg)}}
+
+    .wrap{position:relative; min-height:100%; display:grid; place-items:center; padding:40px 20px}
+
+    .card{
+      position:relative;
+      width:min(980px, 92vw);
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(22px) saturate(135%);
+      -webkit-backdrop-filter: blur(22px) saturate(135%);
+      border-radius: var(--radius);
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .ribbon{
+      position:absolute; inset:auto 16px -16px auto; transform: translateY(40%);
+      background: linear-gradient(90deg, rgba(var(--primary),1), rgba(var(--accent),1));
+      color:white; padding:10px 16px; border-radius:12px; font-weight:700; letter-spacing:.2px; box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+
+    header{
+      padding:28px 26px 8px 26px; display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 35%, rgba(255,90,120,.9), rgba(100,120,255,.9)); color:white; font-weight:900; box-shadow:0 10px 20px rgba(0,0,0,.25)}
+    .brand h1{margin:0; font-size:clamp(18px, 2.6vw, 28px); letter-spacing:.2px}
+
+    /* Romantic glow headline */
+    .headline-glow{
+      color:#fff;
+      text-shadow:
+        0 6px 22px rgba(0,0,0,0.75),
+        0 0 22px rgba(var(--primary),0.35),
+        0 0 34px rgba(var(--accent),0.28);
+      animation: headlinePulse 3.8s ease-in-out infinite;
+    }
+    @keyframes headlinePulse{
+      0%,100%{filter: drop-shadow(0 0 0 rgba(255,90,120,0.0))}
+      50%{filter: drop-shadow(0 0 18px rgba(255,90,170,0.35))}
+    }
+
+    /* Make “Baby” sparkle */
+    .baby-sparkle{
+      position:relative;
+      display:inline-block;
+      background: linear-gradient(90deg, rgba(var(--primary),1), rgba(var(--accent),1));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:none;
+    }
+    .baby-sparkle::after{
+      content:"";
+      position:absolute;
+      inset:-6px -10px;
+      border-radius:14px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.28), transparent 55%),
+                  radial-gradient(circle at 70% 60%, rgba(255,90,170,0.18), transparent 60%),
+                  radial-gradient(circle at 40% 80%, rgba(170,120,255,0.16), transparent 65%);
+      opacity:0.0;
+      filter: blur(6px);
+      animation: sparkle 2.6s ease-in-out infinite;
+      pointer-events:none;
+      z-index:-1;
+    }
+    @keyframes sparkle{0%,100%{opacity:0.0; transform:scale(0.98)}50%{opacity:0.55; transform:scale(1.02)}}
+    .sub{opacity:.8; font-size:12px}
+
+    .actions{display:flex; gap:10px}
+    button, .ghost{
+      appearance:none; border:0; background:rgba(255,255,255,0.14); color:white; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600;
+      transition: transform .08s ease, background .2s ease, box-shadow .2s ease, opacity .2s ease; box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 6px 20px rgba(0,0,0,.25);
+    }
+    button:active{transform: translateY(1px) scale(.99)}
+    button.primary{background:linear-gradient(90deg, rgba(var(--primary),.85), rgba(var(--accent),.85));}
+    .ghost{background:transparent; border:1px dashed rgba(255,255,255,.35)}
+
+    .hero{
+      padding:18px 26px 10px 26px; display:grid; grid-template-columns: 1.2fr .8fr; gap:24px; align-items:center;
+    }
+    .hero .title{font-size:clamp(28px, 4.5vw, 56px); line-height:1.05; margin:0 0 10px 0; color:#fff}
+    .hero p{margin:0; opacity:.9}
+
+    .badgebar{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+    .badge{font-size:12px; padding:8px 10px; border-radius:999px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);}
+
+    .panel{
+      background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.18); border-radius:16px; padding:16px; color:#eef; height:100%;
+    }
+
+    .letter{
+      position:relative; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18); border-radius:16px; padding:24px; min-height:240px; overflow:hidden;
+    }
+    .letter p{margin:.5rem 0; color:#f5f6ff; opacity:.95}
+    .cursor{display:inline-block; width:1px; background:#fff; animation:blink 1s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    .timeline{display:grid; grid-template-columns: repeat(11, minmax(40px, 1fr)); gap:8px; margin-top:12px}
+    .month{
+      text-align:center; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:8px 6px; cursor:pointer; user-select:none;
+      transition:transform .08s ease, background .2s ease;
+    }
+    .month:hover{background:rgba(255,255,255,.14)}
+    .month.active{outline:2px solid rgba(var(--primary), .9); box-shadow:0 0 0 6px rgba(255,90,120,.18) inset}
+    .month small{display:block; opacity:.8}
+
+    .month-note{margin-top:12px; font-size:14px; opacity:.9}
+
+    .gallery{display:grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:10px}
+    .ph{
+      aspect-ratio: 1 / 1; border-radius:14px; border:1px dashed rgba(255,255,255,.3); display:grid; place-items:center; color:#dde; opacity:.9;
+      background:rgba(255,255,255,.05); overflow:hidden; position:relative;
+    }
+    .ph img{width:100%; height:100%; object-fit:cover}
+    .ph input{position:absolute; inset:0; opacity:0; cursor:pointer}
+
+    footer{padding:14px 26px 26px; display:flex; align-items:center; justify-content:space-between; gap:10px; color:#dfe3ff; opacity:.9}
+    .footnote{font-size:12px}
+
+    /* hearts */
+    .heart{position:fixed; pointer-events:none; width:14px; height:14px; transform:translate(-50%, -50%);}
+    .heart::before, .heart::after{
+      content:""; position:absolute; width:8px; height:12px; background:radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.5));
+      border-radius:8px 8px 0 0; transform: rotate(-45deg); left:3px; top:1px; box-shadow: 0 2px 6px rgba(255,255,255,.5)
+    }
+    .heart::after{left:auto; right:3px; transform: rotate(45deg)}
+
+    /* print */
+    @media print{
+      body{background:white; color:#111}
+      .blob, .actions, .ribbon, .footnote a, .ph input{display:none!important}
+      .card{box-shadow:none; border:0; backdrop-filter:none}
+      .panel, .letter{background:white; border:1px solid #ddd; color:#111}
+      .month{border-color:#ccc}
+    }
+
+    /* responsive */
+    @media (max-width: 880px){
+      .hero{grid-template-columns: 1fr;}
+    }
+  </style>
+</head>
+<body>
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+
+  <div class="wrap">
+    <div class="card" role="region" aria-label="11th monthsary love letter">
+      <div class="ribbon">11 Months • Forever with you, Baby ✨</div>
+      <header>
+        <div class="brand">
+          <div class="logo" aria-hidden>❤</div>
+          <div>
+            <h1 id="heading" class="headline-glow">Happy 11th Monthsary</h1>
+            <div class="sub" id="subhead"></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="openLetter" class="primary" title="Open the letter">Open Letter</button>
+          <button id="printBtn" title="Download / Print">Save as PDF</button>
+          <button id="musicBtn" class="ghost" title="Play your song">Music ▷</button>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h2 class="title" id="heroTitle">To my favorite person,</h2>
+          <p style="margin-top:10px; opacity:.95" id="romanticLine">Every day with you feels like my safest place and my biggest adventure.</p>
+          <p id="heroLead">Today marks <strong>11 months</strong> of choosing each other. I built this little page just for us—open the letter to read my heart, peek at our mini‑timeline, and drop in photos to make it truly ours. 💌</p>
+          <div class="badgebar" aria-label="quick stats">
+            <span class="badge" id="daysTogether">— days together</span>
+            <span class="badge" id="since">since —</span>
+            <span class="badge">modern • glass • animated</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3 style="margin:0 0 10px 0">11‑Month Mini‑Timeline</h3>
+          <div class="timeline" id="timeline" role="list" aria-label="timeline of 11 months"></div>
+          <div class="month-note" id="monthNote">Click a month bubble to see a note…</div>
+        </div>
+      </section>
+
+      <section style="padding:0 26px 22px 26px; display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:start">
+        <div class="letter" id="letter" aria-live="polite" aria-label="typed letter">
+          <p style="opacity:.7"><em>(Click “Open Letter” above to start the typewriter.)</em></p>
+        </div>
+        <div>
+          <div class="panel" style="margin-bottom:12px">
+            <h3 style="margin:0 0 8px 0">Memory Gallery</h3>
+            <p style="margin:0 0 12px 0; opacity:.9">Drop in your photos (they stay on your device). Click a tile to upload.</p>
+            <div class="gallery" id="gallery"></div>
+          </div>
+          <div class="panel">
+            <h3 style="margin:0 0 8px 0">Customize</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+              <label> Your Name
+                <input id="you" class="ghost" style="width:100%; padding:10px; border-radius:10px; color:white" value="Your Baby" disabled />
+              </label>
+              <label> Partner Name
+                <input id="partner" class="ghost" style="width:100%; padding:10px; border-radius:10px; color:white" value="Baby" disabled />
+              </label>
+              <label style="grid-column:1 / -1"> Anniversary Start Date
+                <input id="start" type="date" class="ghost" style="width:100%; padding:10px; border-radius:10px; color:white" value="2025-03-18" disabled />
+              </label>
+              <button id="apply" class="primary" style="grid-column:1 / -1; opacity:.6; cursor:not-allowed" disabled>Locked In 💖</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="footnote">Made with ♥, CSS & JS • Print to save as a keepsake</div>
+        <div class="footnote">v11.0 • Designed for us</div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- audio is optional; user can load a local song -->
+  <audio id="audio" preload="none"></audio>
+  <input id="audioInput" type="file" accept="audio/*" style="position:fixed;left:-9999px" />
+
+  <script>
+    // === CONFIG YOU CAN EDIT ===
+    const DEFAULTS = {
+      yourName: "Your Baby",
+      partnerName: "Baby",
+      // Locked start date (edit manually in code if needed)
+      startDate: new Date("2025-03-18"),
+      months: 11,
+      monthNotes: [
+        "The first hello that felt like home.",
+        "Our second-month coffees and shy smiles.",
+        "Inside jokes started multiplying.",
+        "Late-night chats, early-morning good vibes.",
+        "You made ordinary days glow.",
+        "Half a year! Still butterflies.",
+        "Your laugh? Forever favorite sound.",
+        "We learned, we grew, hand in hand.",
+        "Little adventures, big memories.",
+        "Only one month to a year—wow.",
+        "Month eleven: loving you more than ever."
+      ],
+      letter: ({you, partner, days}) => `My dearest ${partner},
+
+Happy 11th monthsary! It amazes me how ${days} days with you can feel like a heartbeat and a whole universe at the same time. Thank you for your patience, your softness, and the way you make the world kinder just by being in it.
+
+I choose you on happy days and hard days. I choose you when we agree, and even more when we don't, because loving you means learning you—constantly, joyfully.
+
+Here's to us: to slow mornings, to shared playlists, to holding hands when no one's watching, and to dreams that sound a lot like our names.
+
+Forever your biggest fan,
+${you} `,
+    };
+
+    // === STATE ===
+    let STATE = { ...DEFAULTS };
+
+    // Utility: formatters
+    const fmt = new Intl.DateTimeFormat(undefined, { year:'numeric', month:'long', day:'numeric' });
+    const number = n => new Intl.NumberFormat().format(n);
+
+    // DOM refs
+    const heading = document.getElementById('heading');
+    const subhead = document.getElementById('subhead');
+    const openLetterBtn = document.getElementById('openLetter');
+    const letterEl = document.getElementById('letter');
+    const daysEl = document.getElementById('daysTogether');
+    const sinceEl = document.getElementById('since');
+    const timelineEl = document.getElementById('timeline');
+    const monthNoteEl = document.getElementById('monthNote');
+    const printBtn = document.getElementById('printBtn');
+    const musicBtn = document.getElementById('musicBtn');
+    const audio = document.getElementById('audio');
+    const audioInput = document.getElementById('audioInput');
+
+    const youIn = document.getElementById('you');
+    const partnerIn = document.getElementById('partner');
+    const startIn = document.getElementById('start');
+    const applyBtn = document.getElementById('apply');
+    const gallery = document.getElementById('gallery');
+
+    // Init gallery placeholders
+    for(let i=0;i<8;i++){
+      const tile = document.createElement('div');
+      tile.className = 'ph';
+      tile.innerHTML = `<span>Click to add photo</span><input type="file" accept="image/*" />`;
+      const input = tile.querySelector('input');
+      input.addEventListener('change', e => {
+        const file = e.target.files?.[0];
+        if(!file) return;
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => URL.revokeObjectURL(url);
+        img.src = url;
+        tile.innerHTML = '';
+        tile.appendChild(img);
+      });
+      gallery.appendChild(tile);
+    }
+
+    // Build timeline
+    function buildTimeline(){
+      timelineEl.innerHTML = '';
+      const months = STATE.months;
+      for(let i=1;i<=months;i++){
+        const m = document.createElement('button');
+        m.className = 'month';
+        m.setAttribute('role','listitem');
+        m.innerHTML = `<div style="font-weight:800">${i}</div><small>mo</small>`;
+        m.addEventListener('click', ()=> selectMonth(i));
+        timelineEl.appendChild(m);
+      }
+    }
+
+    function selectMonth(i){
+      [...timelineEl.children].forEach((c,idx)=> c.classList.toggle('active', idx===i-1));
+      monthNoteEl.textContent = STATE.monthNotes[i-1] || "I love you in all our seasons.";
+      // small burst of hearts
+      spawnHearts(8, timelineEl.getBoundingClientRect().x + (i-0.5)*(timelineEl.clientWidth/STATE.months), timelineEl.getBoundingClientRect().y);
+    }
+
+    // Hearts animation
+    function spawnHearts(n=12, x=null, y=null){
+      for(let i=0;i<n;i++){
+        const h = document.createElement('div');
+        h.className = 'heart';
+        const startX = x ?? (Math.random()*window.innerWidth);
+        const startY = y ?? (Math.random()*window.innerHeight);
+        const dx = (Math.random()-0.5)*140;
+        const dy = - (80 + Math.random()*140);
+        const rot = (Math.random()-0.5)*60;
+        const duration = 1200 + Math.random()*900;
+        h.style.left = startX + 'px';
+        h.style.top = startY + 'px';
+        h.style.opacity = 0.9;
+        h.style.transition = `transform ${duration}ms cubic-bezier(.2,.7,.2,1), opacity ${duration}ms linear`;
+        document.body.appendChild(h);
+        requestAnimationFrame(()=>{
+          h.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg) scale(${1+Math.random()*0.6})`;
+          h.style.opacity = 0;
+        });
+        setTimeout(()=>h.remove(), duration+120);
+      }
+    }
+    window.addEventListener('click', e => spawnHearts(6, e.clientX, e.clientY));
+
+    // Typewriter effect
+    async function typeLetter(text){
+      letterEl.innerHTML = '';
+      const para = document.createElement('p');
+      letterEl.appendChild(para);
+      let i=0;
+      const speed = 18; // ms per char
+      while(i < text.length){
+        const ch = text[i];
+        para.textContent += ch;
+        if(ch==='\n'){
+          para.appendChild(document.createElement('br'));
+        }
+        await new Promise(r=>setTimeout(r, speed + Math.random()*26));
+        i++;
+      }
+      // cursor
+      const c = document.createElement('span'); c.className = 'cursor'; c.textContent = ' ';
+      para.appendChild(c);
+    }
+
+    // Apply state -> UI
+    function render(){
+      const start = new Date(STATE.startDate);
+      const today = new Date();
+      const days = Math.floor((today - start) / (1000*60*60*24));
+      const months = 11; // fixed for monthsary theme
+      heading.innerHTML = `Happy ${months}th Monthsary, <span class="baby-sparkle">${STATE.partnerName}</span>!`;
+      subhead.textContent = "I Loveeeeeeee Youuuuuuu Myyyyyyy Babyyyyyyyy";
+      document.title = `Happy 11th Monthsary, ${STATE.partnerName}!`;
+      daysEl.textContent = `${number(days)} days together`;
+      sinceEl.textContent = `since ${fmt.format(start)}`;
+      buildTimeline();
+      selectMonth(11);
+    }
+
+    // Interactions
+    openLetterBtn.addEventListener('click', ()=>{
+      const start = new Date(STATE.startDate);
+      const today = new Date();
+      const days = Math.floor((today - start) / (1000*60*60*24));
+      typeLetter(STATE.letter({ you: STATE.yourName, partner: STATE.partnerName, days }));
+      spawnHearts(24);
+    });
+
+    printBtn.addEventListener('click', ()=> window.print());
+
+    musicBtn.addEventListener('click', ()=>{
+      if(!audio.src){
+        audioInput.click();
+        return;
+      }
+      if(audio.paused){ audio.play(); musicBtn.textContent = 'Music ❚❚'; }
+      else { audio.pause(); musicBtn.textContent = 'Music ▷'; }
+    });
+    audioInput.addEventListener('change', e=>{
+      const file = e.target.files?.[0];
+      if(!file) return;
+      audio.src = URL.createObjectURL(file);
+      audio.play();
+      musicBtn.textContent = 'Music ❚❚';
+    });
+
+    applyBtn.addEventListener('click', ()=>{
+      const you = youIn.value.trim() || DEFAULTS.yourName;
+      const partner = partnerIn.value.trim() || DEFAULTS.partnerName;
+      const start = startIn.value ? new Date(startIn.value) : DEFAULTS.startDate;
+      STATE = { ...STATE, yourName: you, partnerName: partner, startDate: start };
+      render();
+    });
+
+    // Prefill inputs with defaults
+    function initInputs(){
+      youIn.value = STATE.yourName;
+      partnerIn.value = STATE.partnerName;
+      const d = new Date(STATE.startDate);
+      const iso = d.toISOString().slice(0,10);
+      startIn.value = iso;
+    }
+
+    // Start
+    initInputs();
+    render();
+  </script>
+</body>
+</html>
