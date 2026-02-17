@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Happy 11th Monthsary ❤️</title>
   <meta name="description" content="An interactive 11th monthsary love letter with a modern aesthetic." />
   <style>
@@ -17,6 +17,7 @@
     }
     *{box-sizing:border-box}
     html,body{
+      height:100%;
       margin:0;
       color:#ffffff;
       background: radial-gradient(1200px 800px at 10% 10%, rgba(255,180,200,.25), transparent 60%),
@@ -165,10 +166,14 @@
 
     .gallery{display:grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:10px}
     .ph{
-      aspect-ratio: 1 / 1; border-radius:14px; border:1px dashed rgba(255,255,255,.3); display:grid; place-items:center; color:#dde; opacity:.9;
+      aspect-ratio: 1 / 1; border-radius:14px; border:1px dashed rgba(255,255,255,.3); display:grid; place-items:center; color:#dde; opacity:.95;
       background:rgba(255,255,255,.05); overflow:hidden; position:relative;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      cursor: zoom-in;
     }
-    .ph img{width:100%; height:100%; object-fit:cover}
+    .ph:hover{transform: translateY(-2px) scale(1.02); border-color: rgba(255,255,255,.5); background:rgba(255,255,255,.08)}
+    .ph img{width:100%; height:100%; object-fit:cover; transform:scale(1.02); transition: transform .35s ease}
+    .ph:hover img{transform:scale(1.08)}
     .ph input{position:absolute; inset:0; opacity:0; cursor:pointer}
 
     footer{padding:14px 26px 26px; display:flex; align-items:center; justify-content:space-between; gap:10px; color:#dfe3ff; opacity:.9}
@@ -192,8 +197,141 @@
     }
 
     /* responsive */
+    /* Lightbox animation + controls */
+    .lightbox{
+      opacity:0;
+      transition: opacity .22s ease;
+    }
+    .lightbox.show{opacity:1}
+    .lightbox-img{
+      transform: scale(.98);
+      transition: transform .22s ease;
+    }
+    .lightbox.show .lightbox-img{transform: scale(1)}
+    .lb-btn{
+      position:fixed;
+      top:50%;
+      transform: translateY(-50%);
+      width:44px;height:44px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.12);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 28px rgba(0,0,0,.45);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform .08s ease, opacity .2s ease;
+    }
+    .lb-btn:active{transform: translateY(-50%) scale(.98)}
+    .lb-prev{left:18px}
+    .lb-next{right:18px}
+    .lb-close{
+      top:18px;
+      transform:none;
+      right:18px;
+      width:42px;height:42px;
+      border-radius:14px;
+    }
+    .lb-hint{
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform: translateX(-50%);
+      font-size:12px;
+      opacity:.85;
+      color:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* responsive */
     @media (max-width: 880px){
-      .hero{grid-template-columns: 1fr;}
+      .wrap{padding:22px 12px}
+      header{flex-direction:column; align-items:flex-start; padding:20px 18px 10px}
+      .actions{width:100%; flex-wrap:wrap}
+      .actions button{flex:1 1 140px}
+      .hero{grid-template-columns: 1fr; padding:14px 18px 10px}
+      .panel{padding:14px}
+      .timeline{grid-template-columns: repeat(11, minmax(44px, 1fr))}
+      .lb-prev{left:10px}
+      .lb-next{right:10px}
+    }
+
+    /* Mobile-first fine tuning */
+    @media (max-width: 520px){
+      .ribbon{inset:auto 12px -18px auto; font-size:12px; padding:8px 12px}
+      .logo{width:34px;height:34px}
+      .brand h1{font-size:20px}
+      .sub{font-size:11px; line-height:1.2}
+
+      /* Sticky mobile action bar */
+      header{position:relative}
+      .actions{
+        position: sticky;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        z-index: 50;
+        width: 100%;
+        padding: 10px;
+        border-radius: 16px;
+        background: rgba(0,0,0,0.28);
+        border: 1px solid rgba(255,255,255,0.16);
+        backdrop-filter: blur(18px) saturate(140%);
+        -webkit-backdrop-filter: blur(18px) saturate(140%);
+      }
+
+      .actions{gap:8px}
+      button, .ghost{padding:10px 12px; border-radius:14px}
+      button.primary{width:100%}
+      #printBtn, #musicBtn{width:calc(50% - 4px)}
+
+      /* Prevent content from hiding behind sticky action bar */
+      .lower{padding-bottom: 78px !important}
+      footer{padding-bottom: calc(18px + env(safe-area-inset-bottom))}
+
+      .hero .title{font-size:36px; line-height:1.02}
+      #heroLead{font-size:14px; line-height:1.45}
+      #romanticLine{font-size:14px; line-height:1.45}
+      .badgebar{gap:6px}
+      .badge{font-size:11px; padding:7px 9px}
+
+      /* Make timeline scrollable on small screens */
+      .timeline{
+        display:flex;
+        gap:8px;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+        padding-bottom:6px;
+        scrollbar-width:none;
+      }
+      .timeline::-webkit-scrollbar{display:none}
+      .month{min-width:54px}
+
+      /* Stack lower section */
+      .lower{
+        grid-template-columns: 1fr !important;
+        padding:0 18px 18px !important;
+      }
+      .letter{padding:18px; min-height:220px}
+
+      /* Gallery: 2 columns on mobile */
+      .gallery{grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px}
+
+      footer{flex-direction:column; align-items:flex-start; padding:12px 18px 18px; gap:6px}
+
+      /* Lightbox controls larger + safe areas */
+      .lb-btn{width:48px;height:48px; border-radius:16px}
+      .lb-prev{left: max(10px, env(safe-area-inset-left))}
+      .lb-next{right: max(10px, env(safe-area-inset-right))}
+      .lb-close{top: max(10px, env(safe-area-inset-top)); right: max(10px, env(safe-area-inset-right))}
+      .lb-hint{bottom: max(12px, env(safe-area-inset-bottom))}
     }
   </style>
 </head>
@@ -237,7 +375,7 @@
         </div>
       </section>
 
-      <section style="padding:0 26px 22px 26px; display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:start">
+      <section class="lower" style="padding:0 26px 22px 26px; display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:start">
         <div class="letter" id="letter" aria-live="polite" aria-label="typed letter">
           <p style="opacity:.7"><em>(Click “Open Letter” above to start the typewriter.)</em></p>
         </div>
@@ -336,24 +474,148 @@ ${you} `,
     const applyBtn = document.getElementById('apply');
     const gallery = document.getElementById('gallery');
 
-    // Init gallery placeholders
-    for(let i=0;i<8;i++){
+    // Initialize gallery with preset photos
+    const presetPhotos = [
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-35.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-21.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-30.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-25.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-27.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-33.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-02.jpg",
+      "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/MonthsarryLetter:11thMonthsary/assets/photo_2026-02-17_21-47-15.jpg"
+    ];
+
+    // Lightbox modal (click photo to open, ESC to close, arrows to navigate)
+    let currentPhotoIndex = 0;
+
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.style.position = 'fixed';
+    lightbox.style.inset = '0';
+    lightbox.style.background = 'rgba(0,0,0,0.85)';
+    lightbox.style.display = 'none';
+    lightbox.style.alignItems = 'center';
+    lightbox.style.justifyContent = 'center';
+    lightbox.style.zIndex = '9999';
+
+    const lightboxImg = document.createElement('img');
+    lightboxImg.className = 'lightbox-img';
+    lightboxImg.style.maxWidth = '90%';
+    lightboxImg.style.maxHeight = '90%';
+    lightboxImg.style.borderRadius = '16px';
+    lightboxImg.style.boxShadow = '0 20px 60px rgba(0,0,0,0.8)';
+
+    const btnPrev = document.createElement('button');
+    btnPrev.className = 'lb-btn lb-prev';
+    btnPrev.type = 'button';
+    btnPrev.setAttribute('aria-label', 'Previous photo');
+    btnPrev.textContent = '‹';
+
+    const btnNext = document.createElement('button');
+    btnNext.className = 'lb-btn lb-next';
+    btnNext.type = 'button';
+    btnNext.setAttribute('aria-label', 'Next photo');
+    btnNext.textContent = '›';
+
+    const btnClose = document.createElement('button');
+    btnClose.className = 'lb-btn lb-close';
+    btnClose.type = 'button';
+    btnClose.setAttribute('aria-label', 'Close');
+    btnClose.textContent = '×';
+
+    const hint = document.createElement('div');
+    hint.className = 'lb-hint';
+    hint.textContent = 'Tap sides or use ← → • ESC to close';
+
+    lightbox.appendChild(lightboxImg);
+    document.body.appendChild(lightbox);
+    document.body.appendChild(btnPrev);
+    document.body.appendChild(btnNext);
+    document.body.appendChild(btnClose);
+    document.body.appendChild(hint);
+
+    function setLightboxUI(visible){
+      lightbox.style.display = visible ? 'flex' : 'none';
+      btnPrev.style.display = visible ? 'grid' : 'none';
+      btnNext.style.display = visible ? 'grid' : 'none';
+      btnClose.style.display = visible ? 'grid' : 'none';
+      hint.style.display = visible ? 'block' : 'none';
+      requestAnimationFrame(()=>{
+        lightbox.classList.toggle('show', visible);
+      });
+    }
+
+    function openAt(index){
+      currentPhotoIndex = (index + presetPhotos.length) % presetPhotos.length;
+      lightboxImg.src = presetPhotos[currentPhotoIndex];
+      setLightboxUI(true);
+    }
+
+    function closeLightbox(){
+      setLightboxUI(false);
+      // Clear after fade for nicer effect
+      setTimeout(()=>{ if(lightbox.style.display==='none') lightboxImg.src=''; }, 220);
+    }
+
+    function nextPhoto(){
+      openAt(currentPhotoIndex + 1);
+    }
+
+    function prevPhoto(){
+      openAt(currentPhotoIndex - 1);
+    }
+
+    // Click outside image closes; clicking image does nothing
+    lightbox.addEventListener('click', (e) => {
+      if(e.target === lightbox) closeLightbox();
+    });
+
+    btnClose.addEventListener('click', closeLightbox);
+    btnNext.addEventListener('click', (e)=>{ e.stopPropagation(); nextPhoto(); });
+    btnPrev.addEventListener('click', (e)=>{ e.stopPropagation(); prevPhoto(); });
+
+    // Keyboard support
+    window.addEventListener('keydown', (e)=>{
+      if(lightbox.style.display !== 'flex') return;
+      if(e.key === 'Escape') closeLightbox();
+      if(e.key === 'ArrowRight') nextPhoto();
+      if(e.key === 'ArrowLeft') prevPhoto();
+    });
+
+    // Basic swipe (mobile)
+    let touchStartX = null;
+    lightbox.addEventListener('touchstart', (e)=>{ touchStartX = e.touches?.[0]?.clientX ?? null; }, {passive:true});
+    lightbox.addEventListener('touchend', (e)=>{
+      if(touchStartX == null) return;
+      const endX = e.changedTouches?.[0]?.clientX ?? touchStartX;
+      const dx = endX - touchStartX;
+      touchStartX = null;
+      if(Math.abs(dx) < 40) return;
+      if(dx < 0) nextPhoto(); else prevPhoto();
+    }, {passive:true});
+
+    // Hide controls initially
+    setLightboxUI(false);
+
+    presetPhotos.forEach((src, idx) => {
       const tile = document.createElement('div');
       tile.className = 'ph';
-      tile.innerHTML = `<span>Click to add photo</span><input type="file" accept="image/*" />`;
-      const input = tile.querySelector('input');
-      input.addEventListener('change', e => {
-        const file = e.target.files?.[0];
-        if(!file) return;
-        const url = URL.createObjectURL(file);
-        const img = new Image();
-        img.onload = () => URL.revokeObjectURL(url);
-        img.src = url;
-        tile.innerHTML = '';
-        tile.appendChild(img);
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `Memory photo ${idx + 1}`;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+
+      tile.appendChild(img);
+
+      tile.addEventListener('click', () => {
+        openAt(idx);
       });
+
       gallery.appendChild(tile);
-    }
+    });
 
     // Build timeline
     function buildTimeline(){
