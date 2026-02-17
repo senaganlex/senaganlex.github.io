@@ -157,8 +157,11 @@
     .month{
       text-align:center; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:8px 6px; cursor:pointer; user-select:none;
       transition:transform .08s ease, background .2s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .month:hover{background:rgba(255,255,255,.14)}
+    .month:active{transform: translateY(1px) scale(.98)}
     .month.active{outline:2px solid rgba(var(--primary), .9); box-shadow:0 0 0 6px rgba(255,90,120,.18) inset}
     .month small{display:block; opacity:.8}
 
@@ -196,7 +199,6 @@
       .month{border-color:#ccc}
     }
 
-    /* responsive */
     /* Lightbox animation + controls */
     .lightbox{
       opacity:0;
@@ -302,17 +304,46 @@
       .badgebar{gap:6px}
       .badge{font-size:11px; padding:7px 9px}
 
-      /* Make timeline scrollable on small screens */
+      /* MOBILE TIMELINE UPGRADE: scroll + snap + edge fade + bigger taps */
+      .panel{ position: relative; }
+
       .timeline{
         display:flex;
-        gap:8px;
+        gap:10px;
         overflow-x:auto;
         -webkit-overflow-scrolling:touch;
-        padding-bottom:6px;
+
+        scroll-snap-type: x mandatory;
+        padding: 8px 8px 10px;
+        margin: 6px -8px 0;
+        overscroll-behavior-x: contain;
+
         scrollbar-width:none;
       }
       .timeline::-webkit-scrollbar{display:none}
-      .month{min-width:54px}
+
+      /* edge fade hint */
+      .panel .timeline{
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      }
+
+      .month{
+        min-width: 62px;
+        padding: 10px 8px;
+        border-radius: 14px;
+        scroll-snap-align: center;
+      }
+      .month > div{ font-size: 16px; line-height: 1; }
+      .month small{ font-size: 11px; margin-top: 4px; }
+
+      .month.active{
+        outline: 2px solid rgba(var(--primary), .95);
+        box-shadow:
+          0 0 0 6px rgba(255,90,120,.16) inset,
+          0 10px 22px rgba(0,0,0,.35);
+        transform: translateY(-1px);
+      }
 
       /* Stack lower section */
       .lower{
@@ -361,7 +392,7 @@
         <div>
           <h2 class="title" id="heroTitle">To my favorite person,</h2>
           <p style="margin-top:10px; opacity:.95" id="romanticLine">Every day with you feels like my safest place and my biggest adventure.</p>
-          <p id="heroLead">Today marks <strong>11 months</strong> of choosing each other. I built this little page just for us—open the letter to read my heart, peek at our mini‑timeline, and drop in photos to make it truly ours. 💌</p>
+          <p id="heroLead">Today marks <strong>11 months</strong> of choosing each other. I built this little page just for us—open the letter to read my heart, peek at our mini-timeline, and drop in photos to make it truly ours. 💌</p>
           <div class="badgebar" aria-label="quick stats">
             <span class="badge" id="daysTogether">— days together</span>
             <span class="badge" id="since">since —</span>
@@ -369,7 +400,7 @@
           </div>
         </div>
         <div class="panel">
-          <h3 style="margin:0 0 10px 0">11‑Month Mini‑Timeline</h3>
+          <h3 style="margin:0 0 10px 0">11-Month Mini-Timeline</h3>
           <div class="timeline" id="timeline" role="list" aria-label="timeline of 11 months"></div>
           <div class="month-note" id="monthNote">Click a month bubble to see a note…</div>
         </div>
@@ -437,14 +468,14 @@
       ],
       letter: ({you, partner, days}) => `My dearest ${partner},
 
-Happy 11th monthsary! It amazes me how ${days} days with you can feel like a heartbeat and a whole universe at the same time. Thank you for your patience, your softness, and the way you make the world kinder just by being in it.
+appy 11th monthsary! It amazes me how ${days} days with you can feel like a heartbeat and a whole universe at the same time. Thank you for your patience, your softness, and the way you make the world kinder just by being in it. and imagine we're almost a year na like sheeshhhhhhh how fast world turns nu its almost a year na nga happy kaayu nimo since day 1 ackkkkkkkkkkkkkkkkkkkkk.
 
 I choose you on happy days and hard days. I choose you when we agree, and even more when we don't, because loving you means learning you—constantly, joyfully.
 
-Here's to us: to slow mornings, to shared playlists, to holding hands when no one's watching, and to dreams that sound a lot like our names.
+To slow mornings, to shared playlists, to holding hands when no one's watching, and to dreams that sound a lot like our names.
 
-Forever your biggest fan,
-${you} `,
+I Love You more than you can imagine my baby, I'd say you're already locked in to me you got no way out anymore, akoa raka from day 1 till the end of time ahhhhhhhhhhhhhhhhh
+ `,
     };
 
     // === STATE ===
@@ -631,11 +662,21 @@ ${you} `,
       }
     }
 
+    // ✅ Updated: correct burst position + auto-center selected month (great for mobile)
     function selectMonth(i){
-      [...timelineEl.children].forEach((c,idx)=> c.classList.toggle('active', idx===i-1));
+      const items = [...timelineEl.children];
+      items.forEach((c,idx)=> c.classList.toggle('active', idx===i-1));
       monthNoteEl.textContent = STATE.monthNotes[i-1] || "I love you in all our seasons.";
-      // small burst of hearts
-      spawnHearts(8, timelineEl.getBoundingClientRect().x + (i-0.5)*(timelineEl.clientWidth/STATE.months), timelineEl.getBoundingClientRect().y);
+
+      const target = items[i-1];
+      if(target){
+        target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+        const r = target.getBoundingClientRect();
+        const x = r.left + r.width / 2;
+        const y = r.top + r.height / 2;
+        spawnHearts(10, x, y);
+      }
     }
 
     // Hearts animation
