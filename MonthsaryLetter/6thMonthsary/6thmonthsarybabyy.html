@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy 6th Monthsary 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0f1724;
+      --bg2:#1a2238;
+      --accent:#ff6b9a;
+      --accent-2:#ffd166;
+      --muted:rgba(255,255,255,0.75);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
+      font-family:Inter, sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:#fff;padding:20px;overflow-x:hidden;
+    }
+    .orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.18;pointer-events:none;z-index:0}
+    .orb.one{width:40vw;height:40vw;left:-10vw;top:-10vw;background:linear-gradient(45deg,#ff8fb4,#ffd6a5)}
+    .orb.two{width:35vw;height:35vw;right:-12vw;bottom:-12vw;background:linear-gradient(45deg,#b7a0ff,#8ed0ff)}
+
+    .card{
+      position:relative;z-index:1;
+      width:100%;max-width:1000px;
+      background:rgba(255,255,255,0.05);backdrop-filter:blur(8px);
+      border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.6);
+      padding:24px;display:flex;flex-direction:row;gap:20px;
+      flex-wrap:wrap; /* makes layout adapt */
+    }
+    .portrait{
+      flex:1 1 300px;min-height:300px;display:flex;align-items:center;justify-content:center;
+      border-radius:20px;background:rgba(255,255,255,.05);
+      box-shadow:inset 0 -20px 50px rgba(0,0,0,.4);
+    }
+    .portrait .heart{
+      font-family:Parisienne, cursive;font-size:72px;
+      animation:heartBeat 1.3s infinite ease-in-out;
+    }
+    @keyframes heartBeat{
+      0%{transform:scale(1)}25%{transform:scale(1.1)}50%{transform:scale(.95)}
+      75%{transform:scale(1.05)}100%{transform:scale(1)}
+    }
+
+    .content{flex:2 1 400px;display:flex;flex-direction:column;gap:16px}
+    h1{font-family:Parisienne, cursive;font-size:clamp(28px,5vw,44px)}
+    .sub{color:var(--muted);font-size:clamp(14px,2.5vw,16px)}
+    .message-box{
+      background:rgba(255,255,255,.04);
+      border-radius:16px;padding:16px;
+      max-height:60vh;overflow-y:auto; /* prevent break */
+    }
+    .message{white-space:pre-wrap;line-height:1.6;font-size:16px}
+    .cursor{display:inline-block;width:6px;height:20px;background:var(--accent);margin-left:4px;border-radius:3px;animation:blink 1s steps(2,end) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    .controls{display:flex;flex-wrap:wrap;gap:10px}
+    .btn{padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600;
+      border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;
+      transition:.2s}
+    .btn:hover{transform:translateY(-3px)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#ff9fbf);color:#081226;border:none}
+
+    .hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+    .heart-item{position:absolute;opacity:0;animation:floatUp 5s linear forwards}
+    @keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(.6)}10%{opacity:1}100%{opacity:0;transform:translateY(-500px) scale(1.2)}}
+
+    canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:10}
+  </style>
+</head>
+<body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <div class="card">
+    <div class="portrait"><div class="heart">❤️</div></div>
+    <div class="content">
+      <h1>To my byyyyyyyyyy ❤️</h1>
+      <div class="sub">Every day with you feels like a blessing — here’s a little love letter for our 6 months.</div>
+      <div class="message-box">
+        <div id="message" class="message"></div><span id="cursor" class="cursor"></span>
+        <div class="hearts" id="hearts"></div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="replay">Replay ✨</button>
+        <button class="btn" id="sendHearts">Shower Hearts</button>
+        <button class="btn" id="confettiBtn">Celebrate 🎉</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+<script>
+const fullMessage=`Happy 6th monthsary my byyyyyyyyyy ❤️
+
+Every day that passes with you by my side feels like a blessing I never want to take for granted. I honestly can’t believe how quickly time flies when I’m with you, but at the same time, it feels like we’ve already shared so much more than what can fit in just these few months. You’ve brought so much love, peace, and joy into my life that I sometimes wonder how I ever managed before you came along.
+
+I love how we can be completely ourselves with each other—laughing at the silliest jokes, sharing our little secrets, or even just enjoying the quiet moments together. With you, I’ve learned that love isn’t always about the grand gestures, but about the simple things: holding hands, a random “I miss you” text, or hearing your voice after a long day. Those small things mean the world to me because they remind me of how deeply connected we are.
+
+You’ve shown me patience, care, and understanding in ways I never thought I deserved. I’m so thankful for your heart and the way you love me so genuinely. Please know that I don’t take any of it for granted. I promise to continue cherishing you, supporting you in all your dreams, and being here no matter what challenges come our way.
+
+As we celebrate this 6th monthsary, I want to tell you once again how much I love you and more days, weeks, months, years, eternity for us I'll be loving you till the end of time my byyyyyyyyyy, I Loveeeeeeeeeeeee Youuuuuuuuuuuuuuuuu Sooooooooo Muchhhhhhhh😊`;
+
+const messageEl=document.getElementById('message');
+const cursor=document.getElementById('cursor');
+let idx=0,typingTimer;
+
+function typeMessage(speed=25){
+  clearInterval(typingTimer);
+  messageEl.textContent='';
+  idx=0;cursor.style.display='inline-block';
+  typingTimer=setInterval(()=>{
+    if(idx>=fullMessage.length){
+      clearInterval(typingTimer);
+      cursor.style.display='none';
+      return;
+    }
+    messageEl.textContent+=fullMessage[idx];
+    idx++;
+  },speed);
+}
+
+document.getElementById('replay').addEventListener('click',()=>typeMessage(20));
+
+const heartsContainer=document.getElementById('hearts');
+function triggerHearts(count=15){
+  for(let i=0;i<count;i++){
+    const el=document.createElement('div');
+    el.className='heart-item';
+    el.style.left=(10+Math.random()*80)+'%';
+    el.style.fontSize=(12+Math.random()*28)+'px';
+    el.textContent=Math.random()>.5?'❤️':'💕';
+    heartsContainer.appendChild(el);
+    setTimeout(()=>el.remove(),5000);
+  }
+}
+document.getElementById('sendHearts').addEventListener('click',()=>triggerHearts(20));
+
+const confettiCanvas=document.getElementById('confetti');
+const ctx=confettiCanvas.getContext('2d');
+function resizeCanvas(){confettiCanvas.width=innerWidth;confettiCanvas.height=innerHeight}
+addEventListener('resize',resizeCanvas);resizeCanvas();
+
+let pieces=[];
+function spawnConfetti(){
+  pieces=[];
+  const colors=['#ff6b9a','#ffd166','#8ed0ff','#c8a2ff','#fff1be'];
+  for(let i=0;i<120;i++){
+    pieces.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*2,vy:1+Math.random()*3,color:colors[Math.floor(Math.random()*colors.length)]});
+  }
+}
+function runConfetti(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  for(const p of pieces){
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.y>innerHeight)p.y=0;
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,6,8);
+  }
+  requestAnimationFrame(runConfetti);
+}
+document.getElementById('confettiBtn').addEventListener('click',()=>{spawnConfetti();});
+
+setTimeout(()=>{typeMessage(20);triggerHearts(10)},800);
+runConfetti();
+</script>
+</body>
+</html>

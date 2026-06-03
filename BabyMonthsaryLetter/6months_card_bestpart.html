@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy 6th Monthsary</title>
+  <style>
+    body {
+      font-family: "Segoe UI", cursive;
+      text-align: center;
+      background: linear-gradient(to bottom, #ffe6f0, #fff);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .container {
+      margin-top: 50px;
+      position: relative;
+      z-index: 2;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #ff4d94;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 10px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ff2671;
+      transform: scale(1.1);
+    }
+
+    .message {
+      display: none;
+      background: #4db8ff;
+      color: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px auto;
+      width: 80%;
+      max-width: 600px;
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: left;
+      font-family: "Comic Sans MS", cursive;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      white-space: pre-line; /* Keeps formatting */
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    /* Floating hearts animation */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      color: #ff4d94;
+      font-size: 24px;
+      animation: floatUp 5s linear infinite;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      to {
+        transform: translateY(-120vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Typing effect */
+    .typing {
+      border-right: 3px solid white;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Happy 6th Monthsary my Baby!! (っ◔◡◔)っ ♥</h2>
+    <p>Enter password to open:</p>
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="checkPassword()">Submit</button>
+
+    <div class="message" id="loveMessage"></div>
+  </div>
+
+  <script>
+    const messageText = `Hi my baby, happy 6th monthsaryyy!! 🥺❤️
+Half a year na ta baby, can you believe it? ⏳ Time flies so fast when I’m with you.
+
+Thank you kaayo for choosing me every single day, for loving me even when I’m hard to love,
+and for staying despite everything we’ve been through. 😭💔
+
+I’m beyond thankful nga ikaw akong kauban in this journey — through all the lambing, away gamay,
+kulitan, hilakan, ug tanan. 🤍 You’ve made my heart feel safe and loved in ways I never imagined. 💋
+
+I love you soooo much baby, sobra pa sa akong ma-express. 🥰 Let’s continue loving each other
+more each day, ha? Padayon lang ta. I’m all yours, always. 🫂
+
+Happy 6th monthsary baby!! Here’s to forever with you. ❤️`;
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      if (input === "031825") {
+        const msgBox = document.getElementById("loveMessage");
+        msgBox.style.display = "block";
+        msgBox.style.opacity = "1";
+        typeWriter(messageText, msgBox);
+        generateHearts();
+      } else {
+        alert("Wrong password, try again!");
+      }
+    }
+
+    function typeWriter(text, element) {
+      let i = 0;
+      element.innerHTML = "";
+      function typing() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(typing, 40);
+        }
+      }
+      typing();
+    }
+
+    function generateHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 15 + "px";
+        heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }, 500);
+    }
+  </script>
+</body>
+</html>
