@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>XV · for you, my love</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* midnight & aurora palette — chosen for this brief, not a default */
+  --void:#0a0e1a;
+  --void2:#111729;
+  --night:#1a2138;
+  --dusk:#2a2f4f;
+  --rose:#e8a0a8;
+  --rosegold:#e9bfa3;
+  --gold:#f2d49b;
+  --aurora:#9ad6c4;
+  --aurora2:#7fb8d4;
+  --lilac:#c4a8e0;
+  --starlight:#fdf6ec;
+  --mute:#8a93b4;
+  --ink:#0a0e1a;
+}
+html,body{height:100%;background:var(--void);overflow:hidden}
+body{
+  font-family:'Cormorant Garamond',serif;
+  color:var(--starlight);
+  -webkit-font-smoothing:antialiased;
+}
+.no-scroll{overflow:hidden}
+
+/* ════ STARFIELD CANVAS ════ */
+#sky{
+  position:fixed;inset:0;
+  z-index:0;
+  display:block;
+}
+
+/* grain overlay */
+body::after{
+  content:"";
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:999;opacity:0.6;mix-blend-mode:overlay;
+}
+
+/* aurora glow blooms */
+.bloom{
+  position:fixed;border-radius:50%;
+  filter:blur(90px);
+  pointer-events:none;z-index:1;
+  opacity:0.5;
+}
+.bloom-1{top:-12%;left:-8%;width:46vw;height:46vw;
+  background:radial-gradient(circle,rgba(196,168,224,0.5),transparent 70%);}
+.bloom-2{bottom:-15%;right:-10%;width:52vw;height:52vw;
+  background:radial-gradient(circle,rgba(154,214,196,0.42),transparent 70%);}
+.bloom-3{top:40%;right:20%;width:30vw;height:30vw;
+  background:radial-gradient(circle,rgba(232,160,168,0.32),transparent 70%);
+  animation:drift 14s ease-in-out infinite alternate;}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(-40px,30px)}}
+
+/* ════ SCENE WRAPPER ════ */
+.stage{position:fixed;inset:0;z-index:5}
+.scene{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:1.5rem;
+  opacity:0;visibility:hidden;
+  transition:opacity 1s ease,visibility 1s,transform 1.1s cubic-bezier(.16,1,.3,1);
+  transform:translateY(20px);
+}
+.scene.active{opacity:1;visibility:visible;transform:translateY(0)}
+
+/* ════ SCENE 1 — THE ENVELOPE ════ */
+.eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.42em;
+  text-transform:uppercase;color:var(--rosegold);
+  opacity:0.75;margin-bottom:2.4rem;text-align:center;
+}
+.eyebrow .dot{color:var(--aurora);margin:0 0.5em}
+
+.envelope-stage{
+  position:relative;
+  width:min(78vw,340px);
+  aspect-ratio:1.5/1;
+  cursor:pointer;
+  perspective:1400px;
+}
+.env-body{
+  position:absolute;inset:0;
+  background:linear-gradient(155deg,#222a45 0%,#161c30 55%,#0f1424 100%);
+  border-radius:6px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05),0 0 0 1px rgba(242,212,155,0.14);
+  overflow:hidden;
+}
+.env-body::before{
+  /* left & right diagonal fold lines */
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(to top right,transparent 49.6%,rgba(242,212,155,0.1) 49.8%,rgba(242,212,155,0.1) 50.2%,transparent 50.4%),
+    linear-gradient(to top left,transparent 49.6%,rgba(242,212,155,0.1) 49.8%,rgba(242,212,155,0.1) 50.2%,transparent 50.4%);
+}
+.env-flap{
+  position:absolute;top:0;left:0;width:100%;
+  height:50%;
+  background:linear-gradient(165deg,#2a3252 0%,#1c2238 100%);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;
+  transition:transform 1s cubic-bezier(.6,0,.2,1);
+  z-index:4;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+  backface-visibility:hidden;
+}
+.env-flap::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(242,212,155,0.08),transparent);
+}
+.envelope-stage.open .env-flap{transform:rotateX(180deg);z-index:1}
+
+/* wax seal */
+.seal{
+  position:absolute;
+  top:42%;left:50%;
+  transform:translate(-50%,-50%);
+  width:62px;height:62px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#f0b5b0,#c45a5e 60%,#9c3f48);
+  box-shadow:0 6px 18px rgba(156,63,72,0.5),inset 0 2px 5px rgba(255,255,255,0.3),inset 0 -3px 6px rgba(0,0,0,0.3);
+  z-index:6;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:1.5rem;color:rgba(255,255,255,0.9);
+  transition:transform .5s,opacity .5s;
+}
+.seal::before{
+  content:"";position:absolute;inset:5px;
+  border-radius:50%;border:1px dashed rgba(255,255,255,0.35);
+}
+.envelope-stage.open .seal{transform:translate(-50%,-50%) scale(0.4);opacity:0}
+
+/* letter peeking */
+.env-letter{
+  position:absolute;
+  left:6%;width:88%;
+  top:14%;height:80%;
+  background:linear-gradient(180deg,#fdf8f0,#f6ecdc);
+  border-radius:3px;
+  z-index:2;
+  transform:translateY(0);
+  transition:transform 1s cubic-bezier(.16,1,.3,1) .25s;
+  box-shadow:0 -4px 16px rgba(0,0,0,0.2);
+  padding:1.2rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.envelope-stage.open .env-letter{transform:translateY(-38%)}
+.env-letter span{
+  font-family:'Fraunces',serif;font-style:italic;
+  color:#c45a5e;font-size:1.1rem;opacity:0.5;text-align:center;
+}
+
+.tap-hint{
+  margin-top:2.8rem;
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:1.15rem;color:var(--rosegold);
+  letter-spacing:0.02em;
+  display:flex;align-items:center;gap:0.6rem;
+  animation:breathe 2.6s ease-in-out infinite;
+}
+.tap-hint .ring{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--aurora);
+  box-shadow:0 0 12px var(--aurora);
+}
+@keyframes breathe{0%,100%{opacity:0.45}50%{opacity:1}}
+
+/* ════ SCENE 2 — CONSTELLATION JOURNEY ════ */
+.journey{
+  width:100%;max-width:880px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.journey-title{
+  font-family:'Fraunces',serif;
+  font-weight:300;font-style:italic;
+  font-size:clamp(1.6rem,5vw,2.6rem);
+  text-align:center;line-height:1.2;
+  margin-bottom:0.5rem;
+  background:linear-gradient(120deg,var(--gold),var(--rose),var(--lilac));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.journey-sub{
+  font-family:'Space Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--mute);text-align:center;margin-bottom:2.2rem;
+}
+
+/* the constellation map */
+.constellation{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/10;
+  max-height:54vh;
+  margin-bottom:1.6rem;
+}
+.const-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.const-line{
+  stroke:url(#lineGrad);
+  stroke-width:1.2;
+  fill:none;
+  stroke-dasharray:6 6;
+  opacity:0.4;
+  stroke-dashoffset:1000;
+  animation:dash 3s ease forwards;
+}
+@keyframes dash{to{stroke-dashoffset:0}}
+
+.star-node{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+}
+.star-dot{
+  width:11px;height:11px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff,var(--gold));
+  box-shadow:0 0 0 0 rgba(242,212,155,0.6),0 0 14px var(--gold);
+  transition:transform .35s,box-shadow .35s;
+  position:relative;
+}
+.star-node:hover .star-dot,.star-node.lit .star-dot{
+  transform:scale(1.5);
+  box-shadow:0 0 0 8px rgba(242,212,155,0.12),0 0 24px var(--gold);
+}
+.star-node.lit .star-dot{
+  background:radial-gradient(circle at 35% 35%,#fff,var(--rose));
+  box-shadow:0 0 0 10px rgba(232,160,168,0.14),0 0 28px var(--rose);
+}
+.star-label{
+  position:absolute;top:100%;left:50%;
+  transform:translateX(-50%);
+  font-family:'Space Mono',monospace;
+  font-size:0.55rem;letter-spacing:0.12em;
+  color:var(--mute);white-space:nowrap;
+  margin-top:2px;opacity:0;transition:opacity .3s;
+}
+.star-node:hover .star-label,.star-node.lit .star-label{opacity:0.9}
+
+/* memory card that appears */
+.memory-card{
+  width:100%;max-width:560px;
+  min-height:118px;
+  background:linear-gradient(145deg,rgba(42,47,79,0.5),rgba(17,23,41,0.6));
+  border:1px solid rgba(242,212,155,0.16);
+  border-radius:14px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  padding:1.5rem 1.8rem;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  transition:opacity .5s,transform .5s;
+}
+.memory-card .mc-num{
+  font-family:'Space Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--aurora);margin-bottom:0.7rem;
+}
+.memory-card .mc-text{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:300;
+  font-size:clamp(1.05rem,2.6vw,1.32rem);
+  line-height:1.55;color:var(--starlight);
+}
+.memory-card.swap{opacity:0;transform:translateY(8px)}
+
+.progress-row{
+  margin-top:1.4rem;display:flex;align-items:center;gap:0.5rem;
+}
+.prog-pip{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.18);transition:all .3s;
+}
+.prog-pip.done{background:var(--gold);box-shadow:0 0 8px var(--gold);width:18px;border-radius:3px}
+
+.journey-cta{
+  margin-top:1.8rem;
+  opacity:0;pointer-events:none;
+  transition:opacity .7s;
+}
+.journey-cta.show{opacity:1;pointer-events:auto}
+
+/* ════ SCENE 3 — THE LETTER ════ */
+.letter-scene{
+  align-items:center;
+  justify-content:flex-start;
+  overflow-y:auto;
+  padding-top:3.5rem;padding-bottom:5rem;
+}
+.letter-head{
+  text-align:center;margin-bottom:2rem;
+  opacity:0;animation:fadeUp .9s .2s forwards;
+}
+.letter-head .lh-mark{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:clamp(3rem,11vw,5rem);
+  font-style:italic;line-height:1;
+  background:linear-gradient(120deg,var(--gold),var(--rosegold));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.letter-head .lh-sub{
+  font-family:'Space Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.34em;text-transform:uppercase;
+  color:var(--mute);margin-top:0.6rem;
+}
+
+/* polaroid */
+.polaroid{
+  background:linear-gradient(180deg,#fdfaf4,#f4ecdd);
+  padding:0.7rem 0.7rem 0;
+  border-radius:3px;
+  box-shadow:0 26px 60px rgba(0,0,0,0.5);
+  transform:rotate(-2.2deg);
+  margin-bottom:2.4rem;
+  width:min(76vw,300px);
+  opacity:0;animation:dropIn 1s .45s cubic-bezier(.16,1,.3,1) forwards;
+  position:relative;
+}
+.polaroid::after{
+  content:"15 months ✦";
+  display:block;
+  font-family:'Fraunces',serif;font-style:italic;
+  text-align:center;color:#7a5a48;
+  font-size:1rem;padding:0.8rem 0 1rem;
+}
+.polaroid img{
+  width:100%;display:block;
+  aspect-ratio:4/3;object-fit:cover;
+  filter:saturate(1.05) contrast(1.03);
+  border-radius:1px;
+}
+.polaroid .tape{
+  position:absolute;top:-14px;left:50%;
+  transform:translateX(-50%) rotate(1.5deg);
+  width:90px;height:28px;
+  background:rgba(242,212,155,0.32);
+  border:1px solid rgba(242,212,155,0.2);
+  backdrop-filter:blur(2px);
+}
+
+/* the note paper */
+.note{
+  width:100%;max-width:620px;
+  background:linear-gradient(180deg,#fdf8f0 0%,#f8efe0 100%);
+  border-radius:5px;
+  padding:clamp(1.8rem,5vw,3rem) clamp(1.6rem,5vw,2.8rem);
+  position:relative;
+  box-shadow:0 30px 70px rgba(0,0,0,0.45),0 0 0 1px rgba(242,212,155,0.2);
+  opacity:0;animation:fadeUp .9s .7s forwards;
+  color:#241a10;
+}
+.note::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  background:url("data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='0.4' fill='%23b0935a' fill-opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.note-greeting{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+  font-size:clamp(1.6rem,5vw,2.2rem);
+  color:#9c3f48;margin-bottom:1.4rem;
+}
+#letterText{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.12rem,2.3vw,1.3rem);
+  line-height:1.95;
+  white-space:pre-wrap;word-break:break-word;
+  min-height:1.95em;
+}
+.cursor{
+  display:inline-block;width:2px;height:1.1em;
+  background:#9c3f48;vertical-align:text-bottom;
+  margin-left:1px;animation:blink .8s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.sign-off{
+  margin-top:2.4rem;text-align:right;
+  opacity:0;transition:opacity 1s;
+}
+.sign-off.show{opacity:1}
+.sign-off .so-name{
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:2rem;color:#9c3f48;line-height:1.1;
+}
+.sign-off .so-line{
+  display:inline-block;width:90px;height:1px;
+  background:#bfa06a;margin:0.5rem 0;opacity:0.5;
+}
+.sign-off .so-sub{
+  font-family:'Space Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:#9a7d55;
+}
+
+/* skip / replay floating controls in letter */
+.letter-controls{
+  margin-top:2.2rem;
+  display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;
+  opacity:0;animation:fadeUp .9s 1s forwards;
+}
+
+/* ════ BUTTONS ════ */
+.btn{
+  font-family:'Space Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;
+  padding:0.85rem 1.8rem;border-radius:40px;cursor:pointer;
+  border:1px solid transparent;transition:all .25s;
+  display:inline-flex;align-items:center;gap:0.5rem;
+}
+.btn-primary{
+  background:linear-gradient(120deg,var(--gold),var(--rosegold));
+  color:var(--ink);font-weight:700;
+  box-shadow:0 8px 24px rgba(233,191,163,0.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(233,191,163,0.45)}
+.btn-ghost{
+  background:rgba(255,255,255,0.04);
+  border-color:rgba(242,212,155,0.3);color:var(--gold);
+}
+.btn-ghost:hover{background:rgba(242,212,155,0.1);border-color:var(--gold)}
+
+/* ════ FLOATING HEARTS / PETALS ════ */
+.floater{
+  position:fixed;pointer-events:none;z-index:900;
+  font-family:'Fraunces',serif;font-style:italic;
+  will-change:transform,opacity;
+}
+@keyframes floatUp{
+  0%{opacity:0;transform:translateY(0) scale(.6) rotate(0)}
+  12%{opacity:1}
+  100%{opacity:0;transform:translateY(-120px) scale(1.1) rotate(var(--r))}
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-30px) rotate(-2.2deg) scale(.95)}to{opacity:1;transform:translateY(0) rotate(-2.2deg) scale(1)}}
+
+/* progress nav dots (scene indicator) */
+.scene-nav{
+  position:fixed;left:50%;bottom:1.4rem;
+  transform:translateX(-50%);
+  display:flex;gap:0.7rem;z-index:40;
+  opacity:0.7;
+}
+.sn-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.2);transition:all .4s;
+}
+.sn-dot.on{background:var(--gold);box-shadow:0 0 10px var(--gold);transform:scale(1.3)}
+
+/* reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.15s!important}
+}
+
+@media(max-width:560px){
+  .constellation{aspect-ratio:1/1;max-height:46vh}
+  .star-label{display:none}
+}
+</style>
+</head>
+<body class="no-scroll">
+
+<canvas id="sky"></canvas>
+<div class="bloom bloom-1"></div>
+<div class="bloom bloom-2"></div>
+<div class="bloom bloom-3"></div>
+
+<div class="stage">
+
+  <!-- ░░ SCENE 1 — ENVELOPE ░░ -->
+  <section class="scene active" id="s1">
+    <div class="eyebrow">a letter sealed for you <span class="dot">✦</span> month fifteen</div>
+    <div class="envelope-stage" id="envelope" role="button" tabindex="0" aria-label="Open the letter">
+      <div class="env-body">
+        <div class="env-letter"><span>read me ♡</span></div>
+        <div class="env-flap"></div>
+        <div class="seal">XV</div>
+      </div>
+    </div>
+    <div class="tap-hint"><span class="ring"></span>tap to break the seal</div>
+  </section>
+
+  <!-- ░░ SCENE 2 — CONSTELLATION ░░ -->
+  <section class="scene" id="s2">
+    <div class="journey">
+      <h1 class="journey-title">Fifteen months, mapped in stars</h1>
+      <p class="journey-sub">touch each star ✦ light up our sky</p>
+
+      <div class="constellation" id="constellation">
+        <svg class="const-svg" id="constLines" viewBox="0 0 800 500" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f2d49b"/>
+              <stop offset="50%" stop-color="#e8a0a8"/>
+              <stop offset="100%" stop-color="#c4a8e0"/>
+            </linearGradient>
+          </defs>
+          <path class="const-line" id="theLine" d=""/>
+        </svg>
+        <!-- star nodes injected by JS -->
+      </div>
+
+      <div class="memory-card" id="memCard">
+        <div class="mc-num" id="mcNum">✦ tap a star to begin</div>
+        <div class="mc-text" id="mcText">Every star here is a piece of us — the days, the laughs, the quiet ordinary moments I'd never trade for anything.</div>
+      </div>
+
+      <div class="progress-row" id="progRow"></div>
+
+      <div class="journey-cta" id="journeyCta">
+        <button class="btn btn-primary" id="toLetter">read your letter ♡</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ SCENE 3 — LETTER ░░ -->
+  <section class="scene letter-scene" id="s3">
+    <div class="letter-head">
+      <div class="lh-mark">XV</div>
+      <div class="lh-sub">fifteen months &amp; endlessly counting</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="tape"></div>
+      <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/14thMonthsaryLetter/assets/Messenger_creation_42D8C3A1-8CD2-4D62-8B47-0F30E952CF9A.jpeg" alt="us together"/>
+    </div>
+
+    <div class="note">
+      <div class="note-greeting">Baby,</div>
+      <div id="letterText"></div>
+      <div class="sign-off" id="signOff">
+        <span class="so-line"></span><br/>
+        <span class="so-name">Always yours ♡</span><br/>
+        <span class="so-sub">fifteen months &amp; counting</span>
+      </div>
+      <div class="letter-controls">
+        <button class="btn btn-ghost" id="btnLove">send love ♡</button>
+        <button class="btn btn-ghost" id="btnCelebrate">celebrate ✦</button>
+        <button class="btn btn-ghost" id="btnRestart">from the start ↺</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="scene-nav" id="sceneNav">
+  <span class="sn-dot on"></span>
+  <span class="sn-dot"></span>
+  <span class="sn-dot"></span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ THE LETTER ═══════════ */
+  const LETTER = `Fifteen months in, dugay dugay na jud mi sa baby and still counting — yes yes yes. I know naay mga times nga daghan ug mga trials ang baby nako, daghan kaayug gi huna huna ang baby nako for the past days. No matter what mood you're in, pasabton ra japon nako ang baby nako kay love love man kaayu nako na ang baby.
+
+Pero bitaw my by, ako naman ning gi ingon pud before nga I hope mo abot na ang time nga ma replacesan na ug peace of mind ang baby, kay love love man jud kaayu na ang baby nako na — basin ganahan anakan na para ma peace of mind. 
+
+But still, here's to more late-night conversations, more soft kisses, more moments we'll never forget, and more love that just keeps growing between us. Every little thing feels precious when it's with you, and I can't wait for all the memories we still have left to make.
+
+I love you always, in every way, every single day my babyyyyyyyyyyyyyyyyyyyy 💕`;
+
+  /* ═══════════ CONSTELLATION DATA ═══════════ */
+  // positions are % within the constellation box; order defines the line
+  const STARS = [
+    {x:10, y:72, label:'day one',    num:'✦ where it began',
+      text:"From the very first day, something just clicked. I didn't know then that you'd become my favorite part of every single day."},
+    {x:26, y:38, label:'first laugh', num:'✦ the laughter',
+      text:"The way you laugh — kana siyang tinuod nga katawa — it's the sound I'd choose over anything ug ungol pud dzaaaaaaaaaa. You make even the dull days feel light."},
+    {x:42, y:60, label:'the hard days', num:'✦ through the storms',
+      text:"We've had our trials, our heavy days. But every time, we found our way back to each other. That's how I know this is real."},
+    {x:56, y:26, label:'soft moments', num:'✦ the quiet us',
+      text:"The soft kisses, the late-night talks, the silences that don't need filling. These are the moments I hold onto the most."},
+    {x:72, y:54, label:'still falling', num:'✦ growing love',
+      text:"Fifteen months and I'm somehow falling harder. Whatever mood you're in, I'll always be here — sabton ra japon ka nako, kay love love man kaayu na ang baby."},
+    {x:90, y:30, label:'forever', num:'✦ what comes next',
+      text:"Here's to all the memories we still get to make. I love you always, in every way, every single day. My baby, forever. 💕"},
+  ];
+
+  /* ═══════════ STARFIELD ═══════════ */
+  const sky = document.getElementById('sky');
+  const ctx = sky.getContext('2d');
+  let W,H,stars=[],shooting=[];
+  function resize(){
+    W=sky.width=innerWidth*devicePixelRatio;
+    H=sky.height=innerHeight*devicePixelRatio;
+    sky.style.width=innerWidth+'px';sky.style.height=innerHeight+'px';
+    buildStars();
+  }
+  function buildStars(){
+    stars=[];
+    const count=Math.min(160,Math.floor((W*H)/(14000*devicePixelRatio)));
+    for(let i=0;i<count;i++){
+      stars.push({
+        x:Math.random()*W,y:Math.random()*H,
+        r:(Math.random()*1.3+0.3)*devicePixelRatio,
+        a:Math.random(),
+        tw:Math.random()*0.02+0.004,
+        dir:Math.random()>0.5?1:-1
+      });
+    }
+  }
+  function spawnShoot(){
+    if(Math.random()>0.985 && shooting.length<2){
+      shooting.push({
+        x:Math.random()*W*0.6,y:Math.random()*H*0.4,
+        len:(Math.random()*80+60)*devicePixelRatio,
+        sp:(Math.random()*6+5)*devicePixelRatio,
+        life:1
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(const s of stars){
+      s.a+=s.tw*s.dir;
+      if(s.a>1){s.a=1;s.dir=-1}if(s.a<0.1){s.a=0.1;s.dir=1}
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,7);
+      ctx.fillStyle=`rgba(253,246,236,${s.a*0.9})`;
+      ctx.shadowBlur=4*devicePixelRatio;ctx.shadowColor='rgba(242,212,155,0.6)';
+      ctx.fill();
+    }
+    ctx.shadowBlur=0;
+    spawnShoot();
+    for(let i=shooting.length-1;i>=0;i--){
+      const sh=shooting[i];
+      sh.x+=sh.sp;sh.y+=sh.sp*0.5;sh.life-=0.012;
+      const grad=ctx.createLinearGradient(sh.x,sh.y,sh.x-sh.len,sh.y-sh.len*0.5);
+      grad.addColorStop(0,`rgba(253,246,236,${sh.life})`);
+      grad.addColorStop(1,'rgba(253,246,236,0)');
+      ctx.strokeStyle=grad;ctx.lineWidth=1.4*devicePixelRatio;
+      ctx.beginPath();ctx.moveTo(sh.x,sh.y);ctx.lineTo(sh.x-sh.len,sh.y-sh.len*0.5);ctx.stroke();
+      if(sh.life<=0)shooting.splice(i,1);
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();draw();
+  addEventListener('resize',resize);
+
+  /* ═══════════ SCENE MANAGER ═══════════ */
+  const scenes=['s1','s2','s3'];
+  const navDots=document.querySelectorAll('#sceneNav .sn-dot');
+  let current=0;
+  function goScene(i){
+    document.getElementById(scenes[current]).classList.remove('active');
+    current=i;
+    document.getElementById(scenes[current]).classList.add('active');
+    navDots.forEach((d,idx)=>d.classList.toggle('on',idx<=i));
+    if(i===2)setTimeout(startTyping,700);
+  }
+
+  /* ═══════════ SCENE 1 — ENVELOPE ═══════════ */
+  const env=document.getElementById('envelope');
+  let envOpened=false;
+  function openEnvelope(){
+    if(envOpened)return;envOpened=true;
+    env.classList.add('open');
+    burstFromCenter();
+    setTimeout(()=>goScene(1),1300);
+  }
+  env.addEventListener('click',openEnvelope);
+  env.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openEnvelope();}});
+
+  /* ═══════════ SCENE 2 — CONSTELLATION ═══════════ */
+  const constellation=document.getElementById('constellation');
+  const progRow=document.getElementById('progRow');
+  const mcNum=document.getElementById('mcNum');
+  const mcText=document.getElementById('mcText');
+  const memCard=document.getElementById('memCard');
+  const journeyCta=document.getElementById('journeyCta');
+  let litCount=0;
+  const litSet=new Set();
+
+  // build pips
+  STARS.forEach(()=>{const p=document.createElement('span');p.className='prog-pip';progRow.appendChild(p);});
+  const pips=progRow.querySelectorAll('.prog-pip');
+
+  // build star nodes
+  STARS.forEach((star,i)=>{
+    const node=document.createElement('div');
+    node.className='star-node';
+    node.style.left=star.x+'%';
+    node.style.top=star.y+'%';
+    node.innerHTML=`<div class="star-dot"></div><div class="star-label">${star.label}</div>`;
+    node.addEventListener('click',()=>litStar(i,node));
+    constellation.appendChild(node);
+  });
+
+  function litStar(i,node){
+    const star=STARS[i];
+    // swap memory card text
+    memCard.classList.add('swap');
+    setTimeout(()=>{
+      mcNum.textContent=star.num;
+      mcText.textContent=star.text;
+      memCard.classList.remove('swap');
+    },300);
+
+    if(!litSet.has(i)){
+      litSet.add(i);
+      node.classList.add('lit');
+      pips[litCount].classList.add('done');
+      litCount++;
+      updateLine();
+      sparkleAt(node);
+    }
+    if(litCount>=STARS.length){
+      journeyCta.classList.add('show');
+    }
+  }
+
+  // draw connecting line through lit stars in order
+  function updateLine(){
+    const litInOrder=STARS.map((s,idx)=>({...s,idx})).filter(s=>litSet.has(s.idx));
+    if(litInOrder.length<2){return;}
+    const pts=litInOrder.map(s=>`${(s.x/100)*800},${(s.y/100)*500}`);
+    const d='M'+pts.join(' L');
+    const line=document.getElementById('theLine');
+    line.setAttribute('d',d);
+    line.style.animation='none';
+    void line.offsetWidth;
+    line.style.animation='dash 1.4s ease forwards';
+  }
+
+  document.getElementById('toLetter').addEventListener('click',()=>goScene(2));
+
+  /* ═══════════ SCENE 3 — TYPEWRITER ═══════════ */
+  const letterText=document.getElementById('letterText');
+  const signOff=document.getElementById('signOff');
+  const s3=document.getElementById('s3');
+  let typeStarted=false,typeIdx=0,typeTimer=null;
+
+  function startTyping(){
+    if(typeStarted)return;typeStarted=true;
+    letterText.textContent='';typeIdx=0;typeTick();
+  }
+  function typeTick(){
+    if(typeIdx<LETTER.length){
+      letterText.textContent+=LETTER.charAt(typeIdx);
+      const ch=LETTER.charAt(typeIdx);
+      typeIdx++;
+      const delay=/[.!?]/.test(ch)?200:/[,—]/.test(ch)?90:ch==='\n'?55:16;
+      typeTimer=setTimeout(typeTick,delay);
+      s3.scrollTop=s3.scrollHeight;
+    }else{
+      const c=document.createElement('span');c.className='cursor';
+      letterText.appendChild(c);
+      signOff.classList.add('show');
+      s3.scrollTop=s3.scrollHeight;
+    }
+  }
+
+  /* ═══════════ EFFECTS ═══════════ */
+  const PALETTE=['#f2d49b','#e8a0a8','#c4a8e0','#9ad6c4','#fdf6ec'];
+
+  function floatLove(originPct){
+    const icons=['♡','♥','✦','❀','✿','☽'];
+    for(let i=0;i<16;i++){
+      const el=document.createElement('div');
+      el.className='floater';
+      el.textContent=icons[i%icons.length];
+      el.style.left=(originPct?originPct.x:(8+Math.random()*84))+'%';
+      el.style.top=(originPct?originPct.y:(40+Math.random()*30))+'%';
+      el.style.fontSize=(0.9+Math.random()*1.3)+'rem';
+      el.style.color=PALETTE[i%PALETTE.length];
+      el.style.setProperty('--r',(Math.random()*60-30)+'deg');
+      el.style.animation=`floatUp ${1.6+Math.random()*0.8}s ease-out ${i*0.05}s forwards`;
+      el.style.opacity='0';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),2800);
+    }
+  }
+
+  function sparkleAt(node){
+    const rect=node.getBoundingClientRect();
+    const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+    confetti({
+      particleCount:14,spread:50,
+      origin:{x:cx/innerWidth,y:cy/innerHeight},
+      colors:PALETTE,startVelocity:18,gravity:0.7,scalar:0.7,
+      shapes:['star','circle'],ticks:80
+    });
+  }
+
+  function burstFromCenter(){
+    confetti({
+      particleCount:50,spread:80,
+      origin:{x:0.5,y:0.5},
+      colors:PALETTE,startVelocity:30,gravity:0.8,scalar:0.9,
+      shapes:['star','circle']
+    });
+  }
+
+  function celebrate(){
+    const end=Date.now()+2400;
+    (function frame(){
+      confetti({particleCount:18,spread:70,angle:60,origin:{x:0.05,y:0.6},colors:PALETTE,startVelocity:32,scalar:0.9,shapes:['star','circle']});
+      confetti({particleCount:18,spread:70,angle:120,origin:{x:0.95,y:0.6},colors:PALETTE,startVelocity:32,scalar:0.9,shapes:['star','circle']});
+      if(Date.now()<end)requestAnimationFrame(frame);
+    })();
+    floatLove();
+  }
+
+  document.getElementById('btnLove').addEventListener('click',()=>floatLove());
+  document.getElementById('btnCelebrate').addEventListener('click',celebrate);
+  document.getElementById('btnRestart').addEventListener('click',()=>{
+    // reset everything
+    clearTimeout(typeTimer);
+    typeStarted=false;typeIdx=0;letterText.textContent='';signOff.classList.remove('show');
+    envOpened=false;env.classList.remove('open');
+    litCount=0;litSet.clear();journeyCta.classList.remove('show');
+    pips.forEach(p=>p.classList.remove('done'));
+    document.querySelectorAll('.star-node').forEach(n=>n.classList.remove('lit'));
+    mcNum.textContent='✦ tap a star to begin';
+    mcText.textContent="Every star here is a piece of us — the days, the laughs, the quiet ordinary moments I'd never trade for anything.";
+    document.getElementById('theLine').setAttribute('d','');
+    goScene(0);
+  });
+
+})();
+</script>
+</body>
+</html>
