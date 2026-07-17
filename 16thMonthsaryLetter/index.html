@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6eee7" />
+  <title>Sixteen Months — For You</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Italiana&family=Manrope:wght@400;500;600&family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --paper: #f7f0e9;
+      --paper-deep: #efe2d7;
+      --ink: #2f2724;
+      --muted: #7c6f68;
+      --line: rgba(47, 39, 36, 0.15);
+      --rose: #b85d68;
+      --rose-dark: #8f3e4c;
+      --peach: #e5a78f;
+      --cream: #fffaf6;
+      --sage: #9ca58e;
+      --gold: #bd9a62;
+      --shadow: 0 22px 60px rgba(80, 56, 47, 0.16);
+      --shadow-soft: 0 14px 34px rgba(80, 56, 47, 0.12);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 5% 8%, rgba(229, 167, 143, 0.32), transparent 28%),
+        radial-gradient(circle at 92% 14%, rgba(156, 165, 142, 0.22), transparent 24%),
+        linear-gradient(180deg, #fbf6f1 0%, var(--paper) 54%, #f1e5db 100%);
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.18;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .app {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    .ambient-shape {
+      position: fixed;
+      z-index: -2;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none;
+      opacity: .72;
+    }
+
+    .shape-one {
+      width: min(42vw, 540px);
+      aspect-ratio: 1;
+      left: -18vw;
+      top: 18vh;
+      background: radial-gradient(circle, rgba(184, 93, 104, .16), transparent 70%);
+    }
+
+    .shape-two {
+      width: min(38vw, 480px);
+      aspect-ratio: 1;
+      right: -14vw;
+      bottom: 8vh;
+      background: radial-gradient(circle, rgba(189, 154, 98, .16), transparent 70%);
+    }
+
+    .floating-word {
+      position: fixed;
+      z-index: -1;
+      font-family: "Italiana", serif;
+      font-size: clamp(5rem, 17vw, 15rem);
+      color: rgba(47, 39, 36, 0.035);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .floating-word.one {
+      top: 7vh;
+      left: -1vw;
+      transform: rotate(-8deg);
+    }
+
+    .floating-word.two {
+      right: -2vw;
+      bottom: 4vh;
+      transform: rotate(8deg);
+    }
+
+    .screen {
+      min-height: 100svh;
+      width: 100%;
+      display: none;
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .screen.is-active {
+      display: flex;
+      animation: screenIn .8s var(--ease) forwards;
+    }
+
+    @keyframes screenIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .frame {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: max(18px, env(safe-area-inset-top)) clamp(18px, 3vw, 40px) 18px;
+      pointer-events: none;
+    }
+
+    .brand,
+    .page-index {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid rgba(47, 39, 36, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 250, 246, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 26px rgba(80, 56, 47, .08);
+    }
+
+    .brand-mark {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 0 5px rgba(184, 93, 104, .12);
+    }
+
+    .brand span,
+    .page-index {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      line-height: 1;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* INTRO */
+    #intro {
+      align-items: center;
+      justify-content: center;
+      padding: 110px 0 56px;
+    }
+
+    .intro-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(340px, 1.1fr);
+      align-items: center;
+      gap: clamp(38px, 7vw, 98px);
+    }
+
+    .intro-copy {
+      max-width: 520px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: var(--rose-dark);
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .intro-title {
+      font-family: "Italiana", serif;
+      font-weight: 400;
+      font-size: clamp(4rem, 9vw, 8rem);
+      line-height: .88;
+      letter-spacing: -.05em;
+    }
+
+    .intro-title span {
+      display: block;
+      color: var(--rose);
+      margin-left: .35em;
+      font-family: "Nanum Pen Script", cursive;
+      font-size: .78em;
+      letter-spacing: 0;
+      transform: rotate(-3deg);
+    }
+
+    .intro-lead {
+      margin-top: 28px;
+      max-width: 430px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.6vw, 1.12rem);
+      line-height: 1.8;
+    }
+
+    .intro-actions {
+      margin-top: 34px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 52px;
+      padding: 0 24px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform .25s var(--ease), box-shadow .25s, background .25s;
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .primary-button {
+      background: var(--ink);
+      color: var(--cream);
+      box-shadow: 0 12px 30px rgba(47, 39, 36, .2);
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .primary-button:hover {
+      box-shadow: 0 18px 38px rgba(47, 39, 36, .26);
+    }
+
+    .secondary-button {
+      color: var(--ink);
+      background: rgba(255, 250, 246, .62);
+      border: 1px solid rgba(47, 39, 36, .14);
+    }
+
+    .button-arrow {
+      font-size: 18px;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .ticket-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 580px;
+      perspective: 1400px;
+    }
+
+    .ticket-shadow {
+      position: absolute;
+      width: 80%;
+      height: 64%;
+      border-radius: 36px;
+      background: rgba(47, 39, 36, .16);
+      filter: blur(38px);
+      transform: translateY(34px) rotate(-4deg);
+    }
+
+    .ticket {
+      position: relative;
+      width: min(100%, 520px);
+      aspect-ratio: 1.55 / 1;
+      border-radius: 28px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.56), transparent 44%),
+        linear-gradient(140deg, #bd6671 0%, #b75e68 46%, #8f4050 100%);
+      color: var(--cream);
+      box-shadow: 0 40px 90px rgba(108, 57, 66, .32);
+      transform: rotate(4deg);
+      transition: transform .65s var(--ease);
+      cursor: pointer;
+    }
+
+    .ticket:hover {
+      transform: rotate(1deg) translateY(-8px);
+    }
+
+    .ticket::before,
+    .ticket::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--paper);
+      transform: translateY(-50%);
+      z-index: 4;
+    }
+
+    .ticket::before { left: -22px; }
+    .ticket::after { right: -22px; }
+
+    .ticket-inner {
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255,255,255,.36);
+      border-radius: 19px;
+      display: grid;
+      grid-template-columns: 1fr 132px;
+      overflow: hidden;
+    }
+
+    .ticket-main {
+      padding: clamp(24px, 4vw, 44px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ticket-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .24em;
+      opacity: .76;
+    }
+
+    .ticket-number {
+      font-family: "Italiana", serif;
+      font-size: clamp(4.6rem, 11vw, 8.4rem);
+      line-height: .8;
+      letter-spacing: -.05em;
+      margin-top: 8px;
+    }
+
+    .ticket-script {
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      transform: rotate(-5deg);
+      transform-origin: left center;
+      margin-top: 18px;
+    }
+
+    .ticket-meta {
+      display: flex;
+      gap: 30px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,.26);
+    }
+
+    .ticket-meta-item strong,
+    .ticket-meta-item span {
+      display: block;
+    }
+
+    .ticket-meta-item strong {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      opacity: .65;
+      margin-bottom: 4px;
+    }
+
+    .ticket-meta-item span {
+      font-family: "Italiana", serif;
+      font-size: 1.1rem;
+    }
+
+    .ticket-side {
+      position: relative;
+      border-left: 1px dashed rgba(255,255,255,.42);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 26px 18px;
+    }
+
+    .ticket-side::before {
+      content: "";
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,.36);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.2), transparent 68%);
+      box-shadow: inset 0 0 0 7px rgba(255,255,255,.05);
+    }
+
+    .barcode {
+      display: flex;
+      align-items: stretch;
+      height: 90px;
+      gap: 3px;
+      transform: rotate(90deg);
+    }
+
+    .barcode i {
+      display: block;
+      width: 2px;
+      background: rgba(255,255,255,.82);
+    }
+
+    .barcode i:nth-child(3n) { width: 5px; }
+    .barcode i:nth-child(4n) { width: 1px; }
+    .barcode i:nth-child(5n) { height: 76%; }
+
+    .ticket-code {
+      writing-mode: vertical-rl;
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: .2em;
+      opacity: .72;
+    }
+
+    .tap-note {
+      position: absolute;
+      right: 5%;
+      bottom: 4%;
+      color: var(--muted);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: 1.65rem;
+      transform: rotate(-6deg);
+      animation: floatNote 2.8s ease-in-out infinite;
+    }
+
+    @keyframes floatNote {
+      0%,100% { transform: rotate(-6deg) translateY(0); }
+      50% { transform: rotate(-6deg) translateY(-7px); }
+    }
+
+    /* GALLERY */
+    #gallery {
+      align-items: center;
+      padding: 112px 0 70px;
+    }
+
+    .gallery-shell {
+      width: 100%;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .6fr);
+      align-items: end;
+      gap: 32px;
+      margin-bottom: 34px;
+    }
+
+    .section-heading h2 {
+      font-family: "Italiana", serif;
+      font-size: clamp(3.1rem, 7vw, 6.6rem);
+      font-weight: 400;
+      line-height: .95;
+      letter-spacing: -.04em;
+      max-width: 760px;
+    }
+
+    .section-heading h2 em {
+      color: var(--rose);
+      font-family: "Nanum Pen Script", cursive;
+      font-style: normal;
+      font-size: .82em;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: .98rem;
+      max-width: 430px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, .62fr) minmax(0, 1.38fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chapter-button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 46px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      text-align: left;
+      padding: 18px;
+      border-radius: 18px;
+      cursor: pointer;
+      background: rgba(255, 250, 246, .48);
+      border: 1px solid rgba(47, 39, 36, .11);
+      color: var(--ink);
+      transition: all .3s var(--ease);
+    }
+
+    .chapter-button:hover,
+    .chapter-button.is-selected {
+      background: var(--cream);
+      border-color: rgba(184, 93, 104, .32);
+      box-shadow: var(--shadow-soft);
+      transform: translateX(5px);
+    }
+
+    .chapter-index {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--paper-deep);
+      color: var(--rose-dark);
+      font-family: "Italiana", serif;
+      font-size: 1.15rem;
+    }
+
+    .chapter-button.is-selected .chapter-index {
+      background: var(--rose);
+      color: white;
+    }
+
+    .chapter-label strong,
+    .chapter-label span {
+      display: block;
+    }
+
+    .chapter-label strong {
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      letter-spacing: .05em;
+      margin-bottom: 4px;
+    }
+
+    .chapter-label span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chapter-arrow {
+      color: var(--rose);
+      font-size: 20px;
+    }
+
+    .memory-stage {
+      position: relative;
+      overflow: hidden;
+      min-height: 510px;
+      border-radius: 28px;
+      background: #392d2a;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .memory-stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(31, 22, 20, .78) 0%, rgba(31, 22, 20, .18) 52%, rgba(31, 22, 20, .46) 100%);
+    }
+
+    .memory-visual {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.03);
+      transition: opacity .45s ease, transform 1.2s var(--ease), filter .45s;
+      filter: saturate(.86) contrast(1.04);
+    }
+
+    .memory-stage.is-changing .memory-visual {
+      opacity: .28;
+      transform: scale(1.08);
+    }
+
+    .memory-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      min-height: 510px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(28px, 5vw, 56px);
+      color: white;
+    }
+
+    .memory-caption {
+      max-width: 620px;
+      transition: opacity .3s ease, transform .3s ease;
+    }
+
+    .memory-stage.is-changing .memory-caption {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    .memory-eyebrow {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .22em;
+      opacity: .74;
+      margin-bottom: 14px;
+    }
+
+    .memory-title {
+      font-family: "Italiana", serif;
+      font-size: clamp(2.7rem, 6vw, 5.5rem);
+      font-weight: 400;
+      line-height: .92;
+      letter-spacing: -.035em;
+      margin-bottom: 18px;
+    }
+
+    .memory-copy {
+      max-width: 560px;
+      font-size: clamp(.98rem, 1.5vw, 1.1rem);
+      line-height: 1.8;
+      color: rgba(255,255,255,.84);
+    }
+
+    .gallery-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .progress-line {
+      flex: 1;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(47, 39, 36, .12);
+      overflow: hidden;
+    }
+
+    .progress-line span {
+      display: block;
+      width: 20%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+      border-radius: inherit;
+      transition: width .45s var(--ease);
+    }
+
+    /* LETTER */
+    #letter {
+      align-items: flex-start;
+      padding: 112px 0 90px;
+    }
+
+    .letter-layout {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(260px, .58fr) minmax(0, 1.42fr);
+      gap: clamp(28px, 6vw, 78px);
+      align-items: start;
+    }
+
+    .letter-aside {
+      position: sticky;
+      top: 110px;
+    }
+
+    .letter-aside .number {
+      font-family: "Italiana", serif;
+      font-size: clamp(6rem, 14vw, 11rem);
+      line-height: .75;
+      color: var(--rose);
+      letter-spacing: -.06em;
+    }
+
+    .letter-aside h2 {
+      margin-top: 18px;
+      font-family: "Italiana", serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .letter-aside p {
+      margin-top: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 340px;
+    }
+
+    .photo-stack {
+      position: relative;
+      margin-top: 34px;
+      width: min(100%, 320px);
+      aspect-ratio: 4 / 3.4;
+    }
+
+    .photo-card {
+      position: absolute;
+      inset: 0;
+      padding: 10px 10px 48px;
+      background: #fffdf9;
+      box-shadow: var(--shadow-soft);
+      transform: rotate(-4deg);
+    }
+
+    .photo-card::after {
+      content: "sixteen months with you ♡";
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 100%;
+      text-align: center;
+      font-family: "Nanum Pen Script", cursive;
+      color: #7e554d;
+      font-size: 1.45rem;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.92) contrast(1.02);
+    }
+
+    .tape {
+      position: absolute;
+      z-index: 3;
+      top: -12px;
+      left: 50%;
+      width: 92px;
+      height: 30px;
+      transform: translateX(-50%) rotate(2deg);
+      background: rgba(214, 192, 147, .48);
+      border: 1px solid rgba(155, 128, 78, .12);
+      backdrop-filter: blur(2px);
+    }
+
+    .letter-paper {
+      position: relative;
+      padding: clamp(34px, 6vw, 72px);
+      border-radius: 26px;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 37px,
+          rgba(82, 69, 63, .08) 38px
+        ),
+        linear-gradient(145deg, #fffdf9 0%, #f9f2e9 100%);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(47, 39, 36, .12);
+      overflow: hidden;
+    }
+
+    .letter-paper::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: clamp(22px, 4vw, 52px);
+      width: 1px;
+      background: rgba(184, 93, 104, .22);
+    }
+
+    .letter-date {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+      margin-bottom: 28px;
+    }
+
+    .letter-greeting {
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(3rem, 6vw, 4.8rem);
+      line-height: 1;
+      color: var(--rose-dark);
+      transform: rotate(-2deg);
+      transform-origin: left center;
+      margin-bottom: 16px;
+    }
+
+    #letterText {
+      min-height: 13em;
+      padding-left: clamp(8px, 2vw, 22px);
+      color: #392f2b;
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(1.7rem, 3.3vw, 2.35rem);
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .type-caret {
+      display: inline-block;
+      width: 2px;
+      height: .9em;
+      margin-left: 2px;
+      background: var(--rose-dark);
+      vertical-align: baseline;
+      animation: blink .8s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .letter-signature {
+      margin-top: 28px;
+      text-align: right;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .8s, transform .8s var(--ease);
+    }
+
+    .letter-signature.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-signature strong {
+      display: block;
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      color: var(--rose-dark);
+      font-weight: 400;
+    }
+
+    .letter-signature span {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .letter-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .utility-button {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      background: rgba(255,250,246,.72);
+      color: var(--ink);
+      border: 1px solid rgba(47,39,36,.13);
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      transition: all .25s var(--ease);
+    }
+
+    .utility-button:hover {
+      background: var(--ink);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .scene-dots {
+      position: fixed;
+      right: clamp(18px, 3vw, 40px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      display: grid;
+      gap: 10px;
+    }
+
+    .scene-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(47, 39, 36, .18);
+      transition: all .3s;
+    }
+
+    .scene-dot.is-active {
+      height: 28px;
+      border-radius: 999px;
+      background: var(--rose);
+    }
+
+    .heart-particle {
+      position: fixed;
+      z-index: 1000;
+      pointer-events: none;
+      font-family: "Nanum Pen Script", cursive;
+      color: var(--rose);
+      will-change: transform, opacity;
+      animation: heartFloat var(--duration) var(--ease) forwards;
+    }
+
+    @keyframes heartFloat {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0) scale(.6) rotate(0deg);
+      }
+      12% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift), -150px, 0) scale(1.15) rotate(var(--rotate));
+      }
+    }
+
+    .petal {
+      position: fixed;
+      z-index: 35;
+      width: 10px;
+      height: 16px;
+      border-radius: 80% 20% 70% 30%;
+      pointer-events: none;
+      background: linear-gradient(145deg, #e5a78f, #b85d68);
+      opacity: 0;
+      animation: petalFall var(--duration) linear forwards;
+    }
+
+    @keyframes petalFall {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, -8vh, 0) rotate(0deg);
+      }
+      10% { opacity: .86; }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--x), 108vh, 0) rotate(var(--spin));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .intro-layout,
+      .gallery-grid,
+      .letter-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-copy {
+        text-align: center;
+        margin-inline: auto;
+      }
+
+      .intro-lead {
+        margin-inline: auto;
+      }
+
+      .intro-actions,
+      .kicker {
+        justify-content: center;
+      }
+
+      .ticket-wrap {
+        min-height: 470px;
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+      }
+
+      .chapter-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .chapter-button:hover,
+      .chapter-button.is-selected {
+        transform: translateY(-3px);
+      }
+
+      .letter-aside {
+        position: static;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(230px, 320px);
+        gap: 24px;
+        align-items: center;
+      }
+
+      .photo-stack {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        padding-inline: 14px;
+      }
+
+      .brand span,
+      .page-index {
+        font-size: 9px;
+      }
+
+      .frame {
+        width: min(100% - 22px, 1180px);
+      }
+
+      #intro,
+      #gallery,
+      #letter {
+        padding-top: 96px;
+      }
+
+      .intro-title {
+        font-size: clamp(3.55rem, 19vw, 5.7rem);
+      }
+
+      .ticket-wrap {
+        min-height: 360px;
+      }
+
+      .ticket-inner {
+        grid-template-columns: 1fr 88px;
+        inset: 11px;
+      }
+
+      .ticket-main {
+        padding: 20px;
+      }
+
+      .ticket-number {
+        font-size: 4.5rem;
+      }
+
+      .ticket-side {
+        padding-inline: 8px;
+      }
+
+      .ticket-meta {
+        gap: 16px;
+      }
+
+      .tap-note {
+        display: none;
+      }
+
+      .chapter-list {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 8px;
+      }
+
+      .chapter-button {
+        min-width: 232px;
+        scroll-snap-align: start;
+      }
+
+      .memory-stage,
+      .memory-content {
+        min-height: 500px;
+      }
+
+      .gallery-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .gallery-footer .primary-button {
+        width: 100%;
+      }
+
+      .letter-aside {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-stack {
+        width: 78%;
+      }
+
+      .letter-paper {
+        border-radius: 20px;
+      }
+
+      .letter-paper::before {
+        left: 24px;
+      }
+
+      #letterText {
+        font-size: clamp(1.55rem, 7vw, 2rem);
+      }
+
+      .scene-dots {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="ambient-shape shape-one"></div>
+    <div class="ambient-shape shape-two"></div>
+    <div class="floating-word one">our story</div>
+    <div class="floating-word two">always</div>
+
+    <header class="topbar" aria-label="Page header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Sixteen months</span>
+      </div>
+      <div class="page-index" id="pageIndex">01 / 03</div>
+    </header>
+
+    <main>
+      <section class="screen is-active" id="intro" aria-labelledby="introTitle">
+        <div class="frame intro-layout">
+          <div class="intro-copy">
+            <div class="kicker">A private exhibit for my favorite person</div>
+            <h1 class="intro-title" id="introTitle">
+              Sixteen
+              <span>months of us</span>
+            </h1>
+            <p class="intro-lead">
+              A small collection of the moments, laughter, softness, and love that made the last sixteen months feel like home.
+            </p>
+            <div class="intro-actions">
+              <button class="primary-button" id="enterGallery" type="button">
+                Enter our story <span class="button-arrow">↗</span>
+              </button>
+              <button class="secondary-button" id="sendIntroLove" type="button">Send a little love ♡</button>
+            </div>
+          </div>
+
+          <div class="ticket-wrap">
+            <div class="ticket-shadow" aria-hidden="true"></div>
+            <button class="ticket" id="ticket" type="button" aria-label="Open the sixteen months memory ticket">
+              <span class="ticket-inner">
+                <span class="ticket-main">
+                  <span>
+                    <span class="ticket-label">Admit two · private memory museum</span>
+                    <span class="ticket-number">XVI</span>
+                    <span class="ticket-script">for you, my love</span>
+                  </span>
+                  <span class="ticket-meta">
+                    <span class="ticket-meta-item">
+                      <strong>Valid</strong>
+                      <span>Forever</span>
+                    </span>
+                    <span class="ticket-meta-item">
+                      <strong>Seat</strong>
+                      <span>Beside me</span>
+                    </span>
+                  </span>
+                </span>
+                <span class="ticket-side">
+                  <span class="barcode" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                  </span>
+                  <span class="ticket-code">LOVE-XVI-ALWAYS</span>
+                </span>
+              </span>
+            </button>
+            <div class="tap-note">tap the ticket ♡</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="gallery" aria-labelledby="galleryTitle">
+        <div class="frame gallery-shell">
+          <div class="section-heading">
+            <h2 id="galleryTitle">Five little chapters of <em>us.</em></h2>
+            <p>
+              Choose each chapter to walk through the pieces of our story that I keep close. The letter waits after the final memory.
+            </p>
+          </div>
+
+          <div class="gallery-grid">
+            <nav class="chapter-list" id="chapterList" aria-label="Memory chapters"></nav>
+
+            <article class="memory-stage" id="memoryStage" aria-live="polite">
+              <div class="memory-visual" id="memoryVisual"></div>
+              <div class="memory-content">
+                <div class="memory-caption">
+                  <p class="memory-eyebrow" id="memoryEyebrow"></p>
+                  <h3 class="memory-title" id="memoryTitle"></h3>
+                  <p class="memory-copy" id="memoryCopy"></p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="gallery-footer">
+            <div class="progress-line" aria-label="Gallery progress">
+              <span id="galleryProgress"></span>
+            </div>
+            <button class="primary-button" id="openLetter" type="button">
+              Open your letter <span class="button-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="letter" aria-labelledby="letterTitle">
+        <div class="frame letter-layout">
+          <aside class="letter-aside">
+            <div>
+              <div class="number">16</div>
+              <h2 id="letterTitle">A letter for my baby.</h2>
+              <p>
+                For every ordinary day that became special simply because I got to share it with you.
+              </p>
+            </div>
+
+            <div class="photo-stack" aria-label="Our photograph">
+              <div class="tape" aria-hidden="true"></div>
+              <figure class="photo-card">
+                <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/14thMonthsaryLetter/assets/Messenger_creation_42D8C3A1-8CD2-4D62-8B47-0F30E952CF9A.jpeg" alt="A photo of us together" />
+              </figure>
+            </div>
+          </aside>
+
+          <article class="letter-paper">
+            <div class="letter-date">Sixteen months · still choosing you</div>
+            <div class="letter-greeting">Baby,</div>
+            <div id="letterText"></div>
+
+            <div class="letter-signature" id="letterSignature">
+              <strong>Always yours ♡</strong>
+              <span>Sixteen months and endlessly counting</span>
+            </div>
+
+            <div class="letter-actions">
+              <button class="utility-button" id="loveButton" type="button">Send love ♡</button>
+              <button class="utility-button" id="celebrateButton" type="button">Celebrate ✦</button>
+              <button class="utility-button" id="restartButton" type="button">Start again ↺</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="scene-dots" aria-hidden="true">
+      <span class="scene-dot is-active"></span>
+      <span class="scene-dot"></span>
+      <span class="scene-dot"></span>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const LETTER = `Sixteen months in, dugay-dugay na jud mi sa baby and still counting — yes, yes, yes. I know naay mga times nga daghan ug mga trials ang baby nako, daghan kaayog gihuna-huna ang baby nako for the past few days. No matter what mood you're in, pasabton ra japon nako ang baby nako kay love kaayo nako ang baby.
+
+Pero bitaw my by, I know your mind always plays negative scenarios, which nakasabot napud ko. If your mind plays things and it causes you to be in a bad mood on some days, but no worries, I'll keep understanding you my by. I understand nga naay mga nights nga mokalit rakag hilak, kabaw ko. Pero I'm not really good at resolutions sa mga butang nga dili gani nako cause personally, na-personalize naman sad gud nako nga problem = solution, resolve and fix. Mao nang loslos jud ko in terms ug naay mga random bad or sad days.
+
+Anyway, just don't forget I'm always here for you no matter the cost. Since I myself have been becoming busy for the past couple of days, and I'll become even busier soon, my by. Labaw na nga daghan na ang stations nga mogamit sa application. Diha na mag-inabot ang mga problems, mudaghan na gyud maayo. But I know if moabot na nang time, mubetter naman sad ning Monday Vibe, mas faster na ni in the future. So I hope your understanding will reach the point nga ma-handle ra nimo and dili moabot sa point nga mosurrender ka tungod kay gikapoy.
+
+But still, here's to more late-night conversations, more soft kisses, more moments we'll never forget, and more love that just keeps growing between us. Every little thing feels precious when it's with you, and I can't wait for all the memories we still have left to make. 💕`;
+
+      const PHOTO = "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/main/14thMonthsaryLetter/assets/Messenger_creation_42D8C3A1-8CD2-4D62-8B47-0F30E952CF9A.jpeg";
+
+      const MEMORIES = [
+        {
+          label: "Chapter 01",
+          short: "Where it began",
+          eyebrow: "The beginning · our first chapter",
+          title: "The moment you became my favorite person.",
+          copy: "From the beginning, there was something about you that felt easy, warm, and worth choosing. I did not know then how much of my everyday life would eventually carry your name.",
+          image: PHOTO,
+          position: "center 42%"
+        },
+        {
+          label: "Chapter 02",
+          short: "Your laughter",
+          eyebrow: "The laughter · the lightness",
+          title: "The sound that makes every hard day softer.",
+          copy: "Kana siyang tinuod nga katawa nimo is still one of my favorite sounds. You make ordinary conversations memorable and somehow turn dull days into something I want to keep.",
+          image: PHOTO,
+          position: "44% center"
+        },
+        {
+          label: "Chapter 03",
+          short: "The hard days",
+          eyebrow: "The storms · the choosing",
+          title: "Even on difficult days, I still choose us.",
+          copy: "We have had heavy moments, misunderstandings, and trials. But love also lives in patience, in staying gentle, and in finding our way back to each other again and again.",
+          image: PHOTO,
+          position: "58% 36%"
+        },
+        {
+          label: "Chapter 04",
+          short: "The soft moments",
+          eyebrow: "The quiet · the closeness",
+          title: "Late-night talks, soft kisses, and peaceful silences.",
+          copy: "These are the pieces of us I hold closest: conversations that stretch past midnight, little gestures, comfortable silences, and the feeling that I can simply be myself beside you.",
+          image: PHOTO,
+          position: "center 58%"
+        },
+        {
+          label: "Chapter 05",
+          short: "What comes next",
+          eyebrow: "The future · still counting",
+          title: "Sixteen months later, I am still falling for you.",
+          copy: "There are still so many memories waiting for us. More laughter, more growth, more softness, and more days when we choose one another. I love you always, in every way, every single day.",
+          image: PHOTO,
+          position: "56% center"
+        }
+      ];
+
+      const screens = ["intro", "gallery", "letter"];
+      const dots = [...document.querySelectorAll(".scene-dot")];
+      const pageIndex = document.getElementById("pageIndex");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      let currentScreen = 0;
+      let currentMemory = 0;
+      let typeTimer = null;
+      let typingStarted = false;
+
+      function showScreen(index) {
+        document.getElementById(screens[currentScreen]).classList.remove("is-active");
+        currentScreen = index;
+        const next = document.getElementById(screens[currentScreen]);
+        next.classList.add("is-active");
+        pageIndex.textContent = `0${index + 1} / 03`;
+        dots.forEach((dot, dotIndex) => dot.classList.toggle("is-active", dotIndex === index));
+        window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+
+        if (index === 2) {
+          setTimeout(startTyping, reducedMotion ? 0 : 500);
+        }
+      }
+
+      function launchHearts(originX = 50, originY = 72, amount = 18) {
+        const symbols = ["♡", "♥", "✦", "❀"];
+
+        for (let i = 0; i < amount; i += 1) {
+          const heart = document.createElement("span");
+          heart.className = "heart-particle";
+          heart.textContent = symbols[i % symbols.length];
+          heart.style.left = `${originX + (Math.random() * 16 - 8)}vw`;
+          heart.style.top = `${originY + (Math.random() * 8 - 4)}vh`;
+          heart.style.fontSize = `${1 + Math.random() * 1.6}rem`;
+          heart.style.setProperty("--duration", `${1.6 + Math.random() * 1.3}s`);
+          heart.style.setProperty("--drift", `${Math.random() * 110 - 55}px`);
+          heart.style.setProperty("--rotate", `${Math.random() * 80 - 40}deg`);
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 3200);
+        }
+      }
+
+      function createPetalRain(amount = 52) {
+        for (let i = 0; i < amount; i += 1) {
+          const petal = document.createElement("span");
+          petal.className = "petal";
+          petal.style.left = `${Math.random() * 100}vw`;
+          petal.style.top = `${-10 - Math.random() * 20}vh`;
+          petal.style.setProperty("--duration", `${3.8 + Math.random() * 3.6}s`);
+          petal.style.setProperty("--x", `${Math.random() * 180 - 90}px`);
+          petal.style.setProperty("--spin", `${Math.random() * 900 - 450}deg`);
+          petal.style.animationDelay = `${Math.random() * .9}s`;
+          petal.style.transform = `scale(${.65 + Math.random() * .8})`;
+          document.body.appendChild(petal);
+          setTimeout(() => petal.remove(), 8200);
+        }
+      }
+
+      const chapterList = document.getElementById("chapterList");
+      const memoryStage = document.getElementById("memoryStage");
+      const memoryVisual = document.getElementById("memoryVisual");
+      const memoryEyebrow = document.getElementById("memoryEyebrow");
+      const memoryTitle = document.getElementById("memoryTitle");
+      const memoryCopy = document.getElementById("memoryCopy");
+      const galleryProgress = document.getElementById("galleryProgress");
+
+      function buildMemoryButtons() {
+        MEMORIES.forEach((memory, index) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "chapter-button";
+          button.innerHTML = `
+            <span class="chapter-index">0${index + 1}</span>
+            <span class="chapter-label">
+              <strong>${memory.label}</strong>
+              <span>${memory.short}</span>
+            </span>
+            <span class="chapter-arrow">↗</span>
+          `;
+          button.addEventListener("click", () => selectMemory(index));
+          chapterList.appendChild(button);
+        });
+      }
+
+      function selectMemory(index, immediate = false) {
+        currentMemory = index;
+        const memory = MEMORIES[index];
+        const buttons = [...chapterList.querySelectorAll(".chapter-button")];
+        buttons.forEach((button, buttonIndex) => button.classList.toggle("is-selected", buttonIndex === index));
+        galleryProgress.style.width = `${((index + 1) / MEMORIES.length) * 100}%`;
+
+        const update = () => {
+          memoryVisual.style.backgroundImage = `url("${memory.image}")`;
+          memoryVisual.style.backgroundPosition = memory.position;
+          memoryEyebrow.textContent = memory.eyebrow;
+          memoryTitle.textContent = memory.title;
+          memoryCopy.textContent = memory.copy;
+          memoryStage.classList.remove("is-changing");
+        };
+
+        if (immediate || reducedMotion) {
+          update();
+        } else {
+          memoryStage.classList.add("is-changing");
+          setTimeout(update, 280);
+        }
+      }
+
+      const letterText = document.getElementById("letterText");
+      const letterSignature = document.getElementById("letterSignature");
+
+      function startTyping() {
+        if (typingStarted) return;
+        typingStarted = true;
+        letterText.textContent = "";
+        letterSignature.classList.remove("is-visible");
+
+        if (reducedMotion) {
+          letterText.textContent = LETTER;
+          showTypingComplete();
+          return;
+        }
+
+        let index = 0;
+
+        const typeNext = () => {
+          if (index >= LETTER.length) {
+            showTypingComplete();
+            return;
+          }
+
+          const character = LETTER.charAt(index);
+          letterText.textContent += character;
+          index += 1;
+
+          let delay = 4;
+          if (/[.!?]/.test(character)) delay = 45;
+          else if (/[,—]/.test(character)) delay = 20;
+          else if (character === "\n") delay = 10;
+
+          typeTimer = setTimeout(typeNext, delay);
+        };
+
+        typeNext();
+      }
+
+      function showTypingComplete() {
+        const caret = document.createElement("span");
+        caret.className = "type-caret";
+        caret.setAttribute("aria-hidden", "true");
+        letterText.appendChild(caret);
+        letterSignature.classList.add("is-visible");
+      }
+
+      function resetExperience() {
+        clearTimeout(typeTimer);
+        typingStarted = false;
+        letterText.textContent = "";
+        letterSignature.classList.remove("is-visible");
+        selectMemory(0, true);
+        showScreen(0);
+      }
+
+      buildMemoryButtons();
+      selectMemory(0, true);
+
+      document.getElementById("ticket").addEventListener("click", () => {
+        launchHearts(68, 58, 24);
+        setTimeout(() => showScreen(1), reducedMotion ? 0 : 500);
+      });
+
+      document.getElementById("enterGallery").addEventListener("click", () => showScreen(1));
+      document.getElementById("sendIntroLove").addEventListener("click", () => launchHearts(26, 80, 20));
+      document.getElementById("openLetter").addEventListener("click", () => showScreen(2));
+      document.getElementById("loveButton").addEventListener("click", () => launchHearts(68, 84, 26));
+      document.getElementById("celebrateButton").addEventListener("click", () => {
+        createPetalRain();
+        launchHearts(50, 86, 32);
+      });
+      document.getElementById("restartButton").addEventListener("click", resetExperience);
+    })();
+  </script>
+</body>
+</html>
