@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#090b16" />
+  <meta name="color-scheme" content="dark" />
+  <title>Seventeen Moons — Still You</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Italiana&family=Manrope:wght@400;500;600&family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+
+    :root {
+      --night: #090b16;
+      --night-2: #11152a;
+      --ink: #f7f4ff;
+      --muted: rgba(238, 235, 255, .66);
+      --line: rgba(220, 215, 255, .14);
+      --violet: #9f8cff;
+      --lavender: #c8bfff;
+      --pink: #ff8fbd;
+      --blue: #7dd9ff;
+      --gold: #ffd99a;
+      --glass: rgba(17, 21, 42, .56);
+      --glass-strong: rgba(22, 26, 50, .82);
+      --shadow: 0 30px 100px rgba(0, 0, 0, .38);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--night);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 8%, rgba(126, 95, 255, .18), transparent 28%),
+        radial-gradient(circle at 82% 22%, rgba(255, 111, 170, .12), transparent 24%),
+        radial-gradient(circle at 50% 88%, rgba(79, 177, 255, .11), transparent 30%),
+        linear-gradient(180deg, #080a14 0%, #0d1021 48%, #080a15 100%);
+      font-family: "Manrope", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; }
+    img { display: block; max-width: 100%; }
+
+    .app {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    #starCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    .aurora,
+    .aurora::before,
+    .aurora::after {
+      position: fixed;
+      content: "";
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: -2;
+      opacity: .28;
+      animation: auroraFloat 14s ease-in-out infinite alternate;
+    }
+
+    .aurora {
+      width: 36vw;
+      aspect-ratio: 1;
+      left: -10vw;
+      top: 14vh;
+      background: rgba(115, 92, 255, .32);
+    }
+
+    .aurora::before {
+      width: 30vw;
+      aspect-ratio: 1;
+      left: 68vw;
+      top: 18vh;
+      background: rgba(255, 104, 179, .26);
+      animation-delay: -6s;
+    }
+
+    .aurora::after {
+      width: 24vw;
+      aspect-ratio: 1;
+      left: 42vw;
+      top: 62vh;
+      background: rgba(83, 200, 255, .22);
+      animation-delay: -10s;
+    }
+
+    @keyframes auroraFloat {
+      from { transform: translate3d(-2vw, -2vh, 0) scale(.96); }
+      to { transform: translate3d(4vw, 5vh, 0) scale(1.08); }
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      pointer-events: none;
+      opacity: .08;
+      mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    }
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: max(18px, env(safe-area-inset-top)) clamp(16px, 3vw, 42px) 16px;
+      pointer-events: none;
+    }
+
+    .brand,
+    .scene-index {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(9, 11, 22, .48);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .18);
+    }
+
+    .brand-orbit {
+      width: 17px;
+      height: 17px;
+      border: 1px solid rgba(200, 191, 255, .76);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .brand-orbit::after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--pink);
+      left: 50%;
+      top: -3px;
+      transform: translateX(-50%);
+      box-shadow: 0 0 14px var(--pink);
+    }
+
+    .brand span,
+    .scene-index {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 255, .72);
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      min-height: 100svh;
+      opacity: 0;
+      transform: translateY(18px) scale(.995);
+    }
+
+    .screen.is-active {
+      display: flex;
+      animation: screenIn .8s var(--ease) forwards;
+    }
+
+    @keyframes screenIn {
+      to { opacity: 1; transform: none; }
+    }
+
+    .frame {
+      width: min(1180px, calc(100% - 34px));
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--lavender);
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--lavender));
+    }
+
+    .primary,
+    .ghost,
+    .chip-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: white;
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: transform .3s var(--ease), border-color .3s, background .3s, box-shadow .3s;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #9b89ff, #725cff 56%, #f27caf 145%);
+      box-shadow: 0 18px 42px rgba(119, 91, 255, .32);
+    }
+
+    .ghost,
+    .chip-button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.035);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .primary:hover,
+    .ghost:hover,
+    .chip-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .ghost:hover,
+    .chip-button:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(200,191,255,.34);
+    }
+
+    /* INTRO */
+    #intro {
+      align-items: center;
+      padding: 118px 0 62px;
+      overflow: hidden;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(440px, 1.08fr);
+      gap: clamp(42px, 8vw, 104px);
+      align-items: center;
+    }
+
+    .intro-copy { max-width: 570px; }
+
+    .intro-title {
+      margin-top: 20px;
+      font-family: "Italiana", serif;
+      font-size: clamp(4.5rem, 9.4vw, 9.3rem);
+      font-weight: 400;
+      line-height: .82;
+      letter-spacing: -.055em;
+    }
+
+    .intro-title .seventeen {
+      display: block;
+      color: transparent;
+      background: linear-gradient(100deg, #ffffff 0%, #c8bfff 48%, #ff9bc2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 28px rgba(159,140,255,.14));
+    }
+
+    .intro-title .script {
+      display: block;
+      margin-top: 12px;
+      margin-left: .34em;
+      color: var(--pink);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: .58em;
+      letter-spacing: 0;
+      transform: rotate(-4deg);
+      text-shadow: 0 0 28px rgba(255,143,189,.22);
+    }
+
+    .intro-lead {
+      margin-top: 30px;
+      max-width: 500px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.55vw, 1.12rem);
+      line-height: 1.85;
+    }
+
+    .intro-actions {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .micro-note {
+      margin-top: 20px;
+      color: rgba(238,235,255,.45);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .orbital-stage {
+      position: relative;
+      min-height: 620px;
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+    }
+
+    .orbit-system {
+      position: relative;
+      width: min(42vw, 520px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      transform-style: preserve-3d;
+      transition: transform .25s ease-out;
+    }
+
+    .moon {
+      position: relative;
+      width: 52%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      background:
+        radial-gradient(circle at 34% 30%, rgba(255,255,255,.98), transparent 10%),
+        radial-gradient(circle at 58% 62%, rgba(149,135,213,.26), transparent 14%),
+        radial-gradient(circle at 34% 70%, rgba(141,128,201,.20), transparent 11%),
+        radial-gradient(circle at 70% 34%, rgba(180,169,236,.18), transparent 13%),
+        linear-gradient(135deg, #f5f0ff 0%, #c5baf8 52%, #8d7fd2 100%);
+      box-shadow:
+        inset -34px -34px 70px rgba(57, 42, 104, .32),
+        0 0 80px rgba(183, 167, 255, .28),
+        0 0 180px rgba(112, 83, 255, .16);
+      animation: moonBreathe 5s ease-in-out infinite;
+    }
+
+    .moon::after {
+      content: "XVII";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(41,31,79,.64);
+      font-family: "Italiana", serif;
+      font-size: clamp(4.2rem, 10vw, 8rem);
+      letter-spacing: -.06em;
+      text-shadow: 0 1px 0 rgba(255,255,255,.38);
+    }
+
+    @keyframes moonBreathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.018); }
+    }
+
+    .orbit-ring {
+      position: absolute;
+      inset: 9%;
+      border: 1px solid rgba(200,191,255,.23);
+      border-radius: 50%;
+      transform: rotateX(66deg) rotateZ(-18deg);
+      box-shadow: 0 0 26px rgba(159,140,255,.08);
+    }
+
+    .orbit-ring.r2 {
+      inset: 0;
+      transform: rotateX(72deg) rotateZ(34deg);
+      border-color: rgba(125,217,255,.16);
+    }
+
+    .orbit-ring.r3 {
+      inset: -9%;
+      transform: rotateX(62deg) rotateZ(76deg);
+      border-color: rgba(255,143,189,.15);
+    }
+
+    .orbiter {
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 0 0 18px var(--pink), 0 0 46px rgba(255,143,189,.48);
+      animation: orbitOne 8s linear infinite;
+    }
+
+    .orbiter.o2 {
+      width: 9px;
+      height: 9px;
+      background: var(--blue);
+      box-shadow: 0 0 18px var(--blue);
+      animation: orbitTwo 11s linear infinite reverse;
+    }
+
+    .orbiter.o3 {
+      width: 7px;
+      height: 7px;
+      background: var(--gold);
+      box-shadow: 0 0 16px var(--gold);
+      animation: orbitThree 15s linear infinite;
+    }
+
+    @keyframes orbitOne {
+      from { transform: rotate(0deg) translateX(220px) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(220px) rotate(-360deg); }
+    }
+    @keyframes orbitTwo {
+      from { transform: rotate(0deg) translateX(184px) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(184px) rotate(-360deg); }
+    }
+    @keyframes orbitThree {
+      from { transform: rotate(0deg) translateX(250px) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(250px) rotate(-360deg); }
+    }
+
+    .moon-hint {
+      position: absolute;
+      left: 50%;
+      bottom: 4%;
+      transform: translateX(-50%);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: 1.55rem;
+      color: rgba(243,237,255,.68);
+      white-space: nowrap;
+      animation: hintFloat 2.8s ease-in-out infinite;
+    }
+
+    @keyframes hintFloat {
+      50% { transform: translate(-50%, -7px); }
+    }
+
+    /* CONSTELLATION */
+    #constellation {
+      align-items: center;
+      padding: 112px 0 72px;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .55fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .section-header h2 {
+      margin-top: 14px;
+      font-family: "Italiana", serif;
+      font-size: clamp(3.2rem, 7.5vw, 7rem);
+      font-weight: 400;
+      line-height: .92;
+      letter-spacing: -.045em;
+    }
+
+    .section-header h2 em {
+      font-family: "Nanum Pen Script", cursive;
+      font-style: normal;
+      color: var(--pink);
+      letter-spacing: 0;
+      font-size: .78em;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: .96rem;
+    }
+
+    .constellation-shell {
+      position: relative;
+      min-height: 600px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(125,217,255,.08), transparent 32%),
+        radial-gradient(circle at 82% 30%, rgba(255,143,189,.08), transparent 24%),
+        rgba(7, 9, 20, .74);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .constellation-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: .44;
+    }
+
+    .constellation-lines line {
+      stroke: url(#lineGradient);
+      stroke-width: .25;
+      stroke-dasharray: 1.4 1.1;
+      animation: dashMove 12s linear infinite;
+    }
+
+    @keyframes dashMove { to { stroke-dashoffset: -10; } }
+
+    .memory-node {
+      position: absolute;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: white;
+      box-shadow: 0 0 0 7px rgba(200,191,255,.08), 0 0 24px rgba(200,191,255,.72);
+      transition: transform .35s var(--ease), box-shadow .35s;
+    }
+
+    .memory-node::after {
+      content: attr(data-index);
+      position: absolute;
+      left: 50%;
+      top: 33px;
+      transform: translateX(-50%);
+      color: rgba(245,242,255,.66);
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .memory-node:hover,
+    .memory-node.is-selected {
+      transform: scale(1.45);
+      box-shadow: 0 0 0 9px rgba(255,143,189,.1), 0 0 34px rgba(255,143,189,.9);
+      background: var(--pink);
+    }
+
+    .memory-panel {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      width: min(500px, calc(100% - 48px));
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 18px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 24px;
+      background: rgba(13,16,33,.86);
+      box-shadow: 0 22px 70px rgba(0,0,0,.36);
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+      transition: opacity .3s, transform .3s var(--ease);
+    }
+
+    .memory-panel.is-changing {
+      opacity: .28;
+      transform: translateY(10px) scale(.99);
+    }
+
+    .memory-photo {
+      min-height: 178px;
+      border-radius: 17px;
+      background-size: cover;
+      background-position: center;
+      filter: saturate(.9) contrast(1.03);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+
+    .memory-text {
+      align-self: center;
+      padding: 4px 8px 4px 2px;
+    }
+
+    .memory-meta {
+      color: var(--blue);
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .memory-title {
+      margin-top: 9px;
+      font-family: "Italiana", serif;
+      font-size: clamp(1.9rem, 3.2vw, 3rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .memory-copy {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.7;
+    }
+
+    .constellation-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .memory-progress {
+      flex: 1;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+
+    .memory-progress span {
+      display: block;
+      width: 16.666%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--violet), var(--blue), var(--pink));
+      box-shadow: 0 0 18px rgba(159,140,255,.42);
+      transition: width .45s var(--ease);
+    }
+
+    /* ORBIT */
+    #orbit {
+      align-items: center;
+      padding: 112px 0 76px;
+    }
+
+    .orbit-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, .72fr) minmax(0, 1.28fr);
+      gap: clamp(36px, 7vw, 92px);
+      align-items: center;
+    }
+
+    .orbit-copy h2 {
+      margin-top: 16px;
+      font-family: "Italiana", serif;
+      font-size: clamp(3.4rem, 7vw, 6.9rem);
+      font-weight: 400;
+      line-height: .9;
+      letter-spacing: -.045em;
+    }
+
+    .orbit-copy h2 span {
+      display: block;
+      color: var(--pink);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: .72em;
+      letter-spacing: 0;
+      margin-left: .2em;
+      transform: rotate(-3deg);
+    }
+
+    .orbit-copy > p {
+      margin-top: 22px;
+      max-width: 430px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .orbit-stats {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 16px 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .stat strong,
+    .stat span { display: block; }
+
+    .stat strong {
+      font-family: "Italiana", serif;
+      font-size: 2.1rem;
+      font-weight: 400;
+      color: var(--lavender);
+    }
+
+    .stat span {
+      margin-top: 3px;
+      color: rgba(238,235,255,.46);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .timeline-card {
+      position: relative;
+      padding: clamp(26px, 4vw, 44px);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(24,29,58,.72), rgba(10,13,27,.66));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .timeline-card::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      right: -120px;
+      top: -120px;
+      background: radial-gradient(circle, rgba(255,143,189,.16), transparent 68%);
+      pointer-events: none;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 22px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 10px;
+      bottom: 10px;
+      width: 1px;
+      background: linear-gradient(var(--violet), rgba(125,217,255,.5), var(--pink));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 52px;
+      opacity: .58;
+      transform: translateX(-8px);
+      transition: all .4s var(--ease);
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #151a34;
+      border: 2px solid rgba(200,191,255,.6);
+      box-shadow: 0 0 0 5px rgba(159,140,255,.06);
+      transition: all .35s;
+    }
+
+    .timeline-item:hover,
+    .timeline-item.is-active {
+      opacity: 1;
+      transform: none;
+    }
+
+    .timeline-item.is-active::before {
+      background: var(--pink);
+      border-color: white;
+      box-shadow: 0 0 0 6px rgba(255,143,189,.10), 0 0 22px var(--pink);
+    }
+
+    .timeline-item small {
+      display: block;
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .timeline-item h3 {
+      margin-top: 6px;
+      font-family: "Italiana", serif;
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      font-weight: 400;
+    }
+
+    .timeline-item p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.7;
+      max-width: 610px;
+    }
+
+    .orbit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    /* LETTER */
+    #letter {
+      align-items: center;
+      padding: 112px 0 84px;
+    }
+
+    .letter-shell {
+      display: grid;
+      grid-template-columns: minmax(270px, .62fr) minmax(0, 1.38fr);
+      gap: clamp(32px, 6vw, 72px);
+      align-items: stretch;
+    }
+
+    .letter-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 30px;
+      min-height: 620px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), transparent),
+        rgba(11,14,28,.62);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .letter-side::after {
+      content: "17";
+      position: absolute;
+      right: -10px;
+      bottom: -34px;
+      font-family: "Italiana", serif;
+      font-size: 13rem;
+      line-height: 1;
+      color: rgba(255,255,255,.028);
+      pointer-events: none;
+    }
+
+    .letter-side h2 {
+      margin-top: 16px;
+      font-family: "Italiana", serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 400;
+      line-height: .92;
+    }
+
+    .letter-side h2 em {
+      display: block;
+      color: var(--pink);
+      font-family: "Nanum Pen Script", cursive;
+      font-style: normal;
+      font-size: .78em;
+      letter-spacing: 0;
+      margin-top: 6px;
+    }
+
+    .letter-side p {
+      margin-top: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .photo-portal {
+      position: relative;
+      z-index: 1;
+      aspect-ratio: 4 / 5;
+      width: min(100%, 300px);
+      margin-inline: auto;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 150px 150px 28px 28px;
+      background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+      box-shadow: 0 22px 70px rgba(0,0,0,.30), 0 0 70px rgba(159,140,255,.08);
+    }
+
+    .photo-portal img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 140px 140px 20px 20px;
+      filter: saturate(.88) contrast(1.04) brightness(.92);
+    }
+
+    .photo-portal::after {
+      content: "seventeen moons with you ♡";
+      position: absolute;
+      left: 50%;
+      bottom: 17px;
+      transform: translateX(-50%) rotate(-4deg);
+      width: 90%;
+      text-align: center;
+      font-family: "Nanum Pen Script", cursive;
+      font-size: 1.55rem;
+      color: white;
+      text-shadow: 0 2px 18px rgba(0,0,0,.8);
+    }
+
+    .letter-card {
+      position: relative;
+      min-height: 620px;
+      padding: clamp(30px, 5vw, 64px);
+      border: 1px solid rgba(200,191,255,.16);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 92% 10%, rgba(255,143,189,.11), transparent 23%),
+        radial-gradient(circle at 6% 86%, rgba(125,217,255,.08), transparent 26%),
+        rgba(16,20,40,.72);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .letter-date {
+      color: var(--lavender);
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .letter-greeting {
+      margin-top: 20px;
+      color: var(--pink);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1;
+      transform: rotate(-2deg);
+      transform-origin: left center;
+    }
+
+    #letterText {
+      min-height: 12em;
+      margin-top: 10px;
+      color: rgba(249,247,255,.9);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(1.65rem, 3.25vw, 2.25rem);
+      line-height: 1.47;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .type-caret {
+      display: inline-block;
+      width: 2px;
+      height: .9em;
+      margin-left: 2px;
+      vertical-align: baseline;
+      background: var(--pink);
+      box-shadow: 0 0 10px var(--pink);
+      animation: blink .8s steps(1) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .letter-signature {
+      margin-top: 28px;
+      text-align: right;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .8s, transform .8s var(--ease);
+    }
+
+    .letter-signature.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .letter-signature strong {
+      display: block;
+      color: var(--pink);
+      font-family: "Nanum Pen Script", cursive;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .letter-signature span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(238,235,255,.44);
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .letter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .chip-button {
+      min-height: 44px;
+      padding-inline: 17px;
+      font-size: 9px;
+    }
+
+    .scene-nav {
+      position: fixed;
+      right: clamp(16px, 3vw, 42px);
+      top: 50%;
+      z-index: 40;
+      transform: translateY(-50%);
+      display: grid;
+      gap: 10px;
+    }
+
+    .scene-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      transition: all .35s;
+    }
+
+    .scene-dot.is-active {
+      height: 30px;
+      background: linear-gradient(var(--lavender), var(--pink));
+      box-shadow: 0 0 15px rgba(159,140,255,.4);
+    }
+
+    .love-particle,
+    .star-burst {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      will-change: transform, opacity;
+    }
+
+    .love-particle {
+      color: var(--pink);
+      font-family: "Nanum Pen Script", cursive;
+      animation: loveFloat var(--duration) var(--ease) forwards;
+      text-shadow: 0 0 14px rgba(255,143,189,.46);
+    }
+
+    @keyframes loveFloat {
+      0% { opacity: 0; transform: translate3d(0, 12px, 0) scale(.6) rotate(0deg); }
+      12% { opacity: 1; }
+      100% { opacity: 0; transform: translate3d(var(--drift), -170px, 0) scale(1.2) rotate(var(--rotate)); }
+    }
+
+    .star-burst {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 12px white;
+      animation: starBurst var(--duration) ease-out forwards;
+    }
+
+    @keyframes starBurst {
+      from { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+      to { opacity: 0; transform: translate3d(var(--x), var(--y), 0) scale(.2); }
+    }
+
+    .shooting-star {
+      position: fixed;
+      z-index: 30;
+      width: 120px;
+      height: 1px;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.95));
+      filter: drop-shadow(0 0 6px white);
+      transform: rotate(-25deg);
+      animation: shoot 1.25s ease-out forwards;
+    }
+
+    @keyframes shoot {
+      0% { opacity: 0; transform: translate3d(0,0,0) rotate(-25deg) scaleX(.4); }
+      12% { opacity: 1; }
+      100% { opacity: 0; transform: translate3d(42vw, 34vh, 0) rotate(-25deg) scaleX(1.2); }
+    }
+
+    @media (max-width: 980px) {
+      .intro-grid,
+      .orbit-layout,
+      .letter-shell { grid-template-columns: 1fr; }
+
+      .intro-copy { text-align: center; margin-inline: auto; }
+      .intro-actions, .eyebrow { justify-content: center; }
+      .micro-note, .intro-lead { margin-inline: auto; }
+      .orbital-stage { min-height: 500px; }
+      .orbit-system { width: min(72vw, 500px); }
+      .orbit-copy { text-align: center; }
+      .orbit-copy > p { margin-inline: auto; }
+      .orbit-actions { justify-content: center; }
+      .letter-side { min-height: auto; }
+      .photo-portal { width: min(72%, 330px); }
+    }
+
+    @media (max-width: 720px) {
+      .frame { width: min(100% - 22px, 1180px); }
+      .topbar { padding-inline: 12px; }
+      .brand span, .scene-index { font-size: 8px; }
+      #intro, #constellation, #orbit, #letter { padding-top: 100px; }
+      .intro-title { font-size: clamp(4rem, 21vw, 6rem); }
+      .orbital-stage { min-height: 400px; }
+      .orbit-system { width: min(82vw, 400px); }
+      @keyframes orbitOne { from { transform: rotate(0deg) translateX(165px) rotate(0deg); } to { transform: rotate(360deg) translateX(165px) rotate(-360deg); } }
+      @keyframes orbitTwo { from { transform: rotate(0deg) translateX(140px) rotate(0deg); } to { transform: rotate(360deg) translateX(140px) rotate(-360deg); } }
+      @keyframes orbitThree { from { transform: rotate(0deg) translateX(185px) rotate(0deg); } to { transform: rotate(360deg) translateX(185px) rotate(-360deg); } }
+      .section-header { grid-template-columns: 1fr; }
+      .constellation-shell { min-height: 660px; }
+      .memory-panel { left: 14px; right: 14px; bottom: 14px; width: auto; grid-template-columns: 110px 1fr; }
+      .memory-photo { min-height: 150px; }
+      .memory-copy { font-size: .8rem; }
+      .constellation-footer { flex-direction: column; align-items: stretch; }
+      .constellation-footer .primary { width: 100%; }
+      .orbit-stats { grid-template-columns: 1fr; }
+      .letter-card, .letter-side { border-radius: 22px; }
+      .photo-portal { width: min(88%, 320px); }
+      .scene-nav { display: none; }
+    }
+
+    @media (max-width: 500px) {
+      .brand span { display: none; }
+      .orbital-stage { min-height: 340px; }
+      .moon-hint { font-size: 1.25rem; }
+      .constellation-shell { min-height: 700px; }
+      .memory-panel { grid-template-columns: 1fr; }
+      .memory-photo { min-height: 180px; }
+      .memory-node::after { display: none; }
+      .letter-side { padding: 20px; }
+      .letter-card { padding: 26px 22px; }
+      #letterText { font-size: clamp(1.5rem, 7.3vw, 2rem); }
+    }
+
+    /* Motion stays enabled by default for the Monthsary experience.
+       Add class="reduce-motion" to <html> only when an explicit low-motion mode is desired. */
+    html.reduce-motion *,
+    html.reduce-motion *::before,
+    html.reduce-motion *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+      scroll-behavior: auto !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <canvas id="starCanvas" aria-hidden="true"></canvas>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar" aria-label="Page header">
+      <div class="brand">
+        <span class="brand-orbit" aria-hidden="true"></span>
+        <span>Seventeen moons</span>
+      </div>
+      <div class="scene-index" id="sceneIndex">01 / 04</div>
+    </header>
+
+    <main>
+      <section class="screen is-active" id="intro" aria-labelledby="introTitle">
+        <div class="frame intro-grid">
+          <div class="intro-copy">
+            <div class="eyebrow">Our seventeenth orbit around us</div>
+            <h1 class="intro-title" id="introTitle">
+              <span class="seventeen">Seventeen</span>
+              <span class="script">moons, still you.</span>
+            </h1>
+            <p class="intro-lead">
+              Not another museum. Not another ticket. This time, our months live like a night sky — separate little lights, all connected by the same story: you and me.
+            </p>
+            <div class="intro-actions">
+              <button class="primary" id="beginJourney" type="button">Enter our sky <span>↗</span></button>
+              <button class="ghost" id="sendIntroLove" type="button">Make a wish ♡</button>
+            </div>
+            <p class="micro-note">Move your cursor around the moon. Tap it when you are ready.</p>
+          </div>
+
+          <div class="orbital-stage" id="orbitalStage">
+            <div class="orbit-system" id="orbitSystem">
+              <span class="orbit-ring"></span>
+              <span class="orbit-ring r2"></span>
+              <span class="orbit-ring r3"></span>
+              <span class="orbiter"></span>
+              <span class="orbiter o2"></span>
+              <span class="orbiter o3"></span>
+              <button class="moon" id="moonButton" type="button" aria-label="Open our seventeenth-month constellation"></button>
+            </div>
+            <div class="moon-hint">tap our seventeenth moon ✦</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="constellation" aria-labelledby="constellationTitle">
+        <div class="frame">
+          <div class="section-header">
+            <div>
+              <div class="eyebrow">Constellation 017</div>
+              <h2 id="constellationTitle">Six stars I keep <em>finding you in.</em></h2>
+            </div>
+            <p>
+              Every star opens a different part of us. Follow the constellation, revisit the quiet pieces, then continue into our seventeenth orbit.
+            </p>
+          </div>
+
+          <div class="constellation-shell" id="constellationShell">
+            <svg class="constellation-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="lineGradient" x1="0" x2="1">
+                  <stop offset="0" stop-color="#9f8cff" />
+                  <stop offset=".55" stop-color="#7dd9ff" />
+                  <stop offset="1" stop-color="#ff8fbd" />
+                </linearGradient>
+              </defs>
+              <line x1="12" y1="25" x2="32" y2="16" />
+              <line x1="32" y1="16" x2="47" y2="34" />
+              <line x1="47" y1="34" x2="65" y2="20" />
+              <line x1="65" y1="20" x2="82" y2="38" />
+              <line x1="82" y1="38" x2="70" y2="58" />
+            </svg>
+
+            <div id="memoryNodes" aria-label="Memory constellation"></div>
+
+            <article class="memory-panel" id="memoryPanel" aria-live="polite">
+              <div class="memory-photo" id="memoryPhoto"></div>
+              <div class="memory-text">
+                <div class="memory-meta" id="memoryMeta"></div>
+                <h3 class="memory-title" id="memoryTitle"></h3>
+                <p class="memory-copy" id="memoryCopy"></p>
+              </div>
+            </article>
+          </div>
+
+          <div class="constellation-footer">
+            <div class="memory-progress" aria-label="Constellation progress"><span id="memoryProgress"></span></div>
+            <button class="primary" id="openOrbit" type="button">Continue the orbit <span>→</span></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="orbit" aria-labelledby="orbitTitle">
+        <div class="frame orbit-layout">
+          <div class="orbit-copy">
+            <div class="eyebrow">Month XVII · still counting</div>
+            <h2 id="orbitTitle">Love is not still.<span>It keeps orbiting.</span></h2>
+            <p>
+              Seventeen months means more than a number. It is every hard day we survived, every ordinary day we made special, and every future day we are still choosing to reach together.
+            </p>
+
+            <div class="orbit-stats" aria-label="Seventeenth month highlights">
+              <div class="stat"><strong>17</strong><span>months</span></div>
+              <div class="stat"><strong>∞</strong><span>more memories</span></div>
+              <div class="stat"><strong>1</strong><span>favorite person</span></div>
+            </div>
+
+            <div class="orbit-actions">
+              <button class="primary" id="openLetter" type="button">Open my letter <span>♡</span></button>
+              <button class="ghost" id="shootingStarButton" type="button">Send a shooting star ✦</button>
+            </div>
+          </div>
+
+          <div class="timeline-card">
+            <div class="timeline" id="timeline">
+              <article class="timeline-item is-active">
+                <small>Then · the beginning</small>
+                <h3>When “you” started becoming “us.”</h3>
+                <p>Somewhere between ordinary conversations and small moments, you became the person I started looking for in every part of my day.</p>
+              </article>
+              <article class="timeline-item">
+                <small>Along the way · the softness</small>
+                <h3>The quiet things became my favorites.</h3>
+                <p>Late-night talks, your laughter, random updates, soft kisses, and simply being beside you became the kind of memories I never want to lose.</p>
+              </article>
+              <article class="timeline-item">
+                <small>The difficult days · the choosing</small>
+                <h3>Love also learned how to stay.</h3>
+                <p>We were never promised easy days, but we kept learning patience, understanding, forgiveness, and how to find our way back to each other.</p>
+              </article>
+              <article class="timeline-item">
+                <small>Now · month seventeen</small>
+                <h3>I would still choose you again.</h3>
+                <p>Not because everything is perfect, but because you are still the person I want to grow with, laugh with, and build the next chapters beside.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="letter" aria-labelledby="letterTitle">
+        <div class="frame letter-shell">
+          <aside class="letter-side">
+            <div>
+              <div class="eyebrow">A private transmission</div>
+              <h2 id="letterTitle">For my baby.<em>Only you.</em></h2>
+              <p>A little message from month seventeen — carrying all the softness, patience, chaos, love, and everything still ahead of us.</p>
+            </div>
+
+            <figure class="photo-portal" aria-label="Our photograph">
+              <img src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/refs/heads/main/WebPortfolioII/assets/image/772773183_10239793532428970_3640172639566764255_n.jpg" alt="A photo of us together" />
+            </figure>
+          </aside>
+
+          <article class="letter-card">
+            <div class="letter-date">Seventeen months · August 2026 · still choosing you</div>
+            <div class="letter-greeting">Baby,</div>
+            <div id="letterText"></div>
+
+            <div class="letter-signature" id="letterSignature">
+              <strong>Still yours, always ♡</strong>
+              <span>Seventeen months and endlessly counting</span>
+            </div>
+
+            <div class="letter-actions">
+              <button class="chip-button" id="loveButton" type="button">Send love ♡</button>
+              <button class="chip-button" id="celebrateButton" type="button">Light the sky ✦</button>
+              <button class="chip-button" id="restartButton" type="button">Start again ↺</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="scene-nav" aria-hidden="true">
+      <span class="scene-dot is-active"></span>
+      <span class="scene-dot"></span>
+      <span class="scene-dot"></span>
+      <span class="scene-dot"></span>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const PHOTO = "https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/refs/heads/main/WebPortfolioII/assets/image/772773183_10239793532428970_3640172639566764255_n.jpg";
+
+      const LETTER = `Seventeen months in, dugay-dugay na jud mi sa baby and still counting — yes, yes, yes. Another month passed, and somehow I still find new reasons to love you, understand you, and choose you every single day.
+
+I know naay mag times japon nga mag misunderstood japon with baby and naay mga times nga maglagot ang baby kay tungod ni mame kay daghan kayg sugo ga sunod sunod and naay mga times nga mag lagot ang baby nako kay makatug ko sa kakapoy, I just want you to know nga everything im doing is for the two of us and sa family cause im building the future im plan for all of us kay ako paman sa karun mo dali na na ug kita na duha soon, but I hope nga we further our patience i know time to time ma handle na nato ang atong emotions properly kay practical naman with baby karun its time to aim higher kesa mo stay ta sa life nga unimproved which bati na siya dapat mo aim tag maayu to achieve the things lord G has planned for us
+
+I never want you to feel like you became less important to me. I still want to hear your stories, your random thoughts, your complaints, your wins, and even the little things you think do not matter. They matter to me because they are yours.
+
+So here we are at seventeen months — still imperfect, still learning, still growing, still choosing. Here is to more late-night conversations, more soft kisses, more laughter, more patience, more ordinary days that become special because we share them, and more memories that we have not even met yet.
+
+I love you, my by. Always, in every way, every single day. 💕`;
+
+      const MEMORIES = [
+        {
+          pos: [12, 25],
+          label: "Star 01 · The beginning",
+          title: "You slowly became my favorite place.",
+          copy: "There was no dramatic moment where everything changed. It happened quietly — conversation by conversation, laugh by laugh, until being with you started feeling like home.",
+          image: PHOTO,
+          position: "center 42%"
+        },
+        {
+          pos: [32, 16],
+          label: "Star 02 · Your laughter",
+          title: "Still one of my favorite sounds.",
+          copy: "Kana imong tinuod nga katawa can still make a normal day feel lighter. I love how you can turn small moments into memories without even trying.",
+          image: PHOTO,
+          position: "44% center"
+        },
+        {
+          pos: [47, 34],
+          label: "Star 03 · The difficult days",
+          title: "We learned that love also means patience.",
+          copy: "Not every day is soft. We have misunderstandings, heavy moods, stress, and moments we do not know how to fix immediately. But we keep learning how to understand each other better.",
+          image: PHOTO,
+          position: "58% 36%"
+        },
+        {
+          pos: [65, 20],
+          label: "Star 04 · The quiet moments",
+          title: "The ordinary pieces became precious.",
+          copy: "The random updates, comfortable silences, late-night talks, small gestures, and being close to you are the parts of us I keep returning to.",
+          image: PHOTO,
+          position: "center 58%"
+        },
+        {
+          pos: [82, 38],
+          label: "Star 05 · The choosing",
+          title: "Even after hard days, I still choose us.",
+          copy: "I do not love you because everything is easy. I love you because even through the messy parts, I still want to learn you, understand you, and keep building with you.",
+          image: PHOTO,
+          position: "56% center"
+        },
+        {
+          pos: [70, 58],
+          label: "Star 06 · What comes next",
+          title: "Seventeen months later, there is still more sky ahead.",
+          copy: "More laughter. More growth. More challenges. More soft days. More versions of us we have not met yet. And I still want to meet them with you.",
+          image: PHOTO,
+          position: "52% 44%"
+        }
+      ];
+
+      const screens = ["intro", "constellation", "orbit", "letter"];
+      const dots = [...document.querySelectorAll(".scene-dot")];
+      const sceneIndex = document.getElementById("sceneIndex");
+      const reducedMotion = document.documentElement.classList.contains("reduce-motion");
+
+      let currentScreen = 0;
+      let currentMemory = 0;
+      let typeTimer = null;
+      let typingStarted = false;
+
+      function showScreen(index) {
+        document.getElementById(screens[currentScreen]).classList.remove("is-active");
+        currentScreen = index;
+        document.getElementById(screens[currentScreen]).classList.add("is-active");
+        sceneIndex.textContent = `0${index + 1} / 04`;
+        dots.forEach((dot, dotIndex) => dot.classList.toggle("is-active", dotIndex === index));
+        window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+
+        if (index === 3) {
+          setTimeout(startTyping, reducedMotion ? 0 : 450);
+        }
+      }
+
+      function createLove(originX = 50, originY = 75, amount = 22) {
+        const symbols = ["♡", "♥", "✦", "⋆", "✧"];
+        for (let i = 0; i < amount; i += 1) {
+          const particle = document.createElement("span");
+          particle.className = "love-particle";
+          particle.textContent = symbols[i % symbols.length];
+          particle.style.left = `${originX + (Math.random() * 16 - 8)}vw`;
+          particle.style.top = `${originY + (Math.random() * 8 - 4)}vh`;
+          particle.style.fontSize = `${1 + Math.random() * 1.6}rem`;
+          particle.style.setProperty("--duration", `${1.6 + Math.random() * 1.5}s`);
+          particle.style.setProperty("--drift", `${Math.random() * 120 - 60}px`);
+          particle.style.setProperty("--rotate", `${Math.random() * 100 - 50}deg`);
+          document.body.appendChild(particle);
+          setTimeout(() => particle.remove(), 3400);
+        }
+      }
+
+      function burstStars(x = window.innerWidth / 2, y = window.innerHeight / 2, amount = 42) {
+        for (let i = 0; i < amount; i += 1) {
+          const star = document.createElement("span");
+          star.className = "star-burst";
+          const angle = (Math.PI * 2 * i) / amount + Math.random() * .4;
+          const distance = 60 + Math.random() * 220;
+          star.style.left = `${x}px`;
+          star.style.top = `${y}px`;
+          star.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+          star.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+          star.style.setProperty("--duration", `${.8 + Math.random() * .9}s`);
+          document.body.appendChild(star);
+          setTimeout(() => star.remove(), 1900);
+        }
+      }
+
+      function createShootingStar() {
+        const star = document.createElement("span");
+        star.className = "shooting-star";
+        star.style.left = `${-12 + Math.random() * 28}vw`;
+        star.style.top = `${8 + Math.random() * 32}vh`;
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 1500);
+      }
+
+      const memoryNodes = document.getElementById("memoryNodes");
+      const memoryPanel = document.getElementById("memoryPanel");
+      const memoryPhoto = document.getElementById("memoryPhoto");
+      const memoryMeta = document.getElementById("memoryMeta");
+      const memoryTitle = document.getElementById("memoryTitle");
+      const memoryCopy = document.getElementById("memoryCopy");
+      const memoryProgress = document.getElementById("memoryProgress");
+
+      function buildMemoryNodes() {
+        MEMORIES.forEach((memory, index) => {
+          const node = document.createElement("button");
+          node.type = "button";
+          node.className = "memory-node";
+          node.dataset.index = `0${index + 1}`;
+          node.setAttribute("aria-label", `Open ${memory.label}`);
+          node.style.left = `${memory.pos[0]}%`;
+          node.style.top = `${memory.pos[1]}%`;
+          node.addEventListener("click", () => selectMemory(index));
+          memoryNodes.appendChild(node);
+        });
+      }
+
+      function selectMemory(index, immediate = false) {
+        currentMemory = index;
+        const memory = MEMORIES[index];
+        const nodes = [...memoryNodes.querySelectorAll(".memory-node")];
+        nodes.forEach((node, nodeIndex) => node.classList.toggle("is-selected", nodeIndex === index));
+        memoryProgress.style.width = `${((index + 1) / MEMORIES.length) * 100}%`;
+
+        const update = () => {
+          memoryPhoto.style.backgroundImage = `url("${memory.image}")`;
+          memoryPhoto.style.backgroundPosition = memory.position;
+          memoryMeta.textContent = memory.label;
+          memoryTitle.textContent = memory.title;
+          memoryCopy.textContent = memory.copy;
+          memoryPanel.classList.remove("is-changing");
+        };
+
+        if (immediate || reducedMotion) {
+          update();
+        } else {
+          memoryPanel.classList.add("is-changing");
+          setTimeout(update, 220);
+        }
+      }
+
+      const timelineItems = [...document.querySelectorAll(".timeline-item")];
+      timelineItems.forEach((item) => {
+        item.addEventListener("mouseenter", () => {
+          timelineItems.forEach((entry) => entry.classList.remove("is-active"));
+          item.classList.add("is-active");
+        });
+        item.addEventListener("click", () => {
+          timelineItems.forEach((entry) => entry.classList.remove("is-active"));
+          item.classList.add("is-active");
+        });
+      });
+
+      const letterText = document.getElementById("letterText");
+      const letterSignature = document.getElementById("letterSignature");
+
+      function startTyping() {
+        if (typingStarted) return;
+        typingStarted = true;
+        letterText.textContent = "";
+        letterSignature.classList.remove("is-visible");
+
+        if (reducedMotion) {
+          letterText.textContent = LETTER;
+          showTypingComplete();
+          return;
+        }
+
+        let index = 0;
+        const typeNext = () => {
+          if (index >= LETTER.length) {
+            showTypingComplete();
+            return;
+          }
+
+          const character = LETTER.charAt(index);
+          letterText.textContent += character;
+          index += 1;
+
+          let delay = 3;
+          if (/[.!?]/.test(character)) delay = 38;
+          else if (/[,—]/.test(character)) delay = 16;
+          else if (character === "\n") delay = 9;
+
+          typeTimer = setTimeout(typeNext, delay);
+        };
+
+        typeNext();
+      }
+
+      function showTypingComplete() {
+        const caret = document.createElement("span");
+        caret.className = "type-caret";
+        caret.setAttribute("aria-hidden", "true");
+        letterText.appendChild(caret);
+        letterSignature.classList.add("is-visible");
+      }
+
+      function resetExperience() {
+        clearTimeout(typeTimer);
+        typingStarted = false;
+        letterText.textContent = "";
+        letterSignature.classList.remove("is-visible");
+        selectMemory(0, true);
+        timelineItems.forEach((item, index) => item.classList.toggle("is-active", index === 0));
+        showScreen(0);
+      }
+
+      const orbitalStage = document.getElementById("orbitalStage");
+      const orbitSystem = document.getElementById("orbitSystem");
+
+      if (!reducedMotion) {
+        orbitalStage.addEventListener("pointermove", (event) => {
+          const rect = orbitalStage.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - .5;
+          const y = (event.clientY - rect.top) / rect.height - .5;
+          orbitSystem.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+        });
+        orbitalStage.addEventListener("pointerleave", () => {
+          orbitSystem.style.transform = "rotateY(0deg) rotateX(0deg)";
+        });
+      }
+
+      function setupStarfield() {
+        const canvas = document.getElementById("starCanvas");
+        const ctx = canvas.getContext("2d");
+        let stars = [];
+        let rafId = null;
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        function resize() {
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.floor(window.innerWidth * dpr);
+          canvas.height = Math.floor(window.innerHeight * dpr);
+          canvas.style.width = `${window.innerWidth}px`;
+          canvas.style.height = `${window.innerHeight}px`;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const count = Math.min(180, Math.max(80, Math.floor((window.innerWidth * window.innerHeight) / 9000)));
+          stars = Array.from({ length: count }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            r: .35 + Math.random() * 1.25,
+            a: .22 + Math.random() * .62,
+            speed: .004 + Math.random() * .012,
+            phase: Math.random() * Math.PI * 2
+          }));
+        }
+
+        function draw(time = 0) {
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          stars.forEach((star) => {
+            const alpha = reducedMotion ? star.a : star.a * (.72 + Math.sin(time * star.speed + star.phase) * .28);
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(239, 236, 255, ${Math.max(.08, alpha)})`;
+            ctx.fill();
+          });
+          if (!reducedMotion) rafId = requestAnimationFrame(draw);
+        }
+
+        resize();
+        draw();
+        window.addEventListener("resize", resize, { passive: true });
+        window.addEventListener("pagehide", () => cancelAnimationFrame(rafId), { once: true });
+      }
+
+      buildMemoryNodes();
+      selectMemory(0, true);
+      setupStarfield();
+
+      document.getElementById("moonButton").addEventListener("click", (event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        burstStars(rect.left + rect.width / 2, rect.top + rect.height / 2, 52);
+        setTimeout(() => showScreen(1), reducedMotion ? 0 : 460);
+      });
+
+      document.getElementById("beginJourney").addEventListener("click", () => showScreen(1));
+      document.getElementById("sendIntroLove").addEventListener("click", () => {
+        createLove(30, 80, 24);
+        createShootingStar();
+      });
+      document.getElementById("openOrbit").addEventListener("click", () => showScreen(2));
+      document.getElementById("openLetter").addEventListener("click", () => showScreen(3));
+      document.getElementById("shootingStarButton").addEventListener("click", createShootingStar);
+      document.getElementById("loveButton").addEventListener("click", () => createLove(70, 84, 30));
+      document.getElementById("celebrateButton").addEventListener("click", () => {
+        createLove(50, 86, 34);
+        burstStars(window.innerWidth / 2, window.innerHeight * .58, 72);
+        for (let i = 0; i < 4; i += 1) setTimeout(createShootingStar, i * 180);
+      });
+      document.getElementById("restartButton").addEventListener("click", resetExperience);
+    })();
+  </script>
+</body>
+</html>
