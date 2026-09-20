@@ -1,4 +1,4 @@
-# Helmet Heroes Reborn — Stat Anomaly Test Harness
+
 
 This project is a standalone defensive testing simulator.
 
