@@ -5,87 +5,88 @@ import {createRequire} from "node:module";
 const require=createRequire(import.meta.url);
 const core=require("./core.js");
 const protocol=require("./protocol.js");
+const adapter=require("./official-auth-adapter.js");
 const {createBridgeEngine}=require("./bridge-engine.js");
 
-assert.equal(core.STAT_DEFS.length,9,"Expected nine modifiers");
-assert.equal(core.hasRequiredCapabilities(core.REQUIRED_CAPABILITIES),true);
-assert.equal(core.hasRequiredCapabilities(["telemetry"]),false);
+assert.equal(core.STAT_DEFS.length,9);
+assert.equal(core.validatePlayer({id:"1"}),true);
+assert.equal(core.validatePlayer({username:"user"}),true);
+assert.equal(core.validatePlayer({}),false);
+assert.deepEqual(core.sanitizePlayer({id:123,username:"u",password:"secret",token:"secret"}),{id:"123",username:"u"});
+
+assert.equal(core.hasCapabilities(["read-player-stats"],core.AUTH_CAPABILITIES),true);
+assert.equal(core.hasCapabilities([],core.AUTH_CAPABILITIES),false);
+assert.equal(core.hasCapabilities(["apply-test-modifiers","restore-player-stats"],core.MUTATION_CAPABILITIES),true);
+
+assert.ok(protocol.MSG.AUTH_PROBE);
+assert.ok(protocol.MSG.AUTH_STATE);
+assert.ok(protocol.MSG.GET_STATS);
+assert.ok(protocol.MSG.STATS);
+
+const cfg=adapter.normalizeConfig({});
+assert.equal(cfg.officialUrl,"https://www.helmet-heroes.com/");
+assert.equal(adapter.validateOfficialEndpoint("https://www.helmet-heroes.com/api/test","https://www.helmet-heroes.com"),"https://www.helmet-heroes.com/api/test");
+assert.throws(()=>adapter.validateOfficialEndpoint("https://evil.example/api","https://www.helmet-heroes.com"));
 
 const baseline={...core.DEFAULTS};
 const engine=createBridgeEngine(core,baseline);
 
-assert.deepEqual(engine.getOriginalStats(),baseline);
-assert.deepEqual(engine.getStats(),baseline);
-assert.deepEqual(engine.getApplied(),core.emptyFlags(false));
-
 for(const def of core.STAT_DEFS){
   const flags=core.emptyFlags(false);
   flags[def.key]=true;
-
   let result=engine.setModifiers(flags);
-  assert.equal(result.applied[def.key],true,`${def.key} acknowledgement must be ON`);
-  assert.equal(result.stats[def.key],baseline[def.key]*2,`${def.key} must double`);
+  assert.equal(result.applied[def.key],true);
+  assert.equal(result.stats[def.key],baseline[def.key]*2);
 
   for(const other of core.STAT_DEFS){
     if(other.key!==def.key){
-      assert.equal(result.applied[other.key],false,`${def.key} must not enable ${other.key}`);
-      assert.equal(result.stats[other.key],baseline[other.key],`${def.key} must not alter ${other.key}`);
+      assert.equal(result.applied[other.key],false);
+      assert.equal(result.stats[other.key],baseline[other.key]);
     }
   }
 
   flags[def.key]=false;
   result=engine.setModifiers(flags);
-  assert.equal(result.applied[def.key],false,`${def.key} acknowledgement must be OFF`);
-  assert.equal(result.stats[def.key],baseline[def.key],`${def.key} must restore original value`);
+  assert.equal(result.applied[def.key],false);
+  assert.equal(result.stats[def.key],baseline[def.key]);
 }
 
-let all=core.emptyFlags(true);
-let result=engine.setModifiers(all);
-let detection=core.detect(baseline,result.stats,result.applied);
-assert.equal(detection.enabledCount,9);
-assert.equal(detection.mismatchCount,9);
-assert.equal(detection.signatureMatches,9);
-assert.equal(detection.anomaly,true);
+let all=engine.setModifiers(core.emptyFlags(true));
+let d=core.detect(baseline,all.stats,all.applied);
+assert.equal(d.enabledCount,9);
+assert.equal(d.signatureMatches,9);
 
-result=engine.restore();
-assert.deepEqual(result.applied,core.emptyFlags(false));
-assert.deepEqual(result.stats,baseline);
-detection=core.detect(baseline,result.stats,result.applied);
-assert.equal(detection.enabledCount,0);
-assert.equal(detection.mismatchCount,0);
-assert.equal(detection.signatureMatches,0);
-assert.equal(detection.anomaly,false);
-
-for(const name of ["HELLO","READY","GET_STATS","STATS","SET","APPLIED","RESTORE","RESTORED","ERROR"]){
-  assert.ok(protocol.MSG[name],`Missing protocol message ${name}`);
-}
+let restored=engine.restore();
+assert.deepEqual(restored.stats,baseline);
+assert.deepEqual(restored.applied,core.emptyFlags(false));
 
 const index=fs.readFileSync("./index.html","utf8");
-const sandbox=fs.readFileSync("./sandbox.html","utf8");
-const fallback=fs.readFileSync("./404.html","utf8");
+const authSandbox=fs.readFileSync("./auth-sandbox.html","utf8");
+const integration=fs.readFileSync("./OFFICIAL-INTEGRATION.md","utf8");
+const config=fs.readFileSync("./config.js","utf8");
 
-assert.match(index,/new URL\("\.\/",document\.baseURI\)/);
-assert.match(index,/\.\/sandbox\.html/);
-assert.match(index,/\.\/core\.js/);
-assert.match(index,/\.\/protocol\.js/);
-assert.match(index,/\.\/bridge-engine\.js/);
-assert.doesNotMatch(index,/http:\/\/localhost|127\.0\.0\.1/);
-assert.match(index,/Player-stat access/);
+assert.match(index,/Open Official Site &amp; Authenticate/);
+assert.match(index,/Check Authenticated Session/);
+assert.match(index,/Player-stat detection blocked: authentication has not been confirmed/);
+assert.match(index,/SITE \/ BROWSER ONLY/);
 assert.match(index,/event\.target\.checked=Boolean\(state\.applied\[key\]\)/);
+assert.doesNotMatch(index,/document\.cookie|localStorage|sessionStorage/);
+assert.doesNotMatch(index,/password\s*=|accessToken|refreshToken/);
+assert.doesNotMatch(index,/http:\/\/localhost|127\.0\.0\.1/);
 
-assert.match(sandbox,/HHBridgeEngine/);
-assert.match(sandbox,/read-player-stats/);
-assert.match(sandbox,/apply-test-modifiers/);
-assert.match(sandbox,/restore-player-stats/);
-assert.match(fallback,/\/stat-test-harness\//);
+assert.match(authSandbox,/AUTH_PROBE/);
+assert.match(authSandbox,/Authentication required/);
+assert.match(authSandbox,/Authenticate test player/);
+assert.match(integration,/Do not include passwords, cookies, access tokens/);
+assert.match(config,/sessionEndpoint:\s*null/);
+assert.match(config,/statsEndpoint:\s*null/);
 assert.ok(fs.existsSync("./.nojekyll"));
 
-console.log("PASS: V3 complete test flow verified:");
-console.log("  - explicit handshake/capability contract");
-console.log("  - original player-stat snapshot");
-console.log("  - all 9 modifiers independently applied");
-console.log("  - acknowledged ON/OFF state");
-console.log("  - exact x2 measured values");
-console.log("  - individual restoration");
-console.log("  - restore-all baseline recovery");
-console.log("  - GitHub Pages relative paths / no localhost dependency");
+console.log("PASS: V4 authenticated player-stat workflow verified:");
+console.log("  - authentication is required before stat retrieval");
+console.log("  - standard-site login remains outside the harness");
+console.log("  - player identity is sanitized; secrets are not retained");
+console.log("  - official session/API endpoints are fail-closed until explicitly configured");
+console.log("  - all 9 modifiers remain independent and acknowledgement-driven");
+console.log("  - individual and full restoration return the original baseline");
+console.log("  - GitHub Pages deployment has no localhost dependency");

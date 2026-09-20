@@ -2,8 +2,8 @@
 
 (function (global) {
   const MSG = Object.freeze({
-    HELLO: "HH_TEST_BRIDGE_HELLO",
-    READY: "HH_TEST_BRIDGE_READY",
+    AUTH_PROBE: "HH_AUTH_PROBE",
+    AUTH_STATE: "HH_AUTH_STATE",
     GET_STATS: "HH_TEST_GET_PLAYER_STATS",
     STATS: "HH_TEST_PLAYER_STATS",
     SET: "HH_TEST_SET_MODIFIERS",
@@ -15,7 +15,7 @@
   });
 
   function envelope(type, requestId, payload = {}) {
-    return { type, version: 3, requestId, payload };
+    return { type, version: 4, requestId, payload };
   }
 
   const api = { MSG, envelope };

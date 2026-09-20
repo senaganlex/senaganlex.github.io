@@ -1,104 +1,69 @@
-# Helmet Heroes Reborn — Stat Anomaly Test Harness v3
+# Helmet Heroes Reborn — Authenticated Stat Test Harness v4
 
-## Root cause fixed
+## Purpose
 
-V2 had two different concepts mixed together:
+V4 adds an explicit authenticated-player workflow for the official Helmet Heroes site while preserving browser security boundaries.
 
-1. a local UI simulation, and
-2. a real bridge connection.
+## Official workflow
 
-A toggle could become visually **ON** even when no game/test bridge had received or acknowledged a change. The official-site screenshot showing `HANDSHAKING`, `0` received messages, and no capabilities means no player-stat data channel existed.
+1. Click **Open Official Site & Authenticate**.
+2. Sign in using the normal Helmet Heroes login controls in the official-site window.
+3. The harness probes for a supported authenticated-session interface.
+4. Player-stat retrieval is blocked until authentication is positively confirmed.
+5. If an authenticated player is reported and `read-player-stats` is authorized, the harness requests the player's stat snapshot.
+6. Stat modifiers remain disabled unless the authenticated session also explicitly authorizes the test mutation capabilities.
 
-V3 is acknowledgement-driven.
+The harness never asks for or stores the user's account password.
 
-A modifier is **ON only after the connected test bridge confirms it**.
+## Important live-site limitation
 
-## Complete v3 flow
+A GitHub Pages application cannot read another origin's login cookies, DOM, storage, or private game state. Therefore the official site must provide one of:
 
-1. Open a bridge target.
-2. Exchange `HH_TEST_BRIDGE_HELLO` / `HH_TEST_BRIDGE_READY`.
-3. Verify capabilities:
-   - `read-player-stats`
-   - `apply-test-modifiers`
-   - `restore-player-stats`
-4. Request the original stat snapshot.
-5. Store the returned values as the restoration baseline.
-6. Request one or more modifier changes.
-7. Keep the UI in `PENDING` until acknowledgement.
-8. Update the ON/OFF state and measured values only from `HH_TEST_MODIFIERS_APPLIED`.
-9. When a modifier is disabled, the bridge recalculates from the original baseline and acknowledges the restored value.
-10. `Restore original values` turns all modifiers off and restores the full baseline.
+- an explicit `postMessage` authentication/stat bridge, or
+- a documented credentialed CORS API.
 
-## GitHub Pages
+Without one of those interfaces, the correct result is:
 
-Production URL:
+`SUPPORTED INTERFACE NOT DETECTED`
 
-`https://senaganlex.github.io/stat-test-harness/`
+This is not a login bypass problem and should not be worked around by reading cookies, injecting into the game, or intercepting session traffic.
 
-All internal resources use repository-relative paths:
+See `OFFICIAL-INTEGRATION.md`.
 
-- `./core.js`
-- `./protocol.js`
-- `./sandbox.html`
+## Hosted end-to-end authentication test
 
-No localhost runtime dependency exists.
+Click **Open Hosted Auth Test Bridge**.
 
-Expected repository root:
+1. The test window initially reports unauthenticated.
+2. Click **Authenticate test player** in that window.
+3. Return to the harness or click **Check Authenticated Session**.
+4. The harness detects the authenticated test player.
+5. It retrieves the original stat snapshot.
+6. The nine independent modifiers become available.
+7. Each requested change remains pending until acknowledgement.
+8. Disabling a modifier restores only that statistic.
+9. **Restore original values** restores the entire baseline.
+
+## GitHub Pages files
 
 ```text
 /
 ├── .nojekyll
 ├── 404.html
+├── README.md
+├── OFFICIAL-INTEGRATION.md
+├── config.js
 ├── core.js
 ├── protocol.js
 ├── bridge-engine.js
+├── official-auth-adapter.js
+├── auth-sandbox.html
 ├── index.html
-├── sandbox.html
-├── verify.mjs
-└── README.md
+└── verify.mjs
 ```
 
-## Hosted end-to-end verification
-
-On GitHub Pages:
-
-1. Open the application.
-2. Confirm **Deployment ready**.
-3. Click **Open hosted test bridge**.
-4. Confirm:
-   - Handshake = `CONNECTED`
-   - Player-stat access = `AUTHORIZED`
-   - Baseline snapshot = `LOADED`
-5. Toggle one stat.
-6. It becomes `PENDING`.
-7. After bridge acknowledgement it becomes `ON`.
-8. Only that stat's measured value becomes exactly ×2.
-9. Disable it.
-10. It becomes `PENDING`, then `OFF`, and its measured value returns to the original baseline.
-11. Repeat for all nine modifiers.
-12. `Restore original values` must return every modifier to OFF and every measured value to the original snapshot.
-
-## Official-site behavior
-
-The official-site button probes for the same authorized bridge protocol. It does not consider the website itself a stat connection.
-
-If the target does not implement the protocol, the application reports:
-
-- handshake timeout or insufficient capabilities,
-- player-stat access unavailable,
-- modifier controls disabled.
-
-This is deliberate. It prevents a local UI toggle from being misreported as a live game modification.
-
-For a developer-controlled beta build, implement the v3 bridge protocol in the test build. Do not enable that bridge in production.
-
-
-## Deterministic certification
-
-Run:
+## Verification
 
 ```bash
 node verify.mjs
 ```
-
-The verifier executes the same bridge stat engine used by `sandbox.html` and checks the entire flow for every modifier: original snapshot → independent application → acknowledgement → measured ×2 value → individual restoration → restore-all.
