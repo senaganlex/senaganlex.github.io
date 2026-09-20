@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hosted Official-Site Relay Lab v6</title>
+<style>
+body{margin:0;background:#0f141a;color:#eef3f8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{width:min(1000px,calc(100% - 32px));margin:24px auto}
+.card{background:#171d25;border:1px solid #2d3845;border-radius:14px;padding:16px;margin:14px 0}iframe{width:100%;height:540px;border:1px solid #3a4757;border-radius:12px;background:#0b0f14}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Hosted Full Integration Lab — Official Relay Layer</h1>
+  <div class="card">
+    This page emulates the official-site relay. The game test build below owns the authenticated player state.
+    Authenticate inside the game frame, then return to the harness or use <b>Check Authenticated Session</b>.
+  </div>
+  <iframe id="gameFrame" src="./game-sandbox.html"></iframe>
+</div>
+<script src="./protocol.js"></script>
+<script>
+window.HH_RELAY_CONFIG={
+  harnessOrigin: location.origin,
+  allowedGameOrigins:[location.origin],
+  allowedGameHostSuffixes:[],
+  requestTtlMs:15000
+};
+</script>
+<script src="./official-site-relay.js"></script>
+</body>
+</html>
