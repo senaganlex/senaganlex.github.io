@@ -1,49 +1,45 @@
+# Helmet Heroes Reborn — Stat Anomaly Test Harness v2
 
+## What changed
 
-This project is a standalone defensive testing simulator.
+v2 adds a controlled connection layer.
 
-It intentionally does **not**:
-- inject JavaScript into the live itch.io game iframe,
-- patch or inspect game memory,
-- alter network packets or WebSocket traffic,
-- modify a real player account,
-- bypass server-side checks.
+### Official-site mode
 
-## Included modifiers
+The harness can open:
 
-Each modifier is independently toggleable:
+`https://www.helmet-heroes.com/`
 
-- Attack / Damage ×2
-- Critical Chance ×2
-- Attack Speed ×2
-- Defense ×2
-- Dexterity ×2
-- Luck ×2
-- Orb Attack ×2
-- Orb Defense ×2
-- Orb Critical Multiplier ×2
+and send a non-mutating `HH_TEST_BRIDGE_HELLO` handshake. The harness reports **CONNECTED** only if the opened page explicitly answers with a matching `HH_TEST_BRIDGE_READY` message.
 
-When a modifier is disabled, the effective value returns immediately to the stored baseline.
+The official connector does not:
+- inject JavaScript,
+- read cross-origin page internals,
+- inspect memory,
+- intercept WebSocket/network traffic,
+- alter player stats,
+- send modifier state into the live service.
 
-## Defensive testing features
+This is intentionally fail-closed.
 
-- Per-stat baseline editor
-- Per-stat ON/OFF indicator
-- Effective-value display
-- Enable-all / disable-all controls
-- Random anomaly scenario generator
-- Event log
-- Baseline mismatch detector
-- Exact ×2 signature detector
-- Suggested defensive action indicator
+### Local beta bridge simulator
 
-## Run
+`Open local beta bridge` launches `sandbox.html`, which implements the handshake and accepts the nine synthetic stat modifiers.
 
-Open `index.html` directly in a browser.
+`Push state to local bridge` sends the current test scenario to the simulator, which:
+1. compares effective values to baseline values,
+2. detects exact ×2 signatures,
+3. returns telemetry,
+4. recommends `ALLOW` or `REJECT_AND_RECONCILE`.
 
-For a local web server:
+This provides an end-to-end test target for the detection/countermeasure logic.
+
+## Run locally
+
+Because `postMessage` origin checks are part of the test, run this through a local web server rather than opening the HTML with `file://`.
 
 ```bash
+cd helmet-heroes-reborn-stat-test-harness-v2
 python3 -m http.server 8080
 ```
 
@@ -53,19 +49,14 @@ Then open:
 http://localhost:8080/
 ```
 
-## Integration pattern for an authorized private test build
+## Test sequence
 
-If you control a private development build, connect the harness to a test-only adapter exposed by that build. Keep the adapter server-authorized and disabled in production.
+1. Click `Open local beta bridge`.
+2. Confirm the bridge state becomes `CONNECTED`.
+3. Toggle any combination of modifiers.
+4. Click `Push state to local bridge`.
+5. Inspect the simulator's validation response and the harness telemetry/log.
 
-Recommended contract:
+## Live/private integration
 
-```js
-const testAdapter = {
-  async getBaselineStats() {},
-  async applySyntheticStats(stats) {},
-  async restoreBaseline() {},
-  async subscribeToValidationEvents(callback) {}
-};
-```
-
-Do not point the adapter at public production accounts or use it to bypass authoritative server validation.
+For a developer-controlled private build, implement the same handshake in the test build and keep it disabled in production. The live public connector should remain telemetry/handshake-only unless the game developer provides an explicit authorized testing interface.

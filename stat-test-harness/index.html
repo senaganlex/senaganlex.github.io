@@ -1,536 +1,340 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Helmet Heroes Reborn — Stat Anomaly Test Harness</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0f1115;
-      --panel: #171a21;
-      --panel2: #1d222b;
-      --border: #2c3441;
-      --text: #eef2f7;
-      --muted: #9ba8b8;
-      --good: #67d391;
-      --warn: #f6c45f;
-      --bad: #ff7777;
-      --accent: #7aa2ff;
-      --off: #535d6c;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0b0d11, var(--bg));
-      color: var(--text);
-    }
-
-    .shell {
-      width: min(1180px, calc(100% - 32px));
-      margin: 32px auto;
-    }
-
-    h1 { margin: 0 0 6px; font-size: 28px; }
-    .subtitle { color: var(--muted); margin-bottom: 24px; line-height: 1.45; }
-
-    .notice {
-      background: #151d2a;
-      border: 1px solid #29415f;
-      color: #cfe2ff;
-      padding: 14px 16px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    button {
-      border: 1px solid var(--border);
-      background: var(--panel2);
-      color: var(--text);
-      border-radius: 9px;
-      padding: 10px 14px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-    button:hover { border-color: #49617e; }
-    button.primary { background: #25447a; border-color: #426aa8; }
-    button.danger { background: #4b2328; border-color: #7d3a43; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    .card {
-      background: rgba(23,26,33,.96);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .card header {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      background: #15181e;
-    }
-
-    .card header h2 {
-      margin: 0;
-      font-size: 17px;
-    }
-
-    .table-wrap { overflow-x: auto; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 720px;
-    }
-
-    th, td {
-      padding: 12px 14px;
-      border-bottom: 1px solid #232a34;
-      text-align: left;
-      vertical-align: middle;
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      background: #171b22;
-    }
-
-    td input[type="number"] {
-      width: 110px;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #101318;
-      color: var(--text);
-    }
-
-    .toggle {
-      position: relative;
-      width: 50px;
-      height: 26px;
-      display: inline-block;
-    }
-
-    .toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      inset: 0;
-      border-radius: 999px;
-      background: var(--off);
-      transition: .18s ease;
-      cursor: pointer;
-    }
-
-    .slider::before {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      left: 3px;
-      top: 3px;
-      border-radius: 50%;
-      background: white;
-      transition: .18s ease;
-    }
-
-    input:checked + .slider { background: #3f7be0; }
-    input:checked + .slider::before { transform: translateX(24px); }
-
-    .state {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-weight: 800;
-    }
-
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--off);
-    }
-    .state.on .dot { background: var(--good); box-shadow: 0 0 12px rgba(103,211,145,.6); }
-    .state.off .dot { background: var(--off); }
-
-    .effective {
-      font-variant-numeric: tabular-nums;
-      font-weight: 800;
-    }
-
-    .effective.modified { color: var(--warn); }
-
-    .side {
-      display: grid;
-      gap: 20px;
-      align-content: start;
-    }
-
-    .metric-list {
-      padding: 14px 18px 18px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .metric {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 10px 0;
-      border-bottom: 1px solid #252c36;
-    }
-
-    .metric:last-child { border-bottom: 0; }
-    .metric span:first-child { color: var(--muted); }
-    .metric strong { font-variant-numeric: tabular-nums; }
-
-    .status-ok { color: var(--good); }
-    .status-alert { color: var(--bad); }
-
-    .log {
-      height: 360px;
-      overflow: auto;
-      padding: 12px 14px;
-      background: #101318;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .log-entry {
-      padding: 7px 0;
-      border-bottom: 1px dashed #242b34;
-      color: #c7d0dc;
-    }
-
-    .log-entry .time { color: #728097; margin-right: 8px; }
-    .log-entry.alert { color: #ffc0c0; }
-    .log-entry.ok { color: #b9f4cc; }
-
-    .footer-note {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 18px;
-      line-height: 1.5;
-    }
-
-    .badge {
-      display: inline-block;
-      border: 1px solid #3c4655;
-      border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 11px;
-      color: #c8d2de;
-      background: #14181f;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Helmet Heroes Reborn — Stat Anomaly Test Harness v2</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1015;--panel:#171b22;--panel2:#1d232d;--border:#2b3440;--text:#eef3f8;--muted:#98a6b8;--good:#6bd79a;--warn:#f3c866;--bad:#ff7b7b;--accent:#78a7ff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#090b0f,var(--bg));color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{width:min(1220px,calc(100% - 32px));margin:28px auto}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap}
+h1{margin:0 0 6px;font-size:28px}.sub{color:var(--muted);max-width:820px;line-height:1.5}.badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:#12161c;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800}
+.dot{width:9px;height:9px;border-radius:50%;background:#596473}.dot.good{background:var(--good);box-shadow:0 0 10px rgba(107,215,154,.6)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
+.notice{margin:20px 0;background:#141d2a;border:1px solid #2b4666;border-radius:12px;padding:13px 15px;color:#d2e5ff;line-height:1.45}
+.card{background:rgba(23,27,34,.97);border:1px solid var(--border);border-radius:14px;overflow:hidden}.card>header{padding:15px 17px;border-bottom:1px solid var(--border);background:#14181e}.card>header h2{margin:0;font-size:16px}
+.connection{margin-bottom:18px}.connection-body{padding:16px;display:grid;grid-template-columns:1.3fr 1fr;gap:16px}@media(max-width:900px){.connection-body{grid-template-columns:1fr}}
+.conn-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:9px;padding:10px 13px;font-weight:800;cursor:pointer}button:hover{border-color:#50647e}button.primary{background:#244b83;border-color:#4779b9}button.danger{background:#4a2227;border-color:#814048}
+.kv{display:grid;gap:8px}.kv-row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid #252d38;padding:8px 0}.kv-row:last-child{border-bottom:0}.kv-row span:first-child{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 18px}.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:11px 13px;border-bottom:1px solid #232b35;text-align:left}th{background:#171b21;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+input[type=number]{width:110px;padding:8px;border:1px solid var(--border);border-radius:8px;background:#0f1318;color:var(--text)}.toggle{position:relative;display:inline-block;width:49px;height:26px}.toggle input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#515d6d;border-radius:999px;cursor:pointer;transition:.15s}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:white;transition:.15s}input:checked+.slider{background:#417ee0}input:checked+.slider:before{transform:translateX(23px)}
+.state{display:inline-flex;align-items:center;gap:7px;font-weight:800}.effective{font-weight:800;font-variant-numeric:tabular-nums}.effective.modified{color:var(--warn)}
+.side{display:grid;gap:18px;align-content:start}.metric-list{padding:12px 17px 16px}.metric{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #252d38}.metric:last-child{border-bottom:0}.metric span:first-child{color:var(--muted)}.status-ok{color:var(--good)}.status-alert{color:var(--bad)}
+.log{height:340px;overflow:auto;padding:11px 13px;background:#0f1318;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.entry{padding:7px 0;border-bottom:1px dashed #242c36;color:#c7d0dc}.entry .time{color:#718096;margin-right:8px}.entry.ok{color:#b9f4cc}.entry.alert{color:#ffc0c0}
+.small{font-size:12px;color:var(--muted);line-height:1.5}.cap-list{margin:8px 0 0;padding-left:18px}.cap-list li{margin:4px 0}
+</style>
 </head>
 <body>
-  <main class="shell">
-    <h1>Helmet Heroes Reborn — Stat Anomaly Test Harness</h1>
-    <div class="subtitle">
-      Standalone defensive testing simulator. Each modifier independently applies ×2 while enabled and
-      immediately returns to the baseline value when disabled.
+<main class="shell">
+  <div class="top">
+    <div>
+      <h1>Helmet Heroes Reborn — Stat Anomaly Test Harness v2</h1>
+      <div class="sub">Independent ×2 stat modifiers plus a controlled connection layer for the official site and a fully functional local beta bridge simulator.</div>
+    </div>
+    <div class="badge"><span id="globalDot" class="dot"></span><span id="globalStatus">No bridge connected</span></div>
+  </div>
+
+  <div class="notice">
+    The official-site connector is handshake-only: it opens the official site and waits for an explicit test-bridge response. It does not inject code, inspect memory, intercept packets, or send stat mutations to the live service.
+  </div>
+
+  <section class="card connection">
+    <header><h2>Connection</h2></header>
+    <div class="connection-body">
+      <div>
+        <strong>Official Helmet Heroes site</strong>
+        <div class="small mono" style="margin-top:6px">https://www.helmet-heroes.com/</div>
+        <div class="conn-actions">
+          <button id="connectOfficial" class="primary">Open &amp; handshake official site</button>
+          <button id="disconnect">Disconnect</button>
+          <button id="testLocal">Open local beta bridge</button>
+        </div>
+        <p class="small">
+          A real connection is established only after the opened page sends back a matching
+          <span class="mono">HH_TEST_BRIDGE_READY</span> response. Opening a page alone is not treated as a successful connection.
+        </p>
+      </div>
+      <div class="kv">
+        <div class="kv-row"><span>Target</span><strong id="connTarget">—</strong></div>
+        <div class="kv-row"><span>Bridge state</span><strong id="connState">DISCONNECTED</strong></div>
+        <div class="kv-row"><span>Mode</span><strong id="connMode">—</strong></div>
+        <div class="kv-row"><span>Capabilities</span><strong id="connCaps">—</strong></div>
+        <div class="kv-row"><span>Last handshake</span><strong id="lastHandshake">—</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <button id="enableAll" class="primary">Enable all ×2</button>
+    <button id="disableAll">Disable all</button>
+    <button id="randomScenario">Random test scenario</button>
+    <button id="resetBaseline">Reset baseline values</button>
+    <button id="pushLocal">Push state to local bridge</button>
+    <button id="clearLog">Clear log</button>
+  </div>
+
+  <section class="grid">
+    <div class="card">
+      <header><h2>Independent stat modifiers</h2></header>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Modifier</th><th>Baseline</th><th>Toggle</th><th>State</th><th>Effective</th></tr></thead>
+          <tbody id="statRows"></tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="notice">
-      This harness is intentionally isolated from the live game. It does not inject code into the itch.io iframe,
-      modify network traffic, patch game memory, or alter a real player account.
-    </div>
-
-    <div class="toolbar">
-      <button id="enableAll" class="primary">Enable all ×2</button>
-      <button id="disableAll">Disable all</button>
-      <button id="randomScenario">Random test scenario</button>
-      <button id="resetBaseline">Reset baseline values</button>
-      <button id="clearLog">Clear log</button>
-    </div>
-
-    <section class="grid">
+    <div class="side">
       <div class="card">
-        <header><h2>Independent stat modifiers</h2></header>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Modifier</th>
-                <th>Baseline</th>
-                <th>Toggle</th>
-                <th>State</th>
-                <th>Effective</th>
-              </tr>
-            </thead>
-            <tbody id="statRows"></tbody>
-          </table>
+        <header><h2>Detection summary</h2></header>
+        <div class="metric-list">
+          <div class="metric"><span>Enabled modifiers</span><strong id="enabledCount">0 / 9</strong></div>
+          <div class="metric"><span>Modified fields</span><strong id="modifiedCount">0</strong></div>
+          <div class="metric"><span>Anomaly state</span><strong id="anomalyState" class="status-ok">NORMAL</strong></div>
+          <div class="metric"><span>×2 signature matches</span><strong id="signatureMatches">0</strong></div>
+          <div class="metric"><span>Suggested action</span><strong id="suggestedAction">Allow</strong></div>
         </div>
       </div>
 
-      <div class="side">
-        <div class="card">
-          <header><h2>Detection summary</h2></header>
-          <div class="metric-list">
-            <div class="metric"><span>Enabled modifiers</span><strong id="enabledCount">0 / 9</strong></div>
-            <div class="metric"><span>Modified fields</span><strong id="modifiedCount">0</strong></div>
-            <div class="metric"><span>Anomaly state</span><strong id="anomalyState" class="status-ok">NORMAL</strong></div>
-            <div class="metric"><span>Last event</span><strong id="lastEvent">—</strong></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <header><h2>Countermeasure telemetry <span class="badge">simulated</span></h2></header>
-          <div class="metric-list">
-            <div class="metric"><span>Baseline mismatch</span><strong id="baselineMismatch">0</strong></div>
-            <div class="metric"><span>×2 signature matches</span><strong id="signatureMatches">0</strong></div>
-            <div class="metric"><span>Suggested action</span><strong id="suggestedAction">Allow</strong></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <header><h2>Event log</h2></header>
-          <div id="log" class="log" aria-live="polite"></div>
+      <div class="card">
+        <header><h2>Bridge telemetry</h2></header>
+        <div class="metric-list">
+          <div class="metric"><span>Messages received</span><strong id="rxCount">0</strong></div>
+          <div class="metric"><span>Messages sent</span><strong id="txCount">0</strong></div>
+          <div class="metric"><span>Last bridge event</span><strong id="bridgeEvent">—</strong></div>
         </div>
       </div>
-    </section>
 
-    <div class="footer-note">
-      Detection model: a field is considered anomalous when its current value differs from its stored baseline.
-      The “×2 signature” counter increments only when the effective value is exactly twice the baseline.
-      This gives you a clean place to prototype server-authoritative validation, reconciliation, alerting,
-      audit logging, rate limits, and automatic state correction.
+      <div class="card">
+        <header><h2>Event log</h2></header>
+        <div id="log" class="log" aria-live="polite"></div>
+      </div>
     </div>
-  </main>
+  </section>
+</main>
 
-  <script>
-    const DEFAULTS = {
-      attackDamage: 100,
-      criticalChance: 10,
-      attackSpeed: 1.00,
-      defense: 80,
-      dexterity: 50,
-      luck: 25,
-      orbAttack: 60,
-      orbDefense: 40,
-      orbCritMultiplier: 1.50
-    };
+<script>
+const OFFICIAL_URL = "https://www.helmet-heroes.com/";
+const OFFICIAL_ORIGIN = "https://www.helmet-heroes.com";
+const DEFAULTS = {
+  attackDamage:100, criticalChance:10, attackSpeed:1,
+  defense:80, dexterity:50, luck:25,
+  orbAttack:60, orbDefense:40, orbCritMultiplier:1.5
+};
+const STAT_DEFS = [
+  {key:"attackDamage",label:"Attack / Damage ×2",step:1},
+  {key:"criticalChance",label:"Critical Chance ×2",step:.1},
+  {key:"attackSpeed",label:"Attack Speed ×2",step:.01},
+  {key:"defense",label:"Defense ×2",step:1},
+  {key:"dexterity",label:"Dexterity ×2",step:1},
+  {key:"luck",label:"Luck ×2",step:1},
+  {key:"orbAttack",label:"Orb Attack ×2",step:1},
+  {key:"orbDefense",label:"Orb Defense ×2",step:1},
+  {key:"orbCritMultiplier",label:"Orb Critical Multiplier ×2",step:.01}
+];
 
-    const STAT_DEFS = [
-      { key: "attackDamage", label: "Attack / Damage ×2", step: 1 },
-      { key: "criticalChance", label: "Critical Chance ×2", step: 0.1 },
-      { key: "attackSpeed", label: "Attack Speed ×2", step: 0.01 },
-      { key: "defense", label: "Defense ×2", step: 1 },
-      { key: "dexterity", label: "Dexterity ×2", step: 1 },
-      { key: "luck", label: "Luck ×2", step: 1 },
-      { key: "orbAttack", label: "Orb Attack ×2", step: 1 },
-      { key: "orbDefense", label: "Orb Defense ×2", step: 1 },
-      { key: "orbCritMultiplier", label: "Orb Critical Multiplier ×2", step: 0.01 }
-    ];
+const state = {
+  baseline:{...DEFAULTS},
+  enabled:Object.fromEntries(STAT_DEFS.map(s=>[s.key,false])),
+  effective:{...DEFAULTS},
+  bridge:{
+    windowRef:null, origin:null, target:null, mode:null,
+    connected:false, nonce:null, capabilities:[],
+    rx:0, tx:0
+  }
+};
 
-    const state = {
-      baseline: { ...DEFAULTS },
-      enabled: Object.fromEntries(STAT_DEFS.map(s => [s.key, false])),
-      effective: { ...DEFAULTS }
-    };
+const rows = document.getElementById("statRows");
+const logEl = document.getElementById("log");
 
-    const rows = document.getElementById("statRows");
-    const logEl = document.getElementById("log");
-
-    function formatValue(key, value) {
-      if (key === "attackSpeed" || key === "orbCritMultiplier") return Number(value).toFixed(2);
-      if (key === "criticalChance") return Number(value).toFixed(1);
-      return Number(value).toFixed(0);
-    }
-
-    function log(message, kind = "") {
-      const div = document.createElement("div");
-      div.className = `log-entry ${kind}`.trim();
-      const t = new Date().toLocaleTimeString();
-      div.innerHTML = `<span class="time">${t}</span>${escapeHtml(message)}`;
-      logEl.prepend(div);
-      document.getElementById("lastEvent").textContent = message;
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
-    }
-
-    function calculateEffective() {
-      for (const def of STAT_DEFS) {
-        const base = Number(state.baseline[def.key]);
-        state.effective[def.key] = state.enabled[def.key] ? base * 2 : base;
-      }
-    }
-
-    function updateDetection() {
-      let enabled = 0;
-      let mismatches = 0;
-      let signatures = 0;
-
-      for (const def of STAT_DEFS) {
-        const base = Number(state.baseline[def.key]);
-        const current = Number(state.effective[def.key]);
-        if (state.enabled[def.key]) enabled++;
-        if (current !== base) mismatches++;
-        if (base !== 0 && current === base * 2) signatures++;
-      }
-
-      document.getElementById("enabledCount").textContent = `${enabled} / ${STAT_DEFS.length}`;
-      document.getElementById("modifiedCount").textContent = mismatches;
-      document.getElementById("baselineMismatch").textContent = mismatches;
-      document.getElementById("signatureMatches").textContent = signatures;
-
-      const anomaly = mismatches > 0;
-      const anomalyState = document.getElementById("anomalyState");
-      anomalyState.textContent = anomaly ? "ANOMALY DETECTED" : "NORMAL";
-      anomalyState.className = anomaly ? "status-alert" : "status-ok";
-
-      document.getElementById("suggestedAction").textContent =
-        anomaly ? "Reject / reconcile to server baseline" : "Allow";
-    }
-
-    function render() {
-      calculateEffective();
-
-      for (const def of STAT_DEFS) {
-        const row = document.querySelector(`[data-row="${def.key}"]`);
-        if (!row) continue;
-
-        const checkbox = row.querySelector("input[type=checkbox]");
-        checkbox.checked = state.enabled[def.key];
-
-        const stateEl = row.querySelector(".state");
-        stateEl.className = `state ${state.enabled[def.key] ? "on" : "off"}`;
-        stateEl.querySelector(".state-label").textContent = state.enabled[def.key] ? "ON" : "OFF";
-
-        const effective = row.querySelector(".effective");
-        effective.textContent = formatValue(def.key, state.effective[def.key]);
-        effective.className = `effective ${state.enabled[def.key] ? "modified" : ""}`;
-      }
-
-      updateDetection();
-    }
-
-    function buildRows() {
-      rows.innerHTML = "";
-      for (const def of STAT_DEFS) {
-        const tr = document.createElement("tr");
-        tr.dataset.row = def.key;
-        tr.innerHTML = `
-          <td><strong>${def.label}</strong></td>
-          <td>
-            <input
-              type="number"
-              value="${state.baseline[def.key]}"
-              step="${def.step}"
-              aria-label="${def.label} baseline"
-              data-baseline="${def.key}"
-            />
-          </td>
-          <td>
-            <label class="toggle">
-              <input type="checkbox" data-toggle="${def.key}" />
-              <span class="slider"></span>
-            </label>
-          </td>
-          <td>
-            <span class="state off">
-              <span class="dot"></span>
-              <span class="state-label">OFF</span>
-            </span>
-          </td>
-          <td><span class="effective">${formatValue(def.key, state.baseline[def.key])}</span></td>
-        `;
-        rows.appendChild(tr);
-      }
-
-      rows.addEventListener("change", (event) => {
-        const target = event.target;
-
-        if (target.matches("[data-toggle]")) {
-          const key = target.dataset.toggle;
-          state.enabled[key] = target.checked;
-          render();
-          log(`${STAT_DEFS.find(s => s.key === key).label}: ${target.checked ? "enabled" : "disabled"}`,
-              target.checked ? "alert" : "ok");
-          return;
-        }
-
-        if (target.matches("[data-baseline]")) {
-          const key = target.dataset.baseline;
-          const value = Number(target.value);
-          if (!Number.isFinite(value)) return;
-          state.baseline[key] = value;
-          render();
-          log(`${STAT_DEFS.find(s => s.key === key).label}: baseline changed to ${value}`);
-        }
-      });
-    }
-
-    function setAll(enabled) {
-      for (const def of STAT_DEFS) state.enabled[def.key] = enabled;
+function esc(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
+function log(msg,kind=""){
+  const div=document.createElement("div");
+  div.className=`entry ${kind}`.trim();
+  div.innerHTML=`<span class="time">${new Date().toLocaleTimeString()}</span>${esc(msg)}`;
+  logEl.prepend(div);
+}
+function fmt(key,v){
+  if(key==="attackSpeed"||key==="orbCritMultiplier")return Number(v).toFixed(2);
+  if(key==="criticalChance")return Number(v).toFixed(1);
+  return Number(v).toFixed(0);
+}
+function recalc(){
+  for(const d of STAT_DEFS){
+    const base=Number(state.baseline[d.key]);
+    state.effective[d.key]=state.enabled[d.key]?base*2:base;
+  }
+}
+function updateDetection(){
+  let enabled=0,mismatch=0,sig=0;
+  for(const d of STAT_DEFS){
+    const b=Number(state.baseline[d.key]),c=Number(state.effective[d.key]);
+    if(state.enabled[d.key])enabled++;
+    if(c!==b)mismatch++;
+    if(b!==0&&c===b*2)sig++;
+  }
+  enabledCount.textContent=`${enabled} / ${STAT_DEFS.length}`;
+  modifiedCount.textContent=mismatch;
+  signatureMatches.textContent=sig;
+  const bad=mismatch>0;
+  anomalyState.textContent=bad?"ANOMALY DETECTED":"NORMAL";
+  anomalyState.className=bad?"status-alert":"status-ok";
+  suggestedAction.textContent=bad?"Reject / reconcile to baseline":"Allow";
+}
+function render(){
+  recalc();
+  for(const d of STAT_DEFS){
+    const row=document.querySelector(`[data-row="${d.key}"]`);
+    if(!row)continue;
+    row.querySelector("[data-toggle]").checked=state.enabled[d.key];
+    const st=row.querySelector(".state");
+    st.querySelector(".state-label").textContent=state.enabled[d.key]?"ON":"OFF";
+    st.querySelector(".dot").className=`dot ${state.enabled[d.key]?"good":""}`;
+    const e=row.querySelector(".effective");
+    e.textContent=fmt(d.key,state.effective[d.key]);
+    e.className=`effective ${state.enabled[d.key]?"modified":""}`;
+  }
+  updateDetection();
+  renderBridge();
+}
+function renderBridge(){
+  connTarget.textContent=state.bridge.target||"—";
+  connState.textContent=state.bridge.connected?"CONNECTED":(state.bridge.windowRef?"HANDSHAKING":"DISCONNECTED");
+  connState.className=state.bridge.connected?"status-ok":"";
+  connMode.textContent=state.bridge.mode||"—";
+  connCaps.textContent=state.bridge.capabilities.length?state.bridge.capabilities.join(", "):"—";
+  rxCount.textContent=state.bridge.rx;
+  txCount.textContent=state.bridge.tx;
+  globalStatus.textContent=state.bridge.connected?`${state.bridge.mode} bridge connected`:"No bridge connected";
+  globalDot.className=`dot ${state.bridge.connected?"good":""}`;
+}
+function buildRows(){
+  rows.innerHTML="";
+  for(const d of STAT_DEFS){
+    const tr=document.createElement("tr");
+    tr.dataset.row=d.key;
+    tr.innerHTML=`
+      <td><strong>${d.label}</strong></td>
+      <td><input type="number" value="${state.baseline[d.key]}" step="${d.step}" data-baseline="${d.key}"></td>
+      <td><label class="toggle"><input type="checkbox" data-toggle="${d.key}"><span class="slider"></span></label></td>
+      <td><span class="state"><span class="dot"></span><span class="state-label">OFF</span></span></td>
+      <td><span class="effective">${fmt(d.key,state.baseline[d.key])}</span></td>`;
+    rows.appendChild(tr);
+  }
+  rows.addEventListener("change",e=>{
+    if(e.target.matches("[data-toggle]")){
+      const k=e.target.dataset.toggle;
+      state.enabled[k]=e.target.checked;
       render();
-      log(enabled ? "All ×2 modifiers enabled" : "All modifiers disabled", enabled ? "alert" : "ok");
+      log(`${STAT_DEFS.find(x=>x.key===k).label}: ${state.enabled[k]?"enabled":"disabled"}`,state.enabled[k]?"alert":"ok");
     }
+    if(e.target.matches("[data-baseline]")){
+      const k=e.target.dataset.baseline,v=Number(e.target.value);
+      if(Number.isFinite(v)){state.baseline[k]=v;render();log(`${k}: baseline set to ${v}`)}
+    }
+  });
+}
+function setAll(on){for(const d of STAT_DEFS)state.enabled[d.key]=on;render();log(on?"All ×2 modifiers enabled":"All modifiers disabled",on?"alert":"ok")}
 
-    document.getElementById("enableAll").addEventListener("click", () => setAll(true));
-    document.getElementById("disableAll").addEventListener("click", () => setAll(false));
+function nonce(){
+  const a=new Uint32Array(4);crypto.getRandomValues(a);return Array.from(a).map(n=>n.toString(16)).join("");
+}
+function resetBridge(){
+  state.bridge.windowRef=null;state.bridge.origin=null;state.bridge.target=null;state.bridge.mode=null;
+  state.bridge.connected=false;state.bridge.nonce=null;state.bridge.capabilities=[];
+  renderBridge();
+}
+function beginHandshake(url,origin,mode){
+  const w=window.open(url,mode==="official"?"hhOfficial":"hhLocalBridge");
+  if(!w){log("Popup blocked; allow popups and try again","alert");return}
+  state.bridge.windowRef=w;
+  state.bridge.origin=origin;
+  state.bridge.target=url;
+  state.bridge.mode=mode;
+  state.bridge.connected=false;
+  state.bridge.capabilities=[];
+  state.bridge.nonce=nonce();
+  renderBridge();
+  log(`Handshake started: ${url}`);
 
-    document.getElementById("randomScenario").addEventListener("click", () => {
-      let active = 0;
-      for (const def of STAT_DEFS) {
-        const enabled = Math.random() >= 0.5;
-        state.enabled[def.key] = enabled;
-        if (enabled) active++;
-      }
-      render();
-      log(`Random scenario applied (${active} active modifier${active === 1 ? "" : "s"})`, active ? "alert" : "ok");
-    });
+  const hello={type:"HH_TEST_BRIDGE_HELLO",version:1,nonce:state.bridge.nonce,request:["telemetry"]};
+  let attempts=0;
+  const timer=setInterval(()=>{
+    if(!state.bridge.windowRef||state.bridge.windowRef.closed||state.bridge.connected||attempts>=12){
+      clearInterval(timer);
+      if(!state.bridge.connected&&attempts>=12)log("No authorized test-bridge response received","alert");
+      return;
+    }
+    try{
+      state.bridge.windowRef.postMessage(hello,origin);
+      state.bridge.tx++; bridgeEvent.textContent="HELLO sent"; renderBridge();
+    }catch(err){ log(`Handshake send failed: ${err.message}`,"alert"); clearInterval(timer); }
+    attempts++;
+  },500);
+}
 
-    document.getElementById("resetBaseline").addEventListener("click", () => {
-      state.baseline = { ...DEFAULTS };
-      document.querySelectorAll("[data-baseline]").forEach(input => {
-        input.value = state.baseline[input.dataset.baseline];
-      });
-      render();
-      log("Baseline values reset to defaults", "ok");
-    });
+window.addEventListener("message",event=>{
+  const b=state.bridge;
+  if(!b.windowRef||event.source!==b.windowRef)return;
+  if(event.origin!==b.origin)return;
+  const m=event.data;
+  if(!m||typeof m!=="object")return;
+  b.rx++; bridgeEvent.textContent=m.type||"message";
 
-    document.getElementById("clearLog").addEventListener("click", () => {
-      logEl.innerHTML = "";
-      document.getElementById("lastEvent").textContent = "—";
-    });
+  if(m.type==="HH_TEST_BRIDGE_READY"&&m.nonce===b.nonce){
+    b.connected=true;
+    b.capabilities=Array.isArray(m.capabilities)?m.capabilities:[];
+    lastHandshake.textContent=new Date().toLocaleTimeString();
+    renderBridge();
+    log(`Authorized ${b.mode} bridge connected`,"ok");
+    return;
+  }
 
-    buildRows();
-    render();
-    log("Test harness initialized", "ok");
-  </script>
+  if(m.type==="HH_TEST_TELEMETRY"){
+    log(`Telemetry: ${JSON.stringify(m.payload||{})}`);
+    renderBridge();
+  }
+});
+
+connectOfficial.addEventListener("click",()=>beginHandshake(OFFICIAL_URL,OFFICIAL_ORIGIN,"official"));
+testLocal.addEventListener("click",()=>{
+  const url=new URL("sandbox.html",location.href).href;
+  beginHandshake(url,location.origin,"local-simulator");
+});
+disconnect.addEventListener("click",()=>{
+  if(state.bridge.windowRef&&!state.bridge.windowRef.closed){
+    try{state.bridge.windowRef.postMessage({type:"HH_TEST_BRIDGE_BYE"},state.bridge.origin)}catch{}
+  }
+  resetBridge(); log("Bridge disconnected","ok");
+});
+pushLocal.addEventListener("click",()=>{
+  const b=state.bridge;
+  if(!(b.connected&&b.mode==="local-simulator")){
+    log("State push is restricted to the local beta bridge simulator","alert");
+    return;
+  }
+  b.windowRef.postMessage({
+    type:"HH_TEST_SIMULATE_STATS",
+    payload:{baseline:{...state.baseline},enabled:{...state.enabled},effective:{...state.effective}}
+  },b.origin);
+  b.tx++; bridgeEvent.textContent="SIMULATE_STATS sent"; renderBridge();
+  log("Current modifier state pushed to local simulator","ok");
+});
+
+enableAll.addEventListener("click",()=>setAll(true));
+disableAll.addEventListener("click",()=>setAll(false));
+randomScenario.addEventListener("click",()=>{
+  let c=0;for(const d of STAT_DEFS){state.enabled[d.key]=Math.random()>=.5;if(state.enabled[d.key])c++}
+  render();log(`Random scenario applied (${c} active)`,c?"alert":"ok");
+});
+resetBaseline.addEventListener("click",()=>{
+  state.baseline={...DEFAULTS};
+  document.querySelectorAll("[data-baseline]").forEach(i=>i.value=state.baseline[i.dataset.baseline]);
+  render();log("Baseline reset","ok");
+});
+clearLog.addEventListener("click",()=>logEl.innerHTML="");
+
+buildRows();render();log("Harness v2 initialized","ok");
+</script>
 </body>
 </html>

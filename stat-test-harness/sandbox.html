@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Local Helmet Heroes Beta Bridge Simulator</title>
+<style>
+body{margin:0;background:#0e1116;color:#ecf2f7;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{width:min(900px,calc(100% - 32px));margin:30px auto}
+.card{background:#171c23;border:1px solid #2b3542;border-radius:14px;padding:18px;margin-bottom:16px}.good{color:#72d99d}.warn{color:#f3c96b}
+pre{white-space:pre-wrap;word-break:break-word;background:#0c1015;padding:14px;border-radius:10px;border:1px solid #27303b;min-height:120px}
+small{color:#9ba8b8}.pill{display:inline-block;border:1px solid #334052;border-radius:999px;padding:5px 9px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Local Beta Bridge Simulator</h1>
+  <p><span class="pill good" id="state">READY</span></p>
+  <div class="card">
+    <strong>Purpose</strong>
+    <p>This page emulates an authorized test build. It accepts synthetic stat scenarios only from the opener on the same origin.</p>
+  </div>
+  <div class="card">
+    <strong>Last received scenario</strong>
+    <pre id="out">No stat scenario received yet.</pre>
+  </div>
+  <div class="card">
+    <strong>Validation response</strong>
+    <pre id="validation">Waiting.</pre>
+  </div>
+</div>
+<script>
+let openerOrigin=null;
+function validate(payload){
+  const anomalies=[];
+  const b=payload?.baseline||{},e=payload?.effective||{};
+  for(const [k,v] of Object.entries(e)){
+    if(Number(v)!==Number(b[k])){
+      anomalies.push({
+        stat:k,
+        baseline:Number(b[k]),
+        effective:Number(v),
+        ratio:Number(b[k])!==0?Number(v)/Number(b[k]):null,
+        exactDouble:Number(b[k])!==0&&Number(v)===Number(b[k])*2
+      });
+    }
+  }
+  return {acceptedForSimulation:true, anomalyCount:anomalies.length, anomalies,
+          action:anomalies.length?"REJECT_AND_RECONCILE":"ALLOW"};
+}
+window.addEventListener("message",e=>{
+  if(e.source!==window.opener)return;
+  if(e.origin!==location.origin)return;
+  const m=e.data;
+  if(!m||typeof m!=="object")return;
+
+  if(m.type==="HH_TEST_BRIDGE_HELLO"){
+    openerOrigin=e.origin;
+    window.opener.postMessage({
+      type:"HH_TEST_BRIDGE_READY",
+      version:1,
+      nonce:m.nonce,
+      capabilities:["telemetry","local-stat-simulation","baseline-reconciliation"]
+    },e.origin);
+    return;
+  }
+  if(m.type==="HH_TEST_SIMULATE_STATS"){
+    out.textContent=JSON.stringify(m.payload,null,2);
+    const result=validate(m.payload);
+    validation.textContent=JSON.stringify(result,null,2);
+    window.opener.postMessage({type:"HH_TEST_TELEMETRY",payload:result},e.origin);
+    return;
+  }
+  if(m.type==="HH_TEST_BRIDGE_BYE"){
+    state.textContent="DISCONNECTED";state.className="pill warn";
+  }
+});
+</script>
+</body>
+</html>
