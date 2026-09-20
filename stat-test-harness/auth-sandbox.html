@@ -50,7 +50,7 @@ document.getElementById("signIn").addEventListener("click",()=>{
 
 window.addEventListener("message",event=>{
   if(!valid(event))return;
-  const m=event.data;if(!m||typeof m!=="object"||m.version!==4)return;
+  const m=event.data;if(!m||typeof m!=="object"||m.version!==5)return;
   document.getElementById("eventOut").textContent=JSON.stringify(m,null,2);
 
   if(m.type===MSG.AUTH_PROBE){

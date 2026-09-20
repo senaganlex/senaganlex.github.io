@@ -58,6 +58,7 @@ input[type=number]{width:105px;padding:8px;border:1px solid var(--border);border
         <div class="kv-row"><span>Target</span><strong id="targetValue">—</strong></div>
         <div class="kv-row"><span>Authentication</span><strong id="authState">NOT STARTED</strong></div>
         <div class="kv-row"><span>Session detection</span><strong id="sessionState">NOT ATTEMPTED</strong></div>
+        <div class="kv-row"><span>Diagnostic code</span><strong id="diagnosticCode">READY</strong></div>
         <div class="kv-row"><span>Authenticated player</span><strong id="playerState">—</strong></div>
         <div class="kv-row"><span>Player-stat access</span><strong id="statAccess">UNAVAILABLE</strong></div>
         <div class="kv-row"><span>Baseline snapshot</span><strong id="snapshotState">NOT LOADED</strong></div>
@@ -130,6 +131,7 @@ const state={
   applied:emptyFlags(false),
   pending:{},
   tx:0,rx:0,seq:0,
+  diagnostic:"READY",
   probeTimer:null
 };
 
@@ -204,6 +206,8 @@ function render(){
   $("targetValue").textContent=state.target.url||"—";
   $("authState").textContent=state.auth.status.replaceAll("_"," ");
   $("sessionState").textContent=state.auth.session.replaceAll("_"," ");
+  $("diagnosticCode").textContent=state.diagnostic;
+  $("diagnosticCode").className=state.diagnostic==="OK"?"good":state.diagnostic==="READY"?"":"warn";
   $("playerState").textContent=state.auth.player?(state.auth.player.username||state.auth.player.id):"—";
   $("statAccess").textContent=state.stats.access?"AUTHORIZED":"UNAVAILABLE";
   $("statAccess").className=state.stats.access?"good":"bad";
@@ -235,7 +239,7 @@ function resetSession(closeWindow=false){
   state.target={windowRef:null,origin:null,url:null,mode:null};
   state.auth={status:"NOT_STARTED",session:"NOT_ATTEMPTED",authenticated:false,player:null,capabilities:[],nonce:null,probeAttempts:0};
   state.stats={baseline:{...DEFAULTS},measured:{...DEFAULTS},loaded:false,access:false};
-  state.applied=emptyFlags(false);state.pending={};state.tx=0;state.rx=0;
+  state.applied=emptyFlags(false);state.pending={};state.tx=0;state.rx=0;state.diagnostic="READY";
   render();
 }
 
@@ -312,7 +316,8 @@ function beginTarget(url,mode){
     if(state.auth.authenticated){clearProbeTimer();return}
     if(state.auth.probeAttempts>=15){
       clearProbeTimer();
-      state.auth.session="SUPPORTED_INTERFACE_NOT_DETECTED";
+      state.auth.session="OFFICIAL_INTERFACE_NOT_EXPOSED";
+      state.diagnostic="AUTH-BRIDGE-001";
       $("statusMessage").innerHTML="<strong>Status:</strong> No supported authenticated-session interface responded. Login may have succeeded inside the site, but this GitHub Pages origin cannot observe it.";
       log("No authorized session bridge/API responded. Authentication cannot be observed from this origin.","alert");
       render();return;
@@ -330,11 +335,13 @@ function acceptAuthenticatedSession(player,capabilities,source){
   }
 
   state.auth.authenticated=true;
+  state.diagnostic="AUTHENTICATED";
   state.auth.player=sanitizePlayer(player);
   state.auth.capabilities=Array.isArray(capabilities)?capabilities:[];
   state.auth.status="AUTHENTICATED";
   state.auth.session="SESSION_DETECTED";
   state.stats.access=hasCapabilities(state.auth.capabilities,AUTH_CAPABILITIES);
+  if(!state.stats.access)state.diagnostic="STAT-ACCESS-002";
   $("statusMessage").innerHTML=`<strong>Status:</strong> Authenticated player detected through ${source}.`;
   log(`Authenticated player detected: ${state.auth.player.username||state.auth.player.id}`,"ok");
   render();
@@ -368,11 +375,13 @@ function acceptStats(stats,source){
     log("Ignored player-stat payload because authentication is not confirmed.","alert");return false;
   }
   if(!validateStats(stats)){
-    log("Player-stat payload rejected: required statistics are missing or invalid.","alert");return false;
+    state.diagnostic="STAT-SCHEMA-003";
+    log("Player-stat payload rejected: required statistics are missing or invalid.","alert");render();return false;
   }
   state.stats.baseline={...stats};
   state.stats.measured={...stats};
   state.stats.loaded=true;
+  state.diagnostic="OK";
   state.applied=emptyFlags(false);
   state.pending={};
   $("statusMessage").innerHTML=`<strong>Status:</strong> Authenticated player statistics loaded through ${source}.`;
@@ -404,7 +413,7 @@ function restoreAll(){
 window.addEventListener("message",async event=>{
   if(!state.target.windowRef||event.source!==state.target.windowRef||event.origin!==state.target.origin)return;
   const m=event.data;
-  if(!m||typeof m!=="object"||m.version!==4)return;
+  if(!m||typeof m!=="object"||m.version!==5)return;
   state.rx++;
 
   if(m.type===MSG.AUTH_STATE){
@@ -415,6 +424,7 @@ window.addEventListener("message",async event=>{
     if(m.payload?.authenticated!==true){
       state.auth.status="NOT_AUTHENTICATED";
       state.auth.authenticated=false;
+      state.diagnostic="AUTH-STATE-002";
       $("statusMessage").innerHTML="<strong>Status:</strong> The target reports that login has not been completed.";
       render();return;
     }
@@ -485,7 +495,7 @@ $("clearLog").addEventListener("click",()=>logEl.innerHTML="");
 
 async function deploymentCheck(){
   try{
-    const assets=["core.js","protocol.js","bridge-engine.js","official-auth-adapter.js","config.js","auth-sandbox.html"];
+    const assets=["core.js","protocol.js","bridge-engine.js","official-auth-adapter.js","config.js","auth-sandbox.html","official-site-relay.js","game-test-bridge.js"];
     const responses=await Promise.all(assets.map(name=>fetch(new URL(`./${name}`,SITE_BASE),{cache:"no-store"})));
     const ok=responses.every(r=>r.ok);
     $("deployStatus").textContent=ok?"Deployment ready":"Deployment issue";

@@ -15,7 +15,7 @@
   });
 
   function envelope(type, requestId, payload = {}) {
-    return { type, version: 4, requestId, payload };
+    return { type, version: 5, requestId, payload };
   }
 
   const api = { MSG, envelope };

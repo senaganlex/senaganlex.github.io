@@ -1,4 +1,4 @@
-# Helmet Heroes Reborn — Authenticated Stat Test Harness v4
+# Helmet Heroes Reborn — Authenticated Stat Test Harness v5
 
 ## Purpose
 
@@ -67,3 +67,18 @@ Click **Open Hosted Auth Test Bridge**.
 ```bash
 node verify.mjs
 ```
+
+
+## V5 live-integration correction
+
+The production screenshots prove that the player can be logged into the game while the GitHub Pages application receives zero authenticated-session messages. V5 treats that as `AUTH-BRIDGE-001` rather than as a stat parser failure.
+
+A browser-only GitHub Pages application cannot repair this by polling harder. Reliable live retrieval requires an explicit game/server-side interface.
+
+V5 therefore includes the missing integration kit:
+
+- `official-site-relay.js`
+- `game-test-bridge.js`
+- `LIVE-INTEGRATION-DIAGNOSTICS.md`
+
+The bridge scripts are for authorized deployment by the site/game owner. They do not inspect passwords, cookies, tokens, game memory, or undocumented private objects.
