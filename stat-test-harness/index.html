@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Helmet Heroes Reborn — Authenticated Stat Test Harness v7</title>
+<style>
+:root{color-scheme:dark;--bg:#0c1015;--panel:#171c23;--panel2:#1d242e;--border:#2c3643;--text:#eff3f8;--muted:#9eabbc;--good:#68d99a;--warn:#f1c76a;--bad:#ff7c82;--blue:#4b8ce8}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#080b0f,var(--bg));color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{width:min(1340px,calc(100% - 32px));margin:26px auto}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}h1{margin:0 0 7px;font-size:28px}.sub{color:var(--muted);max-width:950px;line-height:1.5}
+.badges{display:flex;gap:8px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#12171d;font-size:12px;font-weight:800}.dot{width:9px;height:9px;border-radius:50%;background:#5a6676}.dot.good{background:var(--good);box-shadow:0 0 10px rgba(104,217,154,.6)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
+.notice{margin:20px 0;padding:14px 16px;border:1px solid #304a6b;border-radius:12px;background:#142030;color:#d8e8ff;line-height:1.48}.card{background:rgba(23,28,35,.98);border:1px solid var(--border);border-radius:14px;overflow:hidden}.card>header{padding:15px 17px;border-bottom:1px solid var(--border);background:#141920}.card>header h2{margin:0;font-size:16px}
+.connection{margin-bottom:18px}.connection-body{padding:16px;display:grid;grid-template-columns:1.15fr 1fr;gap:20px}@media(max-width:960px){.connection-body{grid-template-columns:1fr}}.actions,.toolbar{display:flex;gap:9px;flex-wrap:wrap}.actions{margin-top:12px}.toolbar{margin:0 0 18px}
+button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:9px;padding:10px 13px;font-weight:800;cursor:pointer}button:hover:not(:disabled){border-color:#536a84}button.primary{background:#28538d;border-color:#4e82c2}button:disabled{opacity:.45;cursor:not-allowed}
+.kv{display:grid;gap:7px}.kv-row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid #27303a}.kv-row:last-child{border-bottom:0}.kv-row span:first-child{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.statusline{margin-top:11px;padding:11px 12px;border:1px solid #2b3642;border-radius:9px;background:#10151b;line-height:1.45}.small{font-size:12px;color:var(--muted);line-height:1.5}
+.grid{display:grid;grid-template-columns:1.67fr 1fr;gap:18px}@media(max-width:960px){.grid{grid-template-columns:1fr}}.side{display:grid;gap:18px;align-content:start}.table-wrap{overflow:auto}table{width:100%;min-width:830px;border-collapse:collapse}th,td{padding:11px 13px;border-bottom:1px solid #252e38;text-align:left}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;background:#171c22}
+input[type=number]{width:105px;padding:8px;border:1px solid var(--border);border-radius:8px;background:#0e1318;color:var(--text)}input[type=number]:disabled{opacity:.65}.toggle{position:relative;display:inline-block;width:50px;height:26px}.toggle input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;background:#536071;transition:.16s;cursor:pointer}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:white;transition:.16s}.toggle input:checked+.slider{background:var(--blue)}.toggle input:checked+.slider:before{transform:translateX(24px)}.toggle input:disabled+.slider{opacity:.45;cursor:not-allowed}
+.state{display:inline-flex;align-items:center;gap:7px;font-weight:800}.state.pending{color:var(--warn)}.state.on{color:var(--good)}.state.off{color:#dce3eb}.effective{font-weight:800;font-variant-numeric:tabular-nums}.effective.modified{color:var(--warn)}
+.metric-list{padding:12px 17px 16px}.metric{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #27303a}.metric:last-child{border-bottom:0}.metric span:first-child{color:var(--muted)}.log{height:390px;overflow:auto;padding:11px 13px;background:#0e1318;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.entry{padding:7px 0;border-bottom:1px dashed #252d36;color:#cbd4de}.entry .time{color:#728096;margin-right:8px}.entry.ok{color:#bef3cf}.entry.alert{color:#ffc4c6}.entry.warn{color:#f7dea2}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top">
+    <div>
+      <h1>Helmet Heroes Reborn — Authenticated Stat Test Harness v7</h1>
+      <div class="sub">Realtime synchronization build: accurate integration/authentication states, push updates, automatic polling fallback, heartbeat health checks, and acknowledgement-driven test modifiers.</div>
+    </div>
+    <div class="badges">
+      <div class="badge"><span id="deployDot" class="dot"></span><span id="deployStatus">Checking deployment…</span></div>
+      <div class="badge"><span id="authDot" class="dot"></span><span id="authBadge">No target</span></div>
+      <div class="badge"><span id="syncDot" class="dot"></span><span id="syncBadge">Sync idle</span></div>
+    </div>
+  </div>
+
+  <div class="notice">
+    The previous display defect is removed: failure to observe an official integration is no longer shown as “Waiting for login.” V7 reports authentication as <b>unobservable</b> when the target exposes no supported bridge/API, while automatic background retry remains active.
+  </div>
+
+  <section class="card connection">
+    <header><h2>Authenticated integration workflow</h2></header>
+    <div class="connection-body">
+      <div>
+        <strong>Connection target</strong>
+        <div class="actions">
+          <button id="openOfficial" class="primary">Open Official Site &amp; Authenticate</button>
+          <button id="checkSession" disabled>Check Now</button>
+          <button id="openHosted">Open Hosted Realtime Integration Lab</button>
+          <button id="disconnect">Disconnect</button>
+        </div>
+        <div id="statusMessage" class="statusline small"><strong>Status:</strong> Open a target to begin.</div>
+        <p class="small">When a provider supports push events, state changes are reflected immediately. Otherwise V7 automatically polls the authorized interface; no refresh or manual check is required.</p>
+      </div>
+
+      <div class="kv">
+        <div class="kv-row"><span>Target</span><strong id="targetValue">—</strong></div>
+        <div class="kv-row"><span>Provider</span><strong id="providerState">—</strong></div>
+        <div class="kv-row"><span>Authentication</span><strong id="authState">NOT STARTED</strong></div>
+        <div class="kv-row"><span>Session detection</span><strong id="sessionState">NOT ATTEMPTED</strong></div>
+        <div class="kv-row"><span>Diagnostic code</span><strong id="diagnosticCode">READY</strong></div>
+        <div class="kv-row"><span>Last error</span><strong id="lastError">—</strong></div>
+        <div class="kv-row"><span>Authenticated player</span><strong id="playerState">—</strong></div>
+        <div class="kv-row"><span>Player-stat access</span><strong id="statAccess">UNAVAILABLE</strong></div>
+        <div class="kv-row"><span>Mutation access</span><strong id="mutationAccess">UNAVAILABLE</strong></div>
+        <div class="kv-row"><span>Baseline snapshot</span><strong id="snapshotState">NOT LOADED</strong></div>
+        <div class="kv-row"><span>Sync mode</span><strong id="syncMode">OFF</strong></div>
+        <div class="kv-row"><span>Sync health</span><strong id="syncHealth">IDLE</strong></div>
+        <div class="kv-row"><span>Last realtime update</span><strong id="lastSync">—</strong></div>
+        <div class="kv-row"><span>Revision</span><strong id="revisionState">—</strong></div>
+        <div class="kv-row"><span>Capabilities</span><strong id="capsState">—</strong></div>
+        <div class="kv-row"><span>Messages TX / RX</span><strong id="messageCount">0 / 0</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <button id="enableAll" class="primary" disabled>Enable all ×2</button>
+    <button id="disableAll" disabled>Disable all</button>
+    <button id="randomScenario" disabled>Random applied scenario</button>
+    <button id="restoreAll" disabled>Restore original values</button>
+    <button id="clearLog">Clear log</button>
+  </div>
+
+  <section class="grid">
+    <div class="card">
+      <header><h2>Authenticated player-stat modifiers</h2></header>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Modifier</th><th>Original</th><th>Apply</th><th>Applied state</th><th>Measured</th></tr></thead>
+          <tbody id="statRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <header><h2>Synchronization</h2></header>
+        <div class="metric-list">
+          <div class="metric"><span>Applied modifiers</span><strong id="enabledCount">0 / 9</strong></div>
+          <div class="metric"><span>Pending requests</span><strong id="pendingCount">0</strong></div>
+          <div class="metric"><span>Modified fields</span><strong id="modifiedCount">0</strong></div>
+          <div class="metric"><span>×2 signature matches</span><strong id="signatureMatches">0</strong></div>
+          <div class="metric"><span>Anomaly state</span><strong id="anomalyState" class="good">NORMAL</strong></div>
+          <div class="metric"><span>Suggested action</span><strong id="suggestedAction">Allow</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <header><h2>Event log</h2></header>
+        <div id="log" class="log" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="./config.js"></script>
+<script src="./core.js"></script>
+<script src="./protocol.js"></script>
+<script src="./official-auth-adapter.js"></script>
+<script>
+"use strict";
+
+const {
+  DEFAULTS, STAT_DEFS, READ_CAPABILITIES, WRITE_CAPABILITIES,
+  emptyFlags, normalizeFlags, validateStats, normalizeStats,
+  validatePlayer, sanitizePlayer, hasCapabilities, detect
+}=HHCore;
+
+const {MSG,envelope,validMessage}=HHProtocol;
+const officialConfig=HHOfficialAdapter.normalizeConfig(window.HH_OFFICIAL_CONFIG||{});
+
+const SITE_BASE=new URL("./",document.baseURI);
+const HOSTED_URL=new URL("./relay-sandbox.html",SITE_BASE);
+const OFFICIAL_URL=new URL(officialConfig.officialUrl);
+
+const state={
+  target:{windowRef:null,origin:null,url:null,mode:null},
+  auth:{
+    status:"NOT_STARTED",
+    session:"NOT_ATTEMPTED",
+    authenticated:false,
+    player:null,
+    capabilities:[],
+    nonce:null
+  },
+  stats:{
+    baseline:{...DEFAULTS},
+    measured:{...DEFAULTS},
+    loaded:false,
+    access:false
+  },
+  applied:emptyFlags(false),
+  pending:new Map(),
+  tx:0,rx:0,seq:0,
+  diagnostic:"READY",
+  lastError:null,
+  provider:null,
+  transport:null,
+  sync:{
+    mode:"OFF",
+    health:"IDLE",
+    subscribed:false,
+    lastUpdate:null,
+    lastHeartbeat:null,
+    revision:null,
+    pollTimer:null,
+    heartbeatTimer:null,
+    passiveRetryTimer:null,
+    sse:null,
+    inFlight:false
+  }
+};
+
+const $=id=>document.getElementById(id);
+const rows=$("statRows"),logEl=$("log");
+
+function esc(value){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+function log(message,kind=""){
+  const div=document.createElement("div");
+  div.className=`entry ${kind}`.trim();
+  div.innerHTML=`<span class="time">${new Date().toLocaleTimeString()}</span>${esc(message)}`;
+  logEl.prepend(div);
+}
+function fmt(key,value){
+  if(key==="attackSpeed"||key==="orbCritMultiplier")return Number(value).toFixed(2);
+  if(key==="criticalChance")return Number(value).toFixed(1);
+  return Number(value).toFixed(0);
+}
+function nowLabel(ts){return ts?new Date(ts).toLocaleTimeString():"—"}
+function requestId(prefix="req"){state.seq++;return `${prefix}-${Date.now()}-${state.seq}`}
+function canRead(){return state.auth.authenticated&&state.stats.access}
+function mutationAccess(){return state.auth.authenticated&&hasCapabilities(state.auth.capabilities,WRITE_CAPABILITIES)}
+function canModify(){return canRead()&&state.stats.loaded&&mutationAccess()}
+function setDiagnostic(code,message=null){state.diagnostic=code;state.lastError=message}
+
+function stopTimer(key){
+  if(state.sync[key]){clearInterval(state.sync[key]);clearTimeout(state.sync[key]);state.sync[key]=null}
+}
+function stopSync(){
+  stopTimer("pollTimer");
+  stopTimer("heartbeatTimer");
+  stopTimer("passiveRetryTimer");
+  if(state.sync.sse){try{state.sync.sse.close()}catch{}state.sync.sse=null}
+  state.sync.mode="OFF";
+  state.sync.health="IDLE";
+  state.sync.subscribed=false;
+  state.sync.inFlight=false;
+}
+function clearPending(){
+  for(const meta of state.pending.values())clearTimeout(meta.timer);
+  state.pending.clear();
+}
+function resetSensitiveState(){
+  clearPending();
+  state.auth.authenticated=false;
+  state.auth.player=null;
+  state.auth.capabilities=[];
+  state.stats={baseline:{...DEFAULTS},measured:{...DEFAULTS},loaded:false,access:false};
+  state.applied=emptyFlags(false);
+}
+
+function beginPending(id,kind,keys=[],expectedType=null){
+  const timer=setTimeout(()=>{
+    const meta=state.pending.get(id);
+    if(!meta)return;
+    state.pending.delete(id);
+
+    const map={
+      state:["STATE-TIMEOUT-022","Realtime state request timed out."],
+      stats:["STAT-TIMEOUT-004","Player-stat request timed out."],
+      subscribe:["SYNC-SUBSCRIBE-023","Realtime subscription was not acknowledged; polling fallback will be used."],
+      ping:["SYNC-HEARTBEAT-024","Realtime heartbeat timed out."],
+      apply:["MOD-ACK-005","Modifier request timed out before acknowledgement."],
+      restore:["RESTORE-ACK-006","Restore request timed out before acknowledgement."]
+    };
+    const [code,message]=map[kind]||["REQUEST-TIMEOUT","Request timed out."];
+    setDiagnostic(code,message);
+    if(kind==="subscribe"){startPostMessagePolling()}
+    if(kind==="ping")state.sync.health="STALE";
+    log(message,kind==="subscribe"?"warn":"alert");
+    render();
+  },officialConfig.requestTimeoutMs);
+
+  state.pending.set(id,{kind,keys,expectedType,timer});
+}
+
+function finishPending(id,actualType){
+  const meta=state.pending.get(id);
+  if(!meta)return null;
+  if(meta.expectedType&&meta.expectedType!==actualType)return null;
+  clearTimeout(meta.timer);state.pending.delete(id);return meta;
+}
+
+function buildRows(){
+  rows.innerHTML="";
+  for(const def of STAT_DEFS){
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td><strong>${def.label}</strong></td>
+      <td><input type="number" data-base="${def.key}" value="${state.stats.baseline[def.key]}" step="${def.step}" disabled></td>
+      <td><label class="toggle"><input type="checkbox" data-toggle="${def.key}" disabled><span class="slider"></span></label></td>
+      <td><span class="state off" data-state="${def.key}"><span class="dot"></span><span class="state-label">OFF</span></span></td>
+      <td><span class="effective" data-effective="${def.key}">${fmt(def.key,state.stats.measured[def.key])}</span></td>`;
+    rows.appendChild(tr);
+  }
+}
+
+function authPresentation(){
+  if(state.auth.authenticated)return {text:"Authenticated player detected",dot:"good"};
+  if(state.auth.status==="AUTH_STATE_UNOBSERVABLE")return {text:"Integration unavailable",dot:"bad"};
+  if(state.auth.status==="NOT_AUTHENTICATED")return {text:"Not authenticated",dot:"warn"};
+  if(state.auth.status==="WAITING_FOR_LOGIN")return {text:"Waiting for login / provider",dot:"warn"};
+  if(state.target.windowRef)return {text:"Session unknown",dot:"warn"};
+  return {text:"No target",dot:""};
+}
+
+function render(){
+  const allow=canModify();
+
+  for(const def of STAT_DEFS){
+    const toggle=document.querySelector(`[data-toggle="${def.key}"]`);
+    const st=document.querySelector(`[data-state="${def.key}"]`);
+    const eff=document.querySelector(`[data-effective="${def.key}"]`);
+    const base=document.querySelector(`[data-base="${def.key}"]`);
+    const pending=[...state.pending.values()].some(p=>(p.kind==="apply"||p.kind==="restore")&&p.keys.includes(def.key));
+
+    toggle.disabled=!allow||pending;
+    toggle.checked=Boolean(state.applied[def.key]);
+    base.value=state.stats.baseline[def.key];
+
+    if(pending){
+      st.className="state pending";st.querySelector(".dot").className="dot warn";st.querySelector(".state-label").textContent="PENDING";
+    }else if(state.applied[def.key]){
+      st.className="state on";st.querySelector(".dot").className="dot good";st.querySelector(".state-label").textContent="ON";
+    }else{
+      st.className="state off";st.querySelector(".dot").className="dot";st.querySelector(".state-label").textContent="OFF";
+    }
+
+    eff.textContent=fmt(def.key,state.stats.measured[def.key]);
+    eff.className=`effective ${state.applied[def.key]?"modified":""}`;
+  }
+
+  const d=detect(state.stats.baseline,state.stats.measured,state.applied);
+  $("enabledCount").textContent=`${d.enabledCount} / ${STAT_DEFS.length}`;
+  $("pendingCount").textContent=state.pending.size;
+  $("modifiedCount").textContent=d.mismatchCount;
+  $("signatureMatches").textContent=d.signatureMatches;
+  $("anomalyState").textContent=d.anomaly?"ANOMALY DETECTED":"NORMAL";
+  $("anomalyState").className=d.anomaly?"bad":"good";
+  $("suggestedAction").textContent=d.suggestedAction;
+
+  $("targetValue").textContent=state.target.url||"—";
+  $("providerState").textContent=state.provider||"—";
+  $("authState").textContent=state.auth.status.replaceAll("_"," ");
+  $("sessionState").textContent=state.auth.session.replaceAll("_"," ");
+  $("diagnosticCode").textContent=state.diagnostic;
+  $("diagnosticCode").className=state.diagnostic==="OK"?"good":state.diagnostic==="READY"?"":"warn";
+  $("lastError").textContent=state.lastError||"—";
+  $("playerState").textContent=state.auth.player?(state.auth.player.username||state.auth.player.id):"—";
+  $("statAccess").textContent=state.stats.access?"AUTHORIZED":"UNAVAILABLE";
+  $("statAccess").className=state.stats.access?"good":"bad";
+  $("mutationAccess").textContent=mutationAccess()?"AUTHORIZED":"UNAVAILABLE";
+  $("mutationAccess").className=mutationAccess()?"good":"bad";
+  $("snapshotState").textContent=state.stats.loaded?"LOADED":"NOT LOADED";
+  $("snapshotState").className=state.stats.loaded?"good":"";
+  $("syncMode").textContent=state.sync.mode;
+  $("syncHealth").textContent=state.sync.health;
+  $("syncHealth").className=state.sync.health==="LIVE"?"good":state.sync.health==="STALE"?"bad":state.sync.health==="RETRYING"?"warn":"";
+  $("lastSync").textContent=nowLabel(state.sync.lastUpdate);
+  $("revisionState").textContent=state.sync.revision??"—";
+  $("capsState").textContent=state.auth.capabilities.length?state.auth.capabilities.join(", "):"—";
+  $("messageCount").textContent=`${state.tx} / ${state.rx}`;
+
+  const auth=authPresentation();
+  $("authBadge").textContent=auth.text;
+  $("authDot").className=`dot ${auth.dot}`;
+
+  const syncText=state.sync.mode==="OFF"?"Sync idle":`${state.sync.mode} · ${state.sync.health}`;
+  $("syncBadge").textContent=syncText;
+  $("syncDot").className=`dot ${state.sync.health==="LIVE"?"good":state.sync.health==="STALE"?"bad":state.sync.health==="RETRYING"?"warn":""}`;
+
+  $("checkSession").disabled=!state.target.windowRef;
+  $("enableAll").disabled=!allow;
+  $("disableAll").disabled=!allow;
+  $("randomScenario").disabled=!allow;
+  $("restoreAll").disabled=!allow;
+}
+
+function send(type,payload={},id=requestId()){
+  if(!state.target.windowRef||state.target.windowRef.closed)throw new Error("Target window is unavailable");
+  state.target.windowRef.postMessage(envelope(type,id,payload),state.target.origin);
+  state.tx++;render();return id;
+}
+
+function resetSession(closeWindow=false){
+  stopSync();clearPending();
+
+  if(closeWindow&&state.target.windowRef&&!state.target.windowRef.closed){
+    try{state.target.windowRef.close()}catch{}
+  }
+
+  state.target={windowRef:null,origin:null,url:null,mode:null};
+  state.auth={status:"NOT_STARTED",session:"NOT_ATTEMPTED",authenticated:false,player:null,capabilities:[],nonce:null};
+  state.stats={baseline:{...DEFAULTS},measured:{...DEFAULTS},loaded:false,access:false};
+  state.applied=emptyFlags(false);
+  state.tx=0;state.rx=0;state.diagnostic="READY";state.lastError=null;state.provider=null;state.transport=null;
+  state.sync.lastUpdate=null;state.sync.lastHeartbeat=null;state.sync.revision=null;
+  render();
+}
+
+function applySnapshot(snapshot,source="realtime provider"){
+  if(!snapshot||typeof snapshot!=="object")return false;
+
+  if(snapshot.authenticated!==true){
+    resetSensitiveState();
+    state.auth.status="NOT_AUTHENTICATED";
+    state.auth.session="SESSION_REPORTED";
+    state.stats.access=false;
+    setDiagnostic("AUTH-STATE-002","Provider reports that the player is not authenticated.");
+    state.sync.lastUpdate=Date.now();
+    state.sync.health="LIVE";
+    $("statusMessage").innerHTML="<strong>Status:</strong> Realtime provider reports that authentication is not complete.";
+    render();
+    return true;
+  }
+
+  if(!validatePlayer(snapshot.player)){
+    setDiagnostic("AUTH-IDENTITY-010","Realtime provider returned an authenticated state without a usable player identity.");
+    render();return false;
+  }
+
+  state.auth.authenticated=true;
+  state.auth.status="AUTHENTICATED";
+  state.auth.session="SESSION_DETECTED";
+  state.auth.player=sanitizePlayer(snapshot.player);
+  state.auth.capabilities=Array.isArray(snapshot.capabilities)?snapshot.capabilities:[];
+  state.stats.access=hasCapabilities(state.auth.capabilities,READ_CAPABILITIES);
+  state.provider=source;
+
+  const baseline=normalizeStats(snapshot.baseline||snapshot.stats);
+  const measured=normalizeStats(snapshot.stats||snapshot.baseline);
+
+  if(state.stats.access&&baseline&&measured){
+    state.stats.baseline={...baseline};
+    state.stats.measured={...measured};
+    state.stats.loaded=true;
+    state.applied=snapshot.applied?normalizeFlags(snapshot.applied):state.applied;
+    setDiagnostic("OK",null);
+  }else if(state.stats.access){
+    setDiagnostic("STAT-SCHEMA-003","Realtime provider did not supply a valid required stat snapshot.");
+  }else{
+    setDiagnostic("STAT-ACCESS-002","Authenticated session does not authorize read-player-stats.");
+  }
+
+  if(snapshot.revision!==undefined&&snapshot.revision!==null&&Number.isFinite(Number(snapshot.revision))){
+    const revision=Number(snapshot.revision);
+    if(state.sync.revision!==null&&revision<state.sync.revision)return false;
+    state.sync.revision=revision;
+  }
+
+  state.sync.lastUpdate=Date.now();
+  state.sync.health="LIVE";
+  $("statusMessage").innerHTML=`<strong>Status:</strong> Realtime state synchronized through ${esc(source)}.`;
+  render();return true;
+}
+
+async function probeHttp(){
+  if(state.target.mode!=="official")return false;
+
+  const stateResult=await HHOfficialAdapter.readState(officialConfig);
+  if(stateResult.supported){
+    state.provider="Official state API";
+    state.transport="http";
+    if(stateResult.ok){
+      applySnapshot(stateResult.state,"official state API");
+      return true;
+    }
+    setDiagnostic(`STATE-${stateResult.code||"HTTP_ERROR"}`,stateResult.reason);
+    return false;
+  }
+
+  const session=await HHOfficialAdapter.readSession(officialConfig);
+  if(!session.supported)return false;
+
+  state.provider="Official credentialed CORS API";
+  state.transport="http";
+
+  if(!session.ok){
+    setDiagnostic(`AUTH-${session.code||"HTTP_ERROR"}`,session.reason);
+    return false;
+  }
+
+  if(session.authenticated!==true){
+    applySnapshot({authenticated:false},"official session API");
+    return true;
+  }
+
+  const stats=session.stats&&validateStats(session.stats)
+    ? session.stats
+    : (await HHOfficialAdapter.readStats(officialConfig));
+
+  const statsPayload=stats&&stats.supported===true
+    ? (stats.ok?stats.stats:null)
+    : stats;
+
+  applySnapshot({
+    authenticated:true,
+    player:session.player,
+    capabilities:session.capabilities,
+    baseline:statsPayload,
+    stats:statsPayload,
+    applied:emptyFlags(false)
+  },"official credentialed CORS API");
+
+  return true;
+}
+
+function sendAuthProbe(){
+  if(!state.target.windowRef||state.target.windowRef.closed)return;
+  state.auth.session="PROBING";
+  try{send(MSG.AUTH_PROBE,{nonce:state.auth.nonce,request:["authenticated-player","capabilities"]},requestId("auth"))}
+  catch(error){setDiagnostic("AUTH-SEND-012",error.message)}
+}
+
+function requestSubscription(){
+  if(state.transport==="http")return;
+  if(!state.target.windowRef||state.target.windowRef.closed)return;
+
+  const id=requestId("subscribe");
+  beginPending(id,"subscribe",[],MSG.SUBSCRIBED);
+  try{send(MSG.SUBSCRIBE,{events:["session","stats","modifiers","capabilities"]},id)}
+  catch(error){
+    finishPending(id,MSG.SUBSCRIBED);
+    startPostMessagePolling();
+  }
+}
+
+function requestState(){
+  if(!state.target.windowRef||state.target.windowRef.closed||state.sync.inFlight)return;
+  state.sync.inFlight=true;
+  const id=requestId("state");
+  beginPending(id,"state",[],MSG.STATE);
+  try{send(MSG.GET_STATE,{},id)}
+  catch(error){
+    finishPending(id,MSG.STATE);
+    state.sync.inFlight=false;
+    setDiagnostic("STATE-SEND-025",error.message);
+  }
+}
+
+function startPostMessagePolling(){
+  stopTimer("pollTimer");
+  state.sync.mode="POLL";
+  state.sync.health="RETRYING";
+  state.sync.pollTimer=setInterval(requestState,officialConfig.sync.activePollMs);
+  requestState();
+  render();
+}
+
+function startHeartbeat(){
+  stopTimer("heartbeatTimer");
+  state.sync.heartbeatTimer=setInterval(()=>{
+    if(!state.target.windowRef||state.target.windowRef.closed)return;
+    const id=requestId("ping");
+    beginPending(id,"ping",[],MSG.PONG);
+    try{send(MSG.PING,{timestamp:Date.now()},id)}
+    catch(error){finishPending(id,MSG.PONG)}
+  },officialConfig.sync.heartbeatMs);
+}
+
+function startPassiveRetry(){
+  stopTimer("passiveRetryTimer");
+  state.sync.mode="AUTO-RETRY";
+  state.sync.health="RETRYING";
+  state.sync.passiveRetryTimer=setInterval(async()=>{
+    if(!state.target.windowRef||state.target.windowRef.closed)return;
+
+    const handled=await probeHttp();
+    if(handled&&state.auth.authenticated){
+      stopTimer("passiveRetryTimer");
+      await startRealtimeSync();
+      return;
+    }
+
+    sendAuthProbe();
+    requestSubscription();
+  },officialConfig.sync.passiveRetryMs);
+
+  render();
+}
+
+function startSse(url){
+  if(!url||typeof EventSource==="undefined")return false;
+  try{
+    const es=new EventSource(url,{withCredentials:true});
+    state.sync.sse=es;
+    state.sync.mode="SSE";
+    state.sync.health="RETRYING";
+
+    es.onopen=()=>{
+      state.sync.health="LIVE";
+      state.sync.lastHeartbeat=Date.now();
+      render();
+    };
+
+    es.onmessage=event=>{
+      try{
+        const payload=JSON.parse(event.data);
+        applySnapshot(payload,"official realtime events API");
+      }catch{
+        setDiagnostic("SYNC-EVENT-SCHEMA-026","Realtime event could not be parsed.");
+      }
+    };
+
+    es.onerror=()=>{
+      state.sync.health="STALE";
+      render();
+    };
+    return true;
+  }catch{return false}
+}
+
+function startHttpPolling(){
+  stopTimer("pollTimer");
+  state.sync.mode="POLL";
+  state.sync.health="LIVE";
+  state.sync.pollTimer=setInterval(async()=>{
+    if(state.sync.inFlight)return;
+    state.sync.inFlight=true;
+    try{
+      await probeHttp();
+      state.sync.lastUpdate=Date.now();
+      state.sync.health="LIVE";
+    }finally{
+      state.sync.inFlight=false;
+      render();
+    }
+  },officialConfig.sync.activePollMs);
+}
+
+async function startRealtimeSync(){
+  stopTimer("passiveRetryTimer");
+
+  if(state.transport==="http"){
+    const events=HHOfficialAdapter.eventsUrl(officialConfig);
+    if(events&&startSse(events)){
+      startHttpPolling(); // low-cost reconciliation remains active.
+      state.sync.mode="SSE+POLL";
+      render();
+      return;
+    }
+    startHttpPolling();
+    return;
+  }
+
+  requestSubscription();
+  startHeartbeat();
+}
+
+async function checkNow(){
+  if(!state.target.windowRef)return;
+
+  const handled=await probeHttp();
+  if(!handled){
+    sendAuthProbe();
+    requestSubscription();
+  }
+}
+
+function beginTarget(url,mode){
+  resetSession(false);
+
+  const target=new URL(url);
+  const w=window.open(target.href,mode==="official"?"hhOfficialAuth":"hhHostedRealtime");
+  if(!w){
+    setDiagnostic("POPUP-009","Popup blocked; allow popups and retry.");
+    log(state.lastError,"alert");render();return;
+  }
+
+  state.target={windowRef:w,origin:target.origin,url:target.href,mode};
+  state.auth.status="WAITING_FOR_LOGIN";
+  state.auth.session="WAITING_FOR_SUPPORTED_INTERFACE";
+  state.auth.nonce=requestId("nonce");
+  state.provider=mode==="official"
+    ?"Official site — probing authorized integration"
+    :"Hosted relay + game bridge realtime lab";
+
+  $("statusMessage").innerHTML="<strong>Status:</strong> Target opened. V7 is automatically watching for an authorized authentication/state provider.";
+  render();
+
+  // Immediate checks plus continuous retry. No user action is required after login.
+  setTimeout(checkNow,500);
+  setTimeout(checkNow,1800);
+  startPassiveRetry();
+}
+
+async function requestModifiers(changes){
+  if(!canModify()){
+    setDiagnostic("MOD-CAPABILITY-013","Authenticated test-mutation capability is unavailable.");
+    log(state.lastError,"alert");render();return;
+  }
+
+  const desired={...state.applied};
+  for(const def of STAT_DEFS){
+    if(def.key in changes)desired[def.key]=Boolean(changes[def.key]);
+  }
+  const keys=Object.keys(changes);
+
+  if(state.transport==="http"){
+    const result=await HHOfficialAdapter.setModifiers(officialConfig,desired);
+    if(!result.supported||!result.ok){
+      setDiagnostic("MOD-HTTP-020",result.reason||"Official modifier endpoint unavailable.");
+      log(state.lastError,"alert");render();return;
+    }
+    const snapshot={
+      authenticated:true,
+      player:state.auth.player,
+      capabilities:state.auth.capabilities,
+      baseline:result.baseline||state.stats.baseline,
+      stats:result.stats,
+      applied:result.applied,
+      revision:result.revision
+    };
+    applySnapshot(snapshot,"official modifier API");
+    return;
+  }
+
+  const id=requestId("apply");
+  beginPending(id,"apply",keys,MSG.APPLIED);
+  try{send(MSG.SET,{modifiers:desired},id)}
+  catch(error){
+    finishPending(id,MSG.APPLIED);
+    setDiagnostic("MOD-SEND-014",error.message);
+    log(error.message,"alert");
+  }
+  render();
+}
+
+async function restoreAll(){
+  if(!canModify())return;
+
+  if(state.transport==="http"){
+    const result=await HHOfficialAdapter.restore(officialConfig);
+    if(!result.supported||!result.ok){
+      setDiagnostic("RESTORE-HTTP-021",result.reason||"Official restoration endpoint unavailable.");
+      log(state.lastError,"alert");render();return;
+    }
+    applySnapshot({
+      authenticated:true,
+      player:state.auth.player,
+      capabilities:state.auth.capabilities,
+      baseline:result.baseline||result.stats,
+      stats:result.stats,
+      applied:emptyFlags(false),
+      revision:result.revision
+    },"official restoration API");
+    return;
+  }
+
+  const id=requestId("restore");
+  beginPending(id,"restore",STAT_DEFS.map(s=>s.key),MSG.RESTORED);
+  try{send(MSG.RESTORE,{},id)}
+  catch(error){
+    finishPending(id,MSG.RESTORED);
+    setDiagnostic("RESTORE-SEND-015",error.message);
+    log(error.message,"alert");
+  }
+  render();
+}
+
+window.addEventListener("message",async event=>{
+  if(!state.target.windowRef||event.source!==state.target.windowRef||event.origin!==state.target.origin)return;
+  const m=event.data;
+  if(!validMessage(m))return;
+  state.rx++;
+
+  if(m.type===MSG.AUTH_STATE){
+    if(m.payload?.nonce!==state.auth.nonce)return;
+
+    if(m.payload?.authenticated!==true){
+      state.auth.status="NOT_AUTHENTICATED";
+      state.auth.session="SESSION_REPORTED";
+      state.auth.authenticated=false;
+      state.auth.player=null;
+      state.auth.capabilities=Array.isArray(m.payload?.capabilities)?m.payload.capabilities:[];
+      state.stats.access=false;
+      setDiagnostic("AUTH-STATE-002","Authorized provider reports that authentication has not been completed.");
+      render();return;
+    }
+
+    applySnapshot({
+      authenticated:true,
+      player:m.payload.player,
+      capabilities:m.payload.capabilities
+    },"authorized postMessage bridge");
+
+    requestState();
+    return;
+  }
+
+  if(m.type===MSG.SUBSCRIBED){
+    const pending=finishPending(m.requestId,MSG.SUBSCRIBED);
+    if(!pending)return;
+
+    state.sync.subscribed=m.payload?.push===true;
+    if(state.sync.subscribed){
+      stopTimer("pollTimer");
+      state.sync.mode="PUSH";
+      state.sync.health="LIVE";
+      state.transport="postMessage";
+      setDiagnostic(state.diagnostic==="AUTH-BRIDGE-001"?"READY":state.diagnostic,state.lastError);
+      log("Realtime push subscription established.","ok");
+    }else{
+      startPostMessagePolling();
+      log("Provider has no push subscription; automatic polling fallback enabled.","warn");
+    }
+    render();return;
+  }
+
+  if(m.type===MSG.STATE_EVENT){
+    state.transport="postMessage";
+    applySnapshot(m.payload,"authorized realtime bridge");
+    return;
+  }
+
+  if(m.type===MSG.STATE){
+    if(!finishPending(m.requestId,MSG.STATE))return;
+    state.sync.inFlight=false;
+    state.transport="postMessage";
+    applySnapshot(m.payload,"authorized state bridge");
+    return;
+  }
+
+  if(m.type===MSG.PONG){
+    if(!finishPending(m.requestId,MSG.PONG))return;
+    state.sync.lastHeartbeat=Date.now();
+    state.sync.health="LIVE";
+    render();return;
+  }
+
+  if(m.type===MSG.APPLIED){
+    const p=finishPending(m.requestId,MSG.APPLIED);
+    if(!p)return;
+
+    const snapshot={
+      authenticated:true,
+      player:state.auth.player,
+      capabilities:state.auth.capabilities,
+      baseline:m.payload?.baseline||state.stats.baseline,
+      stats:m.payload?.stats,
+      applied:m.payload?.applied,
+      revision:m.payload?.revision
+    };
+    applySnapshot(snapshot,"authorized modifier acknowledgement");
+    return;
+  }
+
+  if(m.type===MSG.RESTORED){
+    if(!finishPending(m.requestId,MSG.RESTORED))return;
+    applySnapshot({
+      authenticated:true,
+      player:state.auth.player,
+      capabilities:state.auth.capabilities,
+      baseline:m.payload?.baseline||m.payload?.stats||state.stats.baseline,
+      stats:m.payload?.stats,
+      applied:emptyFlags(false),
+      revision:m.payload?.revision
+    },"authorized restoration acknowledgement");
+    return;
+  }
+
+  if(m.type===MSG.ERROR){
+    if(m.requestId){
+      const meta=state.pending.get(m.requestId);
+      if(meta){clearTimeout(meta.timer);state.pending.delete(m.requestId)}
+    }
+    setDiagnostic(m.payload?.code||"PROVIDER-ERROR-019",m.payload?.message||"Provider returned an unspecified error.");
+    log(state.lastError,"alert");
+    render();
+  }
+});
+
+function evaluateUnobservableState(){
+  if(state.auth.authenticated)return;
+  state.auth.status="AUTH_STATE_UNOBSERVABLE";
+  state.auth.session="INTERFACE_UNAVAILABLE";
+  setDiagnostic("AUTH-BRIDGE-001","No supported authenticated-session bridge or CORS session endpoint is observable from this origin.");
+  state.sync.mode="AUTO-RETRY";
+  state.sync.health="RETRYING";
+  $("statusMessage").innerHTML="<strong>Status:</strong> Authentication inside the official game cannot currently be observed by this origin. Automatic integration retry remains active.";
+  render();
+}
+
+// If still unanswered after 8 seconds, correct the display while continuing retries.
+setInterval(()=>{
+  if(
+    state.target.windowRef &&
+    !state.auth.authenticated &&
+    state.auth.status==="WAITING_FOR_LOGIN" &&
+    state.rx===0
+  ) evaluateUnobservableState();
+},8000);
+
+rows.addEventListener("change",event=>{
+  if(!event.target.matches("[data-toggle]"))return;
+  const key=event.target.dataset.toggle;
+  const requested=event.target.checked;
+  event.target.checked=Boolean(state.applied[key]);
+  requestModifiers({[key]:requested});
+});
+
+$("openOfficial").addEventListener("click",()=>beginTarget(OFFICIAL_URL.href,"official"));
+$("openHosted").addEventListener("click",()=>beginTarget(HOSTED_URL.href,"hosted"));
+$("checkSession").addEventListener("click",checkNow);
+$("disconnect").addEventListener("click",()=>{
+  if(state.target.windowRef&&!state.target.windowRef.closed){
+    try{send(MSG.BYE,{})}catch{}
+  }
+  resetSession(false);
+  $("statusMessage").innerHTML="<strong>Status:</strong> Disconnected.";
+  log("Disconnected.","ok");
+});
+$("enableAll").addEventListener("click",()=>requestModifiers(Object.fromEntries(STAT_DEFS.map(s=>[s.key,true]))));
+$("disableAll").addEventListener("click",()=>requestModifiers(Object.fromEntries(STAT_DEFS.map(s=>[s.key,false]))));
+$("randomScenario").addEventListener("click",()=>requestModifiers(Object.fromEntries(STAT_DEFS.map(s=>[s.key,Math.random()>=0.5]))));
+$("restoreAll").addEventListener("click",restoreAll);
+$("clearLog").addEventListener("click",()=>logEl.innerHTML="");
+
+async function deploymentCheck(){
+  try{
+    const assets=[
+      "core.js","protocol.js","official-auth-adapter.js","config.js",
+      "official-site-relay.js","game-test-bridge.js","relay-sandbox.html","game-sandbox.html"
+    ];
+    const responses=await Promise.all(assets.map(name=>fetch(new URL(`./${name}`,SITE_BASE),{cache:"no-store"})));
+    const ok=responses.every(r=>r.ok);
+    $("deployStatus").textContent=ok?"Deployment ready":"Deployment issue";
+    $("deployDot").className=`dot ${ok?"good":"bad"}`;
+    log(ok?"GitHub Pages asset self-check passed.":"GitHub Pages asset self-check failed.",ok?"ok":"alert");
+  }catch(error){
+    $("deployStatus").textContent="Deployment issue";
+    $("deployDot").className="dot bad";
+    log(`Deployment self-check failed: ${error.message}`,"alert");
+  }
+}
+
+buildRows();
+render();
+deploymentCheck();
+log("Authenticated stat harness v7 initialized.","ok");
+</script>
+</body>
+</html>

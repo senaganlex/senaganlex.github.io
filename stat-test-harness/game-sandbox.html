@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Authorized Game Adapter Lab v7</title>
+<style>
+body{margin:0;background:#0c1117;color:#eef3f8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{padding:18px}
+button{padding:10px 14px;border:1px solid #45607c;border-radius:9px;background:#28538d;color:white;font-weight:800;cursor:pointer;margin-right:8px;margin-bottom:8px}
+.pill{display:inline-block;padding:5px 9px;border:1px solid #344354;border-radius:999px}
+pre{white-space:pre-wrap;word-break:break-word;background:#080c11;border:1px solid #27313d;border-radius:9px;padding:12px;min-height:70px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>Authorized Game/Test Build Adapter v7</h2>
+  <p><span class="pill" id="authLabel">NOT AUTHENTICATED</span></p>
+  <button id="authenticate">Authenticate test player</button>
+  <button id="signOut">Sign out test player</button>
+  <button id="externalUpdate">Simulate server stat update</button>
+
+  <h3>Player</h3><pre id="playerOut">—</pre>
+  <h3>Baseline</h3><pre id="baselineOut">Unavailable before authentication.</pre>
+  <h3>Measured stats</h3><pre id="statsOut">Unavailable before authentication.</pre>
+  <h3>Applied modifiers</h3><pre id="flagsOut">Unavailable before authentication.</pre>
+  <h3>Revision</h3><pre id="revisionOut">0</pre>
+</div>
+
+<script src="./core.js"></script>
+<script>
+"use strict";
+
+let authenticated=false;
+let revision=0;
+const player={id:"test-player-001",username:"authorized_test_player"};
+
+let baseline={...HHCore.DEFAULTS};
+let applied=HHCore.emptyFlags(false);
+let measured={...baseline};
+
+const listeners=new Set();
+
+function recalc(){
+  measured=HHCore.calculateEffective(baseline,applied);
+}
+
+function emit(reason){
+  revision++;
+  for(const listener of listeners){
+    try{listener(reason)}catch{}
+  }
+  render();
+}
+
+window.HelmetHeroesTestHost={
+  allowedParentOrigins:[location.origin],
+
+  async getAuthenticatedPlayer(){
+    return {authenticated,player:authenticated?player:null};
+  },
+
+  async getCapabilities(){
+    return authenticated
+      ? ["read-player-stats","apply-test-modifiers","restore-player-stats","realtime-state"]
+      : ["realtime-state"];
+  },
+
+  async getPlayerStats(){
+    if(!authenticated)throw new Error("Authentication required");
+    return {...baseline};
+  },
+
+  async getRealtimeSnapshot(){
+    return {
+      authenticated,
+      player:authenticated?player:null,
+      capabilities:await this.getCapabilities(),
+      baseline:authenticated?{...baseline}:null,
+      stats:authenticated?{...measured}:null,
+      applied:authenticated?{...applied}:null,
+      revision
+    };
+  },
+
+  async subscribe(listener){
+    listeners.add(listener);
+    return ()=>listeners.delete(listener);
+  },
+
+  async setTestModifiers(flags){
+    if(!authenticated)throw new Error("Authentication required");
+    applied=HHCore.normalizeFlags(flags);
+    recalc();
+    emit("modifier-change");
+    return {
+      applied:{...applied},
+      stats:{...measured},
+      baseline:{...baseline},
+      revision
+    };
+  },
+
+  async restorePlayerStats(){
+    if(!authenticated)throw new Error("Authentication required");
+    applied=HHCore.emptyFlags(false);
+    recalc();
+    emit("restore");
+    return {
+      stats:{...measured},
+      baseline:{...baseline},
+      revision
+    };
+  }
+};
+
+function render(){
+  document.getElementById("authLabel").textContent=authenticated?"AUTHENTICATED":"NOT AUTHENTICATED";
+  document.getElementById("playerOut").textContent=authenticated?JSON.stringify(player,null,2):"—";
+  document.getElementById("baselineOut").textContent=authenticated?JSON.stringify(baseline,null,2):"Unavailable before authentication.";
+  document.getElementById("statsOut").textContent=authenticated?JSON.stringify(measured,null,2):"Unavailable before authentication.";
+  document.getElementById("flagsOut").textContent=authenticated?JSON.stringify(applied,null,2):"Unavailable before authentication.";
+  document.getElementById("revisionOut").textContent=String(revision);
+}
+
+document.getElementById("authenticate").addEventListener("click",()=>{
+  authenticated=true;
+  emit("authentication-changed");
+});
+
+document.getElementById("signOut").addEventListener("click",()=>{
+  authenticated=false;
+  applied=HHCore.emptyFlags(false);
+  recalc();
+  emit("authentication-changed");
+});
+
+document.getElementById("externalUpdate").addEventListener("click",()=>{
+  if(!authenticated)return;
+  baseline={...baseline,defense:Number(baseline.defense)+5};
+  recalc();
+  emit("server-stat-update");
+});
+
+recalc();
+render();
+</script>
+<script src="./game-test-bridge.js"></script>
+</body>
+</html>

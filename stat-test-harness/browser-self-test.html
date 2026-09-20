@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>V7 Browser Self Test</title></head>
+<body><pre id="result">RUNNING</pre>
+<script src="./core.js"></script>
+<script src="./protocol.js"></script>
+<script src="./bridge-engine.js"></script>
+<script>
+(async()=>{
+  const out=[];
+  try{
+    const engine=HHBridgeEngine.createBridgeEngine(HHCore,{...HHCore.DEFAULTS});
+    for(const def of HHCore.STAT_DEFS){
+      const flags=HHCore.emptyFlags(false);flags[def.key]=true;
+      const r=engine.setModifiers(flags);
+      if(r.stats[def.key]!==HHCore.DEFAULTS[def.key]*2)throw new Error(def.key+" did not double");
+      for(const other of HHCore.STAT_DEFS){
+        if(other.key!==def.key && r.stats[other.key]!==HHCore.DEFAULTS[other.key])throw new Error(def.key+" altered "+other.key);
+      }
+      flags[def.key]=false;
+      const restored=engine.setModifiers(flags);
+      if(restored.stats[def.key]!==HHCore.DEFAULTS[def.key])throw new Error(def.key+" did not restore");
+    }
+    const all=engine.setModifiers(HHCore.emptyFlags(true));
+    const d=HHCore.detect(HHCore.DEFAULTS,all.stats,all.applied);
+    if(d.signatureMatches!==9)throw new Error("Expected 9 signatures");
+    const final=engine.restore();
+    if(JSON.stringify(final.stats)!==JSON.stringify(HHCore.DEFAULTS))throw new Error("restore-all mismatch");
+    out.push("PASS: browser stat engine");
+    document.getElementById("result").textContent=out.join("\n");
+    document.body.dataset.result="PASS";
+  }catch(e){
+    document.getElementById("result").textContent="FAIL: "+e.message;
+    document.body.dataset.result="FAIL";
+  }
+})();
+</script></body></html>
