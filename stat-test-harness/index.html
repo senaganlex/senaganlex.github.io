@@ -3,82 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Helmet Heroes Reborn — Stat Anomaly Test Harness v2</title>
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Helmet Heroes Reborn — Stat Anomaly Test Harness v3</title>
 <style>
-:root{color-scheme:dark;--bg:#0d1015;--panel:#171b22;--panel2:#1d232d;--border:#2b3440;--text:#eef3f8;--muted:#98a6b8;--good:#6bd79a;--warn:#f3c866;--bad:#ff7b7b;--accent:#78a7ff}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#090b0f,var(--bg));color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.shell{width:min(1220px,calc(100% - 32px));margin:28px auto}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap}
-h1{margin:0 0 6px;font-size:28px}.sub{color:var(--muted);max-width:820px;line-height:1.5}.badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:#12161c;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800}
-.dot{width:9px;height:9px;border-radius:50%;background:#596473}.dot.good{background:var(--good);box-shadow:0 0 10px rgba(107,215,154,.6)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
-.notice{margin:20px 0;background:#141d2a;border:1px solid #2b4666;border-radius:12px;padding:13px 15px;color:#d2e5ff;line-height:1.45}
-.card{background:rgba(23,27,34,.97);border:1px solid var(--border);border-radius:14px;overflow:hidden}.card>header{padding:15px 17px;border-bottom:1px solid var(--border);background:#14181e}.card>header h2{margin:0;font-size:16px}
-.connection{margin-bottom:18px}.connection-body{padding:16px;display:grid;grid-template-columns:1.3fr 1fr;gap:16px}@media(max-width:900px){.connection-body{grid-template-columns:1fr}}
-.conn-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:9px;padding:10px 13px;font-weight:800;cursor:pointer}button:hover{border-color:#50647e}button.primary{background:#244b83;border-color:#4779b9}button.danger{background:#4a2227;border-color:#814048}
-.kv{display:grid;gap:8px}.kv-row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid #252d38;padding:8px 0}.kv-row:last-child{border-bottom:0}.kv-row span:first-child{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
-.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 18px}.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:11px 13px;border-bottom:1px solid #232b35;text-align:left}th{background:#171b21;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em}
-input[type=number]{width:110px;padding:8px;border:1px solid var(--border);border-radius:8px;background:#0f1318;color:var(--text)}.toggle{position:relative;display:inline-block;width:49px;height:26px}.toggle input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#515d6d;border-radius:999px;cursor:pointer;transition:.15s}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:white;transition:.15s}input:checked+.slider{background:#417ee0}input:checked+.slider:before{transform:translateX(23px)}
-.state{display:inline-flex;align-items:center;gap:7px;font-weight:800}.effective{font-weight:800;font-variant-numeric:tabular-nums}.effective.modified{color:var(--warn)}
-.side{display:grid;gap:18px;align-content:start}.metric-list{padding:12px 17px 16px}.metric{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #252d38}.metric:last-child{border-bottom:0}.metric span:first-child{color:var(--muted)}.status-ok{color:var(--good)}.status-alert{color:var(--bad)}
-.log{height:340px;overflow:auto;padding:11px 13px;background:#0f1318;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.entry{padding:7px 0;border-bottom:1px dashed #242c36;color:#c7d0dc}.entry .time{color:#718096;margin-right:8px}.entry.ok{color:#b9f4cc}.entry.alert{color:#ffc0c0}
-.small{font-size:12px;color:var(--muted);line-height:1.5}.cap-list{margin:8px 0 0;padding-left:18px}.cap-list li{margin:4px 0}
+:root{color-scheme:dark;--bg:#0c1015;--panel:#171c23;--panel2:#1d242e;--border:#2c3643;--text:#eff3f8;--muted:#9eabbc;--good:#68d99a;--warn:#f1c76a;--bad:#ff7c82;--blue:#4b8ce8}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#080b0f,var(--bg));color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{width:min(1280px,calc(100% - 32px));margin:26px auto}h1{margin:0 0 7px;font-size:28px}.sub{color:var(--muted);line-height:1.5;max-width:900px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap}
+.badges{display:flex;gap:8px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#12171d;font-size:12px;font-weight:800}.dot{width:9px;height:9px;border-radius:50%;background:#5a6676}.dot.good{background:var(--good);box-shadow:0 0 10px rgba(104,217,154,.6)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
+.notice{margin:20px 0;padding:14px 16px;border:1px solid #304a6b;border-radius:12px;background:#142030;color:#d8e8ff;line-height:1.48}
+.card{background:rgba(23,28,35,.98);border:1px solid var(--border);border-radius:14px;overflow:hidden}.card>header{padding:15px 17px;border-bottom:1px solid var(--border);background:#141920}.card>header h2{margin:0;font-size:16px}
+.connection{margin-bottom:18px}.connection-body{padding:16px;display:grid;grid-template-columns:1.2fr 1fr;gap:20px}@media(max-width:920px){.connection-body{grid-template-columns:1fr}}
+.actions,.toolbar{display:flex;gap:9px;flex-wrap:wrap}.actions{margin-top:12px}.toolbar{margin:0 0 18px}
+button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:9px;padding:10px 13px;font-weight:800;cursor:pointer}button:hover:not(:disabled){border-color:#536a84}button.primary{background:#28538d;border-color:#4e82c2}button:disabled{opacity:.45;cursor:not-allowed}
+.kv{display:grid;gap:7px}.kv-row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid #27303a}.kv-row:last-child{border-bottom:0}.kv-row span:first-child{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.grid{display:grid;grid-template-columns:1.65fr 1fr;gap:18px}@media(max-width:920px){.grid{grid-template-columns:1fr}}.side{display:grid;gap:18px;align-content:start}.table-wrap{overflow:auto}table{width:100%;min-width:820px;border-collapse:collapse}th,td{padding:11px 13px;border-bottom:1px solid #252e38;text-align:left}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;background:#171c22}
+input[type=number]{width:105px;padding:8px;border:1px solid var(--border);border-radius:8px;background:#0e1318;color:var(--text)}input[type=number]:disabled{opacity:.65}
+.toggle{position:relative;display:inline-block;width:50px;height:26px}.toggle input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;background:#536071;transition:.16s;cursor:pointer}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:white;transition:.16s}.toggle input:checked+.slider{background:var(--blue)}.toggle input:checked+.slider:before{transform:translateX(24px)}.toggle input:disabled+.slider{opacity:.45;cursor:not-allowed}
+.state{display:inline-flex;align-items:center;gap:7px;font-weight:800}.state.pending{color:var(--warn)}.state.on{color:var(--good)}.state.off{color:#dce3eb}.effective{font-weight:800;font-variant-numeric:tabular-nums}.effective.modified{color:var(--warn)}
+.metric-list{padding:12px 17px 16px}.metric{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #27303a}.metric:last-child{border-bottom:0}.metric span:first-child{color:var(--muted)}
+.log{height:360px;overflow:auto;padding:11px 13px;background:#0e1318;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.entry{padding:7px 0;border-bottom:1px dashed #252d36;color:#cbd4de}.entry .time{color:#728096;margin-right:8px}.entry.ok{color:#bef3cf}.entry.alert{color:#ffc4c6}.entry.warn{color:#f7dea2}
+.small{font-size:12px;color:var(--muted);line-height:1.5}.statusline{margin-top:10px;padding:10px 12px;border-radius:9px;background:#10151b;border:1px solid #27313d}.statusline strong{margin-right:7px}
 </style>
 </head>
 <body>
 <main class="shell">
   <div class="top">
     <div>
-      <h1>Helmet Heroes Reborn — Stat Anomaly Test Harness v2</h1>
-      <div class="sub">Independent ×2 stat modifiers plus a controlled connection layer for the official site and a fully functional local beta bridge simulator.</div>
+      <h1>Helmet Heroes Reborn — Stat Anomaly Test Harness v3</h1>
+      <div class="sub">Acknowledgement-driven stat testing. A modifier is shown as active only after a stat-capable test bridge confirms that it was applied.</div>
     </div>
-    <div class="badge"><span id="globalDot" class="dot"></span><span id="globalStatus">No bridge connected</span></div>
+    <div class="badges">
+      <div class="badge"><span id="deployDot" class="dot"></span><span id="deployStatus">Checking deployment…</span></div>
+      <div class="badge"><span id="bridgeDot" class="dot"></span><span id="bridgeStatus">Disconnected</span></div>
+    </div>
   </div>
 
   <div class="notice">
-    The official-site connector is handshake-only: it opens the official site and waits for an explicit test-bridge response. It does not inject code, inspect memory, intercept packets, or send stat mutations to the live service.
+    V2 could display a local modifier as ON even when the game had never acknowledged it. V3 removes that false-positive state. Official-site testing requires an explicit authorized stat bridge; otherwise modifier requests are rejected rather than pretending they were applied.
   </div>
 
   <section class="card connection">
-    <header><h2>Connection</h2></header>
+    <header><h2>Game / test-bridge connection</h2></header>
     <div class="connection-body">
       <div>
-        <strong>Official Helmet Heroes site</strong>
-        <div class="small mono" style="margin-top:6px">https://www.helmet-heroes.com/</div>
-        <div class="conn-actions">
-          <button id="connectOfficial" class="primary">Open &amp; handshake official site</button>
+        <strong>Connection targets</strong>
+        <div class="actions">
+          <button id="connectOfficial" class="primary">Open official site &amp; probe bridge</button>
+          <button id="connectHosted">Open hosted test bridge</button>
           <button id="disconnect">Disconnect</button>
-          <button id="testLocal">Open local beta bridge</button>
         </div>
-        <p class="small">
-          A real connection is established only after the opened page sends back a matching
-          <span class="mono">HH_TEST_BRIDGE_READY</span> response. Opening a page alone is not treated as a successful connection.
-        </p>
+        <div id="connectionMessage" class="statusline small"><strong>Status:</strong>No active bridge.</div>
+        <p class="small">The hosted bridge is the complete end-to-end reference implementation. The official-site probe only becomes stat-capable if the target explicitly implements the documented v3 bridge protocol.</p>
       </div>
       <div class="kv">
+        <div class="kv-row"><span>Base URL</span><strong id="baseUrl" class="mono">—</strong></div>
         <div class="kv-row"><span>Target</span><strong id="connTarget">—</strong></div>
-        <div class="kv-row"><span>Bridge state</span><strong id="connState">DISCONNECTED</strong></div>
-        <div class="kv-row"><span>Mode</span><strong id="connMode">—</strong></div>
-        <div class="kv-row"><span>Capabilities</span><strong id="connCaps">—</strong></div>
-        <div class="kv-row"><span>Last handshake</span><strong id="lastHandshake">—</strong></div>
+        <div class="kv-row"><span>Handshake</span><strong id="handshakeState">DISCONNECTED</strong></div>
+        <div class="kv-row"><span>Player-stat access</span><strong id="statAccess">UNAVAILABLE</strong></div>
+        <div class="kv-row"><span>Baseline snapshot</span><strong id="snapshotState">NOT LOADED</strong></div>
+        <div class="kv-row"><span>Capabilities</span><strong id="capabilities">—</strong></div>
+        <div class="kv-row"><span>Messages TX / RX</span><strong id="messageCount">0 / 0</strong></div>
       </div>
     </div>
   </section>
 
   <div class="toolbar">
-    <button id="enableAll" class="primary">Enable all ×2</button>
-    <button id="disableAll">Disable all</button>
-    <button id="randomScenario">Random test scenario</button>
-    <button id="resetBaseline">Reset baseline values</button>
-    <button id="pushLocal">Push state to local bridge</button>
+    <button id="enableAll" class="primary" disabled>Enable all ×2</button>
+    <button id="disableAll" disabled>Disable all</button>
+    <button id="randomScenario" disabled>Random applied scenario</button>
+    <button id="restoreAll" disabled>Restore original values</button>
     <button id="clearLog">Clear log</button>
   </div>
 
   <section class="grid">
     <div class="card">
-      <header><h2>Independent stat modifiers</h2></header>
+      <header><h2>Stat modifiers</h2></header>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Modifier</th><th>Baseline</th><th>Toggle</th><th>State</th><th>Effective</th></tr></thead>
+          <thead><tr><th>Modifier</th><th>Original</th><th>Apply</th><th>Applied state</th><th>Measured</th></tr></thead>
           <tbody id="statRows"></tbody>
         </table>
       </div>
@@ -86,22 +88,14 @@ input[type=number]{width:110px;padding:8px;border:1px solid var(--border);border
 
     <div class="side">
       <div class="card">
-        <header><h2>Detection summary</h2></header>
+        <header><h2>Synchronization</h2></header>
         <div class="metric-list">
-          <div class="metric"><span>Enabled modifiers</span><strong id="enabledCount">0 / 9</strong></div>
+          <div class="metric"><span>Applied modifiers</span><strong id="enabledCount">0 / 9</strong></div>
+          <div class="metric"><span>Pending requests</span><strong id="pendingCount">0</strong></div>
           <div class="metric"><span>Modified fields</span><strong id="modifiedCount">0</strong></div>
-          <div class="metric"><span>Anomaly state</span><strong id="anomalyState" class="status-ok">NORMAL</strong></div>
           <div class="metric"><span>×2 signature matches</span><strong id="signatureMatches">0</strong></div>
+          <div class="metric"><span>Anomaly state</span><strong id="anomalyState" class="good">NORMAL</strong></div>
           <div class="metric"><span>Suggested action</span><strong id="suggestedAction">Allow</strong></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <header><h2>Bridge telemetry</h2></header>
-        <div class="metric-list">
-          <div class="metric"><span>Messages received</span><strong id="rxCount">0</strong></div>
-          <div class="metric"><span>Messages sent</span><strong id="txCount">0</strong></div>
-          <div class="metric"><span>Last bridge event</span><strong id="bridgeEvent">—</strong></div>
         </div>
       </div>
 
@@ -113,228 +107,305 @@ input[type=number]{width:110px;padding:8px;border:1px solid var(--border);border
   </section>
 </main>
 
+<script src="./core.js"></script>
+<script src="./protocol.js"></script>
 <script>
-const OFFICIAL_URL = "https://www.helmet-heroes.com/";
-const OFFICIAL_ORIGIN = "https://www.helmet-heroes.com";
-const DEFAULTS = {
-  attackDamage:100, criticalChance:10, attackSpeed:1,
-  defense:80, dexterity:50, luck:25,
-  orbAttack:60, orbDefense:40, orbCritMultiplier:1.5
-};
-const STAT_DEFS = [
-  {key:"attackDamage",label:"Attack / Damage ×2",step:1},
-  {key:"criticalChance",label:"Critical Chance ×2",step:.1},
-  {key:"attackSpeed",label:"Attack Speed ×2",step:.01},
-  {key:"defense",label:"Defense ×2",step:1},
-  {key:"dexterity",label:"Dexterity ×2",step:1},
-  {key:"luck",label:"Luck ×2",step:1},
-  {key:"orbAttack",label:"Orb Attack ×2",step:1},
-  {key:"orbDefense",label:"Orb Defense ×2",step:1},
-  {key:"orbCritMultiplier",label:"Orb Critical Multiplier ×2",step:.01}
-];
+"use strict";
 
-const state = {
+const {DEFAULTS,STAT_DEFS,emptyFlags,calculateEffective,validateStats,detect,hasRequiredCapabilities}=HHCore;
+const {MSG,envelope}=HHProtocol;
+
+const SITE_BASE=new URL("./",document.baseURI);
+const HOSTED_URL=new URL("./sandbox.html",SITE_BASE);
+const OFFICIAL_URL="https://www.helmet-heroes.com/";
+
+const state={
+  bridge:{windowRef:null,origin:null,url:null,mode:null,handshake:false,statAccess:false,capabilities:[],tx:0,rx:0,nonce:null},
   baseline:{...DEFAULTS},
-  enabled:Object.fromEntries(STAT_DEFS.map(s=>[s.key,false])),
-  effective:{...DEFAULTS},
-  bridge:{
-    windowRef:null, origin:null, target:null, mode:null,
-    connected:false, nonce:null, capabilities:[],
-    rx:0, tx:0
-  }
+  measured:{...DEFAULTS},
+  applied:emptyFlags(false),
+  pending:{},
+  snapshotLoaded:false,
+  seq:0
 };
 
-const rows = document.getElementById("statRows");
-const logEl = document.getElementById("log");
+const $=id=>document.getElementById(id);
+const logEl=$("log");
+const rows=$("statRows");
 
-function esc(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
 function log(msg,kind=""){
-  const div=document.createElement("div");
-  div.className=`entry ${kind}`.trim();
-  div.innerHTML=`<span class="time">${new Date().toLocaleTimeString()}</span>${esc(msg)}`;
-  logEl.prepend(div);
+  const el=document.createElement("div");
+  el.className=`entry ${kind}`.trim();
+  el.innerHTML=`<span class="time">${new Date().toLocaleTimeString()}</span>${String(msg).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}`;
+  logEl.prepend(el);
 }
 function fmt(key,v){
   if(key==="attackSpeed"||key==="orbCritMultiplier")return Number(v).toFixed(2);
   if(key==="criticalChance")return Number(v).toFixed(1);
   return Number(v).toFixed(0);
 }
-function recalc(){
-  for(const d of STAT_DEFS){
-    const base=Number(state.baseline[d.key]);
-    state.effective[d.key]=state.enabled[d.key]?base*2:base;
-  }
-}
-function updateDetection(){
-  let enabled=0,mismatch=0,sig=0;
-  for(const d of STAT_DEFS){
-    const b=Number(state.baseline[d.key]),c=Number(state.effective[d.key]);
-    if(state.enabled[d.key])enabled++;
-    if(c!==b)mismatch++;
-    if(b!==0&&c===b*2)sig++;
-  }
-  enabledCount.textContent=`${enabled} / ${STAT_DEFS.length}`;
-  modifiedCount.textContent=mismatch;
-  signatureMatches.textContent=sig;
-  const bad=mismatch>0;
-  anomalyState.textContent=bad?"ANOMALY DETECTED":"NORMAL";
-  anomalyState.className=bad?"status-alert":"status-ok";
-  suggestedAction.textContent=bad?"Reject / reconcile to baseline":"Allow";
-}
-function render(){
-  recalc();
-  for(const d of STAT_DEFS){
-    const row=document.querySelector(`[data-row="${d.key}"]`);
-    if(!row)continue;
-    row.querySelector("[data-toggle]").checked=state.enabled[d.key];
-    const st=row.querySelector(".state");
-    st.querySelector(".state-label").textContent=state.enabled[d.key]?"ON":"OFF";
-    st.querySelector(".dot").className=`dot ${state.enabled[d.key]?"good":""}`;
-    const e=row.querySelector(".effective");
-    e.textContent=fmt(d.key,state.effective[d.key]);
-    e.className=`effective ${state.enabled[d.key]?"modified":""}`;
-  }
-  updateDetection();
-  renderBridge();
-}
-function renderBridge(){
-  connTarget.textContent=state.bridge.target||"—";
-  connState.textContent=state.bridge.connected?"CONNECTED":(state.bridge.windowRef?"HANDSHAKING":"DISCONNECTED");
-  connState.className=state.bridge.connected?"status-ok":"";
-  connMode.textContent=state.bridge.mode||"—";
-  connCaps.textContent=state.bridge.capabilities.length?state.bridge.capabilities.join(", "):"—";
-  rxCount.textContent=state.bridge.rx;
-  txCount.textContent=state.bridge.tx;
-  globalStatus.textContent=state.bridge.connected?`${state.bridge.mode} bridge connected`:"No bridge connected";
-  globalDot.className=`dot ${state.bridge.connected?"good":""}`;
-}
+function requestId(prefix="req"){state.seq++;return `${prefix}-${Date.now()}-${state.seq}`}
+function canApply(){return state.bridge.handshake&&state.bridge.statAccess&&state.snapshotLoaded}
+function pendingCount(){return Object.keys(state.pending).length}
+
 function buildRows(){
   rows.innerHTML="";
-  for(const d of STAT_DEFS){
-    const tr=document.createElement("tr");
-    tr.dataset.row=d.key;
+  for(const def of STAT_DEFS){
+    const tr=document.createElement("tr");tr.dataset.row=def.key;
     tr.innerHTML=`
-      <td><strong>${d.label}</strong></td>
-      <td><input type="number" value="${state.baseline[d.key]}" step="${d.step}" data-baseline="${d.key}"></td>
-      <td><label class="toggle"><input type="checkbox" data-toggle="${d.key}"><span class="slider"></span></label></td>
-      <td><span class="state"><span class="dot"></span><span class="state-label">OFF</span></span></td>
-      <td><span class="effective">${fmt(d.key,state.baseline[d.key])}</span></td>`;
+      <td><strong>${def.label}</strong></td>
+      <td><input type="number" data-base="${def.key}" value="${state.baseline[def.key]}" step="${def.step}" disabled></td>
+      <td><label class="toggle"><input type="checkbox" data-toggle="${def.key}" disabled><span class="slider"></span></label></td>
+      <td><span class="state off" data-state="${def.key}"><span class="dot"></span><span class="state-label">OFF</span></span></td>
+      <td><span class="effective" data-effective="${def.key}">${fmt(def.key,state.measured[def.key])}</span></td>`;
     rows.appendChild(tr);
   }
-  rows.addEventListener("change",e=>{
-    if(e.target.matches("[data-toggle]")){
-      const k=e.target.dataset.toggle;
-      state.enabled[k]=e.target.checked;
-      render();
-      log(`${STAT_DEFS.find(x=>x.key===k).label}: ${state.enabled[k]?"enabled":"disabled"}`,state.enabled[k]?"alert":"ok");
-    }
-    if(e.target.matches("[data-baseline]")){
-      const k=e.target.dataset.baseline,v=Number(e.target.value);
-      if(Number.isFinite(v)){state.baseline[k]=v;render();log(`${k}: baseline set to ${v}`)}
-    }
-  });
 }
-function setAll(on){for(const d of STAT_DEFS)state.enabled[d.key]=on;render();log(on?"All ×2 modifiers enabled":"All modifiers disabled",on?"alert":"ok")}
 
-function nonce(){
-  const a=new Uint32Array(4);crypto.getRandomValues(a);return Array.from(a).map(n=>n.toString(16)).join("");
-}
-function resetBridge(){
-  state.bridge.windowRef=null;state.bridge.origin=null;state.bridge.target=null;state.bridge.mode=null;
-  state.bridge.connected=false;state.bridge.nonce=null;state.bridge.capabilities=[];
-  renderBridge();
-}
-function beginHandshake(url,origin,mode){
-  const w=window.open(url,mode==="official"?"hhOfficial":"hhLocalBridge");
-  if(!w){log("Popup blocked; allow popups and try again","alert");return}
-  state.bridge.windowRef=w;
-  state.bridge.origin=origin;
-  state.bridge.target=url;
-  state.bridge.mode=mode;
-  state.bridge.connected=false;
-  state.bridge.capabilities=[];
-  state.bridge.nonce=nonce();
-  renderBridge();
-  log(`Handshake started: ${url}`);
+function render(){
+  const allow=canApply();
+  for(const def of STAT_DEFS){
+    const toggle=document.querySelector(`[data-toggle="${def.key}"]`);
+    const st=document.querySelector(`[data-state="${def.key}"]`);
+    const eff=document.querySelector(`[data-effective="${def.key}"]`);
+    const base=document.querySelector(`[data-base="${def.key}"]`);
+    const pending=Object.values(state.pending).some(p=>p.keys.includes(def.key));
+    toggle.disabled=!allow||pending;
+    toggle.checked=Boolean(state.applied[def.key]);
+    base.value=state.baseline[def.key];
 
-  const hello={type:"HH_TEST_BRIDGE_HELLO",version:1,nonce:state.bridge.nonce,request:["telemetry"]};
+    if(pending){
+      st.className="state pending";
+      st.querySelector(".dot").className="dot warn";
+      st.querySelector(".state-label").textContent="PENDING";
+    }else if(state.applied[def.key]){
+      st.className="state on";
+      st.querySelector(".dot").className="dot good";
+      st.querySelector(".state-label").textContent="ON";
+    }else{
+      st.className="state off";
+      st.querySelector(".dot").className="dot";
+      st.querySelector(".state-label").textContent="OFF";
+    }
+
+    eff.textContent=fmt(def.key,state.measured[def.key]);
+    eff.className=`effective ${state.applied[def.key]?"modified":""}`;
+  }
+
+  const d=detect(state.baseline,state.measured,state.applied);
+  $("enabledCount").textContent=`${d.enabledCount} / ${STAT_DEFS.length}`;
+  $("pendingCount").textContent=pendingCount();
+  $("modifiedCount").textContent=d.mismatchCount;
+  $("signatureMatches").textContent=d.signatureMatches;
+  $("anomalyState").textContent=d.anomaly?"ANOMALY DETECTED":"NORMAL";
+  $("anomalyState").className=d.anomaly?"bad":"good";
+  $("suggestedAction").textContent=d.suggestedAction;
+
+  $("connTarget").textContent=state.bridge.url||"—";
+  $("handshakeState").textContent=state.bridge.handshake?"CONNECTED":(state.bridge.windowRef?"HANDSHAKING":"DISCONNECTED");
+  $("handshakeState").className=state.bridge.handshake?"good":"";
+  $("statAccess").textContent=state.bridge.statAccess?"AUTHORIZED":"UNAVAILABLE";
+  $("statAccess").className=state.bridge.statAccess?"good":"bad";
+  $("snapshotState").textContent=state.snapshotLoaded?"LOADED":"NOT LOADED";
+  $("snapshotState").className=state.snapshotLoaded?"good":"";
+  $("capabilities").textContent=state.bridge.capabilities.length?state.bridge.capabilities.join(", "):"—";
+  $("messageCount").textContent=`${state.bridge.tx} / ${state.bridge.rx}`;
+  $("bridgeStatus").textContent=canApply()?"Stat bridge ready":(state.bridge.handshake?"Connected; no stat access":"Disconnected");
+  $("bridgeDot").className=`dot ${canApply()?"good":state.bridge.handshake?"warn":""}`;
+  $("enableAll").disabled=!allow||pendingCount()>0;
+  $("disableAll").disabled=!allow||pendingCount()>0;
+  $("randomScenario").disabled=!allow||pendingCount()>0;
+  $("restoreAll").disabled=!allow||pendingCount()>0;
+}
+
+function send(type,payload={},id=requestId()){
+  const b=state.bridge;
+  if(!b.windowRef||b.windowRef.closed)throw new Error("Bridge window is unavailable");
+  b.windowRef.postMessage(envelope(type,id,payload),b.origin);
+  b.tx++;render();return id;
+}
+
+function resetSession(closeWindow=false){
+  if(closeWindow&&state.bridge.windowRef&&!state.bridge.windowRef.closed){
+    try{state.bridge.windowRef.close()}catch{}
+  }
+  state.bridge={windowRef:null,origin:null,url:null,mode:null,handshake:false,statAccess:false,capabilities:[],tx:0,rx:0,nonce:null};
+  state.baseline={...DEFAULTS};state.measured={...DEFAULTS};state.applied=emptyFlags(false);state.pending={};state.snapshotLoaded=false;
+  render();
+}
+
+function beginHandshake(url,mode){
+  resetSession(false);
+  const target=new URL(url,document.baseURI);
+  const w=window.open(target.href,mode==="official"?"hhOfficial":"hhHostedBridge");
+  if(!w){log("Popup blocked; allow popups and retry.","alert");return}
+  state.bridge.windowRef=w;state.bridge.origin=target.origin;state.bridge.url=target.href;state.bridge.mode=mode;
+  state.bridge.nonce=requestId("nonce");
+  $("connectionMessage").innerHTML="<strong>Status:</strong>Waiting for an explicit bridge response.";
+  render();
+
   let attempts=0;
+  const helloId=requestId("hello");
+  const hello=envelope(MSG.HELLO,helloId,{nonce:state.bridge.nonce,requiredCapabilities:HHCore.REQUIRED_CAPABILITIES});
   const timer=setInterval(()=>{
-    if(!state.bridge.windowRef||state.bridge.windowRef.closed||state.bridge.connected||attempts>=12){
+    if(state.bridge.handshake||!state.bridge.windowRef||state.bridge.windowRef.closed||attempts>=10){
       clearInterval(timer);
-      if(!state.bridge.connected&&attempts>=12)log("No authorized test-bridge response received","alert");
+      if(!state.bridge.handshake){
+        $("connectionMessage").innerHTML="<strong>Status:</strong>No authorized bridge responded. Player-stat access was not established.";
+        log("Handshake timed out: target page did not expose the authorized v3 test bridge.","alert");
+        resetAppliedOnly();
+      }
       return;
     }
-    try{
-      state.bridge.windowRef.postMessage(hello,origin);
-      state.bridge.tx++; bridgeEvent.textContent="HELLO sent"; renderBridge();
-    }catch(err){ log(`Handshake send failed: ${err.message}`,"alert"); clearInterval(timer); }
-    attempts++;
-  },500);
+    state.bridge.windowRef.postMessage(hello,state.bridge.origin);
+    state.bridge.tx++;attempts++;render();
+  },400);
+}
+
+function resetAppliedOnly(){
+  state.applied=emptyFlags(false);
+  state.pending={};
+  state.measured={...state.baseline};
+  state.snapshotLoaded=false;
+  render();
+}
+
+function requestModifiers(changes){
+  if(!canApply()){
+    log("Modifier request rejected: no authorized player-stat bridge is available.","alert");
+    render();return;
+  }
+  const desired={...state.applied,...changes};
+  const keys=Object.keys(changes);
+  const id=requestId("apply");
+  state.pending[id]={keys,desired};
+  send(MSG.SET,{modifiers:desired},id);
+  log(`Modifier request sent for: ${keys.join(", ")}`,"warn");
+  render();
+}
+
+function restoreAll(){
+  if(!canApply())return;
+  const id=requestId("restore");
+  state.pending[id]={keys:STAT_DEFS.map(s=>s.key),desired:emptyFlags(false)};
+  send(MSG.RESTORE,{},id);
+  log("Restore-all request sent.","warn");render();
 }
 
 window.addEventListener("message",event=>{
   const b=state.bridge;
-  if(!b.windowRef||event.source!==b.windowRef)return;
-  if(event.origin!==b.origin)return;
-  const m=event.data;
-  if(!m||typeof m!=="object")return;
-  b.rx++; bridgeEvent.textContent=m.type||"message";
+  if(!b.windowRef||event.source!==b.windowRef||event.origin!==b.origin)return;
+  const m=event.data;if(!m||typeof m!=="object"||m.version!==3)return;
+  b.rx++;
 
-  if(m.type==="HH_TEST_BRIDGE_READY"&&m.nonce===b.nonce){
-    b.connected=true;
-    b.capabilities=Array.isArray(m.capabilities)?m.capabilities:[];
-    lastHandshake.textContent=new Date().toLocaleTimeString();
-    renderBridge();
-    log(`Authorized ${b.mode} bridge connected`,"ok");
-    return;
+  if(m.type===MSG.READY){
+    if(m.payload?.nonce!==b.nonce){log("Bridge response rejected: nonce mismatch.","alert");render();return}
+    b.handshake=true;
+    b.capabilities=Array.isArray(m.payload?.capabilities)?m.payload.capabilities:[];
+    b.statAccess=hasRequiredCapabilities(b.capabilities);
+    if(!b.statAccess){
+      $("connectionMessage").innerHTML="<strong>Status:</strong>Bridge responded, but it does not expose the required player-stat test capabilities.";
+      log("Bridge connected without required stat capabilities.","alert");
+      render();return;
+    }
+    $("connectionMessage").innerHTML="<strong>Status:</strong>Authorized stat bridge connected. Reading original player stats…";
+    log("Bridge handshake completed; requesting original player-stat snapshot.","ok");
+    send(MSG.GET_STATS,{},requestId("stats"));
+    render();return;
   }
 
-  if(m.type==="HH_TEST_TELEMETRY"){
-    log(`Telemetry: ${JSON.stringify(m.payload||{})}`);
-    renderBridge();
+  if(m.type===MSG.STATS){
+    if(!b.statAccess)return;
+    const stats=m.payload?.stats;
+    if(!validateStats(stats)){log("Player-stat snapshot rejected: invalid schema.","alert");return}
+    state.baseline={...stats};
+    state.measured={...stats};
+    state.applied=emptyFlags(false);
+    state.snapshotLoaded=true;
+    $("connectionMessage").innerHTML="<strong>Status:</strong>Original player stats loaded. Modifier controls are now active.";
+    log("Original player-stat snapshot loaded.","ok");
+    render();return;
+  }
+
+  if(m.type===MSG.APPLIED){
+    const pending=state.pending[m.requestId];
+    if(!pending){log(`Ignoring unexpected apply acknowledgement: ${m.requestId}`,"warn");return}
+    const applied=m.payload?.applied;
+    const stats=m.payload?.stats;
+    if(!applied||typeof applied!=="object"||!validateStats(stats)){
+      delete state.pending[m.requestId];log("Apply acknowledgement rejected: invalid payload.","alert");render();return;
+    }
+    state.applied={...emptyFlags(false),...applied};
+    state.measured={...stats};
+    delete state.pending[m.requestId];
+    log(`Modifier application acknowledged: ${pending.keys.join(", ")}`,"ok");
+    render();return;
+  }
+
+  if(m.type===MSG.RESTORED){
+    if(!validateStats(m.payload?.stats)){log("Restore acknowledgement rejected: invalid stats.","alert");return}
+    state.applied=emptyFlags(false);
+    state.measured={...m.payload.stats};
+    if(m.requestId)delete state.pending[m.requestId];
+    else state.pending={};
+    log("Original values restored and acknowledged.","ok");
+    render();return;
+  }
+
+  if(m.type===MSG.ERROR){
+    if(m.requestId)delete state.pending[m.requestId];
+    log(`Bridge error: ${m.payload?.message||"unspecified error"}`,"alert");
+    render();
   }
 });
 
-connectOfficial.addEventListener("click",()=>beginHandshake(OFFICIAL_URL,OFFICIAL_ORIGIN,"official"));
-testLocal.addEventListener("click",()=>{
-  const url=new URL("sandbox.html",location.href).href;
-  beginHandshake(url,location.origin,"local-simulator");
+rows.addEventListener("change",event=>{
+  if(!event.target.matches("[data-toggle]"))return;
+  const key=event.target.dataset.toggle;
+  const desired=event.target.checked;
+  event.target.checked=Boolean(state.applied[key]); // UI reflects acknowledged state only.
+  requestModifiers({[key]:desired});
 });
-disconnect.addEventListener("click",()=>{
+
+$("connectOfficial").addEventListener("click",()=>beginHandshake(OFFICIAL_URL,"official"));
+$("connectHosted").addEventListener("click",()=>beginHandshake(HOSTED_URL.href,"hosted-test"));
+$("disconnect").addEventListener("click",()=>{
   if(state.bridge.windowRef&&!state.bridge.windowRef.closed){
-    try{state.bridge.windowRef.postMessage({type:"HH_TEST_BRIDGE_BYE"},state.bridge.origin)}catch{}
+    try{send(MSG.BYE,{})}catch{}
   }
-  resetBridge(); log("Bridge disconnected","ok");
+  resetSession(false);
+  $("connectionMessage").innerHTML="<strong>Status:</strong>No active bridge.";
+  log("Disconnected.","ok");
 });
-pushLocal.addEventListener("click",()=>{
-  const b=state.bridge;
-  if(!(b.connected&&b.mode==="local-simulator")){
-    log("State push is restricted to the local beta bridge simulator","alert");
-    return;
+$("enableAll").addEventListener("click",()=>requestModifiers(emptyFlags(true)));
+$("disableAll").addEventListener("click",()=>requestModifiers(emptyFlags(false)));
+$("randomScenario").addEventListener("click",()=>{
+  const flags=emptyFlags(false);for(const def of STAT_DEFS)flags[def.key]=Math.random()>=.5;
+  requestModifiers(flags);
+});
+$("restoreAll").addEventListener("click",restoreAll);
+$("clearLog").addEventListener("click",()=>logEl.innerHTML="");
+
+async function deploymentCheck(){
+  $("baseUrl").textContent=SITE_BASE.href;
+  try{
+    const [sandbox,core,protocol,bridgeEngine]=await Promise.all([
+      fetch(HOSTED_URL.href,{cache:"no-store"}),
+      fetch(new URL("./core.js",SITE_BASE),{cache:"no-store"}),
+      fetch(new URL("./protocol.js",SITE_BASE),{cache:"no-store"}),
+      fetch(new URL("./bridge-engine.js",SITE_BASE),{cache:"no-store"})
+    ]);
+    const ok=sandbox.ok&&core.ok&&protocol.ok&&bridgeEngine.ok;
+    $("deployStatus").textContent=ok?"Deployment ready":"Deployment issue";
+    $("deployDot").className=`dot ${ok?"good":"bad"}`;
+    log(ok?"GitHub Pages asset self-check passed.":"GitHub Pages asset self-check failed.",ok?"ok":"alert");
+  }catch(err){
+    $("deployStatus").textContent="Deployment issue";$("deployDot").className="dot bad";
+    log(`Deployment check failed: ${err.message}`,"alert");
   }
-  b.windowRef.postMessage({
-    type:"HH_TEST_SIMULATE_STATS",
-    payload:{baseline:{...state.baseline},enabled:{...state.enabled},effective:{...state.effective}}
-  },b.origin);
-  b.tx++; bridgeEvent.textContent="SIMULATE_STATS sent"; renderBridge();
-  log("Current modifier state pushed to local simulator","ok");
-});
+}
 
-enableAll.addEventListener("click",()=>setAll(true));
-disableAll.addEventListener("click",()=>setAll(false));
-randomScenario.addEventListener("click",()=>{
-  let c=0;for(const d of STAT_DEFS){state.enabled[d.key]=Math.random()>=.5;if(state.enabled[d.key])c++}
-  render();log(`Random scenario applied (${c} active)`,c?"alert":"ok");
-});
-resetBaseline.addEventListener("click",()=>{
-  state.baseline={...DEFAULTS};
-  document.querySelectorAll("[data-baseline]").forEach(i=>i.value=state.baseline[i.dataset.baseline]);
-  render();log("Baseline reset","ok");
-});
-clearLog.addEventListener("click",()=>logEl.innerHTML="");
-
-buildRows();render();log("Harness v2 initialized","ok");
+buildRows();render();deploymentCheck();log("Harness v3 initialized.","ok");
 </script>
 </body>
 </html>

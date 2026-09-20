@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><title>v3 E2E Self Test</title>
+<pre id="out">RUNNING</pre><iframe id="bridge" src="./sandbox.html" hidden></iframe>
+<script src="./core.js"></script><script src="./protocol.js"></script><script>
+(async()=>{
+ const out=document.getElementById('out'), frame=document.getElementById('bridge');
+ const {MSG,envelope}=HHProtocol,{STAT_DEFS,DEFAULTS,emptyFlags}=HHCore;
+ let seq=0; const pending=new Map(); const rid=()=>`t-${++seq}`;
+ function ask(type,payload={}){return new Promise((resolve,reject)=>{const id=rid();pending.set(id,{resolve,reject});frame.contentWindow.postMessage(envelope(type,id,payload),location.origin);setTimeout(()=>{if(pending.has(id)){pending.delete(id);reject(new Error('timeout '+type))}},2000)})}
+ addEventListener('message',e=>{if(e.source!==frame.contentWindow||e.origin!==location.origin)return;const m=e.data;if(!m||m.version!==3)return;const p=pending.get(m.requestId);if(p){pending.delete(m.requestId);p.resolve(m)}});
+ await new Promise(r=>frame.addEventListener('load',r,{once:true}));
+ const nonce='selftest';
+ let m=await ask(MSG.HELLO,{nonce,requiredCapabilities:HHCore.REQUIRED_CAPABILITIES});
+ if(m.type!==MSG.READY||m.payload.nonce!==nonce)throw new Error('handshake');
+ m=await ask(MSG.GET_STATS,{}); if(m.type!==MSG.STATS)throw new Error('snapshot'); const base=m.payload.stats;
+ for(const d of STAT_DEFS){
+   const flags=emptyFlags(false);flags[d.key]=true;
+   m=await ask(MSG.SET,{modifiers:flags}); if(m.type!==MSG.APPLIED)throw new Error('apply '+d.key);
+   if(Number(m.payload.stats[d.key])!==Number(base[d.key])*2)throw new Error('double '+d.key);
+   for(const o of STAT_DEFS)if(o.key!==d.key&&Number(m.payload.stats[o.key])!==Number(base[o.key]))throw new Error('independence '+d.key+' '+o.key);
+   flags[d.key]=false;
+   m=await ask(MSG.SET,{modifiers:flags}); if(Number(m.payload.stats[d.key])!==Number(base[d.key]))throw new Error('restore '+d.key);
+ }
+ const all=emptyFlags(true);m=await ask(MSG.SET,{modifiers:all});
+ if(!STAT_DEFS.every(d=>Number(m.payload.stats[d.key])===Number(base[d.key])*2))throw new Error('all x2');
+ m=await ask(MSG.RESTORE,{});if(m.type!==MSG.RESTORED)throw new Error('restore all');
+ if(!STAT_DEFS.every(d=>Number(m.payload.stats[d.key])===Number(base[d.key])))throw new Error('restore baseline');
+ out.textContent='PASS: handshake, stat snapshot, all 9 independent modifiers, synchronization acknowledgements, and restoration verified in browser.';
+ document.title='PASS';
+})().catch(e=>{document.getElementById('out').textContent='FAIL: '+e.message;document.title='FAIL'})
+</script>

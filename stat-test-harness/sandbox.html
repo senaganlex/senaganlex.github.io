@@ -2,77 +2,86 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Local Helmet Heroes Beta Bridge Simulator</title>
+<title>Helmet Heroes — Authorized Test Bridge Simulator v3</title>
 <style>
-body{margin:0;background:#0e1116;color:#ecf2f7;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{width:min(900px,calc(100% - 32px));margin:30px auto}
-.card{background:#171c23;border:1px solid #2b3542;border-radius:14px;padding:18px;margin-bottom:16px}.good{color:#72d99d}.warn{color:#f3c96b}
-pre{white-space:pre-wrap;word-break:break-word;background:#0c1015;padding:14px;border-radius:10px;border:1px solid #27303b;min-height:120px}
-small{color:#9ba8b8}.pill{display:inline-block;border:1px solid #334052;border-radius:999px;padding:5px 9px;font-weight:700}
+body{margin:0;background:#0d1117;color:#eef3f8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{width:min(930px,calc(100% - 32px));margin:28px auto}
+.card{background:#171d25;border:1px solid #2c3744;border-radius:14px;padding:17px;margin:14px 0}.pill{display:inline-block;padding:5px 9px;border:1px solid #344354;border-radius:999px;color:#75dda0}
+pre{white-space:pre-wrap;word-break:break-word;background:#0c1116;border:1px solid #27313c;border-radius:9px;padding:13px;min-height:90px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Local Beta Bridge Simulator</h1>
-  <p><span class="pill good" id="state">READY</span></p>
-  <div class="card">
-    <strong>Purpose</strong>
-    <p>This page emulates an authorized test build. It accepts synthetic stat scenarios only from the opener on the same origin.</p>
-  </div>
-  <div class="card">
-    <strong>Last received scenario</strong>
-    <pre id="out">No stat scenario received yet.</pre>
-  </div>
-  <div class="card">
-    <strong>Validation response</strong>
-    <pre id="validation">Waiting.</pre>
-  </div>
+  <h1>Authorized Test Bridge Simulator v3</h1>
+  <p><span class="pill" id="status">READY</span></p>
+  <div class="card"><strong>Purpose</strong><p>This page is the reference implementation for the complete test protocol: player-stat snapshot, independent modifier application, acknowledgement, synchronization, and restoration.</p></div>
+  <div class="card"><strong>Current simulated player stats</strong><pre id="statsOut">Waiting for harness.</pre></div>
+  <div class="card"><strong>Applied modifiers</strong><pre id="flagsOut">None.</pre></div>
+  <div class="card"><strong>Last protocol event</strong><pre id="eventOut">Waiting.</pre></div>
 </div>
+<script src="./core.js"></script>
+<script src="./protocol.js"></script>
+<script src="./bridge-engine.js"></script>
 <script>
-let openerOrigin=null;
-function validate(payload){
-  const anomalies=[];
-  const b=payload?.baseline||{},e=payload?.effective||{};
-  for(const [k,v] of Object.entries(e)){
-    if(Number(v)!==Number(b[k])){
-      anomalies.push({
-        stat:k,
-        baseline:Number(b[k]),
-        effective:Number(v),
-        ratio:Number(b[k])!==0?Number(v)/Number(b[k]):null,
-        exactDouble:Number(b[k])!==0&&Number(v)===Number(b[k])*2
-      });
-    }
-  }
-  return {acceptedForSimulation:true, anomalyCount:anomalies.length, anomalies,
-          action:anomalies.length?"REJECT_AND_RECONCILE":"ALLOW"};
-}
-window.addEventListener("message",e=>{
-  if(e.source!==window.opener)return;
-  if(e.origin!==location.origin)return;
-  const m=e.data;
-  if(!m||typeof m!=="object")return;
+"use strict";
+const {DEFAULTS}=HHCore;
+const {MSG,envelope}=HHProtocol;
+const {createBridgeEngine}=HHBridgeEngine;
 
-  if(m.type==="HH_TEST_BRIDGE_HELLO"){
-    openerOrigin=e.origin;
-    window.opener.postMessage({
-      type:"HH_TEST_BRIDGE_READY",
-      version:1,
-      nonce:m.nonce,
-      capabilities:["telemetry","local-stat-simulation","baseline-reconciliation"]
-    },e.origin);
+const engine=createBridgeEngine(HHCore,{...DEFAULTS});
+
+function render(){
+  document.getElementById("statsOut").textContent=JSON.stringify(engine.getStats(),null,2);
+  document.getElementById("flagsOut").textContent=JSON.stringify(engine.getApplied(),null,2);
+}
+function reply(event,type,requestId,payload={}){
+  event.source.postMessage(envelope(type,requestId,payload),event.origin);
+}
+function validSource(event){return (event.source===window.opener||event.source===window.parent)&&event.origin===location.origin}
+
+window.addEventListener("message",event=>{
+  if(!validSource(event))return;
+  const m=event.data;if(!m||typeof m!=="object"||m.version!==3)return;
+  document.getElementById("eventOut").textContent=JSON.stringify(m,null,2);
+
+  if(m.type===MSG.HELLO){
+    reply(event,MSG.READY,m.requestId,{
+      nonce:m.payload?.nonce,
+      capabilities:["read-player-stats","apply-test-modifiers","restore-player-stats","telemetry"]
+    });
     return;
   }
-  if(m.type==="HH_TEST_SIMULATE_STATS"){
-    out.textContent=JSON.stringify(m.payload,null,2);
-    const result=validate(m.payload);
-    validation.textContent=JSON.stringify(result,null,2);
-    window.opener.postMessage({type:"HH_TEST_TELEMETRY",payload:result},e.origin);
-    return;
+
+  if(m.type===MSG.GET_STATS){
+    reply(event,MSG.STATS,m.requestId,{stats:engine.getOriginalStats()});
+    render();return;
   }
-  if(m.type==="HH_TEST_BRIDGE_BYE"){
-    state.textContent="DISCONNECTED";state.className="pill warn";
+
+  if(m.type===MSG.SET){
+    const requested=m.payload?.modifiers;
+    if(!requested||typeof requested!=="object"){
+      reply(event,MSG.ERROR,m.requestId,{message:"Invalid modifiers payload"});return;
+    }
+    try{
+      const result=engine.setModifiers(requested);
+      reply(event,MSG.APPLIED,m.requestId,result);
+    }catch(err){
+      reply(event,MSG.ERROR,m.requestId,{message:err.message});
+    }
+    render();return;
+  }
+
+  if(m.type===MSG.RESTORE){
+    const result=engine.restore();
+    reply(event,MSG.RESTORED,m.requestId,{stats:result.stats});
+    render();return;
+  }
+
+  if(m.type===MSG.BYE){
+    document.getElementById("status").textContent="DISCONNECTED";
   }
 });
+
+render();
 </script>
 </body>
 </html>

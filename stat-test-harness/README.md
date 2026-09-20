@@ -1,62 +1,104 @@
-# Helmet Heroes Reborn — Stat Anomaly Test Harness v2
+# Helmet Heroes Reborn — Stat Anomaly Test Harness v3
 
-## What changed
+## Root cause fixed
 
-v2 adds a controlled connection layer.
+V2 had two different concepts mixed together:
 
-### Official-site mode
+1. a local UI simulation, and
+2. a real bridge connection.
 
-The harness can open:
+A toggle could become visually **ON** even when no game/test bridge had received or acknowledged a change. The official-site screenshot showing `HANDSHAKING`, `0` received messages, and no capabilities means no player-stat data channel existed.
 
-`https://www.helmet-heroes.com/`
+V3 is acknowledgement-driven.
 
-and send a non-mutating `HH_TEST_BRIDGE_HELLO` handshake. The harness reports **CONNECTED** only if the opened page explicitly answers with a matching `HH_TEST_BRIDGE_READY` message.
+A modifier is **ON only after the connected test bridge confirms it**.
 
-The official connector does not:
-- inject JavaScript,
-- read cross-origin page internals,
-- inspect memory,
-- intercept WebSocket/network traffic,
-- alter player stats,
-- send modifier state into the live service.
+## Complete v3 flow
 
-This is intentionally fail-closed.
+1. Open a bridge target.
+2. Exchange `HH_TEST_BRIDGE_HELLO` / `HH_TEST_BRIDGE_READY`.
+3. Verify capabilities:
+   - `read-player-stats`
+   - `apply-test-modifiers`
+   - `restore-player-stats`
+4. Request the original stat snapshot.
+5. Store the returned values as the restoration baseline.
+6. Request one or more modifier changes.
+7. Keep the UI in `PENDING` until acknowledgement.
+8. Update the ON/OFF state and measured values only from `HH_TEST_MODIFIERS_APPLIED`.
+9. When a modifier is disabled, the bridge recalculates from the original baseline and acknowledges the restored value.
+10. `Restore original values` turns all modifiers off and restores the full baseline.
 
-### Local beta bridge simulator
+## GitHub Pages
 
-`Open local beta bridge` launches `sandbox.html`, which implements the handshake and accepts the nine synthetic stat modifiers.
+Production URL:
 
-`Push state to local bridge` sends the current test scenario to the simulator, which:
-1. compares effective values to baseline values,
-2. detects exact ×2 signatures,
-3. returns telemetry,
-4. recommends `ALLOW` or `REJECT_AND_RECONCILE`.
+`https://senaganlex.github.io/stat-test-harness/`
 
-This provides an end-to-end test target for the detection/countermeasure logic.
+All internal resources use repository-relative paths:
 
-## Run locally
+- `./core.js`
+- `./protocol.js`
+- `./sandbox.html`
 
-Because `postMessage` origin checks are part of the test, run this through a local web server rather than opening the HTML with `file://`.
+No localhost runtime dependency exists.
 
-```bash
-cd helmet-heroes-reborn-stat-test-harness-v2
-python3 -m http.server 8080
-```
-
-Then open:
+Expected repository root:
 
 ```text
-http://localhost:8080/
+/
+├── .nojekyll
+├── 404.html
+├── core.js
+├── protocol.js
+├── bridge-engine.js
+├── index.html
+├── sandbox.html
+├── verify.mjs
+└── README.md
 ```
 
-## Test sequence
+## Hosted end-to-end verification
 
-1. Click `Open local beta bridge`.
-2. Confirm the bridge state becomes `CONNECTED`.
-3. Toggle any combination of modifiers.
-4. Click `Push state to local bridge`.
-5. Inspect the simulator's validation response and the harness telemetry/log.
+On GitHub Pages:
 
-## Live/private integration
+1. Open the application.
+2. Confirm **Deployment ready**.
+3. Click **Open hosted test bridge**.
+4. Confirm:
+   - Handshake = `CONNECTED`
+   - Player-stat access = `AUTHORIZED`
+   - Baseline snapshot = `LOADED`
+5. Toggle one stat.
+6. It becomes `PENDING`.
+7. After bridge acknowledgement it becomes `ON`.
+8. Only that stat's measured value becomes exactly ×2.
+9. Disable it.
+10. It becomes `PENDING`, then `OFF`, and its measured value returns to the original baseline.
+11. Repeat for all nine modifiers.
+12. `Restore original values` must return every modifier to OFF and every measured value to the original snapshot.
 
-For a developer-controlled private build, implement the same handshake in the test build and keep it disabled in production. The live public connector should remain telemetry/handshake-only unless the game developer provides an explicit authorized testing interface.
+## Official-site behavior
+
+The official-site button probes for the same authorized bridge protocol. It does not consider the website itself a stat connection.
+
+If the target does not implement the protocol, the application reports:
+
+- handshake timeout or insufficient capabilities,
+- player-stat access unavailable,
+- modifier controls disabled.
+
+This is deliberate. It prevents a local UI toggle from being misreported as a live game modification.
+
+For a developer-controlled beta build, implement the v3 bridge protocol in the test build. Do not enable that bridge in production.
+
+
+## Deterministic certification
+
+Run:
+
+```bash
+node verify.mjs
+```
+
+The verifier executes the same bridge stat engine used by `sandbox.html` and checks the entire flow for every modifier: original snapshot → independent application → acknowledgement → measured ×2 value → individual restoration → restore-all.
