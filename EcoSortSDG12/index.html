@@ -15,6 +15,9 @@ nav{max-width:1100px;margin:auto;padding:14px 18px;display:flex;align-items:cent
 .links{display:none;position:absolute;top:62px;left:0;right:0;background:white;padding:15px 20px;box-shadow:0 8px 20px #0001}
 .links.open{display:grid;gap:12px}
 .links a{text-decoration:none;color:#214238;font-weight:700;padding:8px}
+section[id]{scroll-margin-top:76px}
+:focus-visible{outline:3px solid #d89b1c;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .hero{padding:65px 20px 45px;background:linear-gradient(145deg,#e8f7ed,#d4eddd);overflow:hidden}
 .hero-inner{max-width:1100px;margin:auto}
 .badge{display:inline-block;background:#17623e;color:white;padding:7px 12px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:.7px}
@@ -60,7 +63,7 @@ section{padding:85px 30px}
 <header>
 <nav>
 <a class="logo" href="#home"><span>🌱</span> EcoSort</a>
-<button class="menu" id="menu">☰</button>
+<button class="menu" id="menu" type="button" aria-label="Open navigation menu" aria-controls="links" aria-expanded="false">☰</button>
 <div class="links" id="links">
 <a href="#home">Home</a><a href="#problem">Problem</a><a href="#guide">Sort Guide</a><a href="#quiz">Quiz</a><a href="#action">Take Action</a><a href="#sts">STS</a>
 </div>
@@ -106,7 +109,7 @@ section{padding:85px 30px}
 
 <section id="quiz"><div class="container">
 <div class="kicker">INTERACTIVE QUIZ</div><h2>Test your EcoSort knowledge</h2>
-<div class="quiz"><p id="qn"></p><h3 id="question"></h3><div class="answers" id="answers"></div><div id="result"></div><button class="btn green" id="next" style="display:none">Next Question</button></div>
+<div class="quiz"><p id="qn"></p><h3 id="question"></h3><div class="answers" id="answers"></div><div id="result" role="status" aria-live="polite"></div><button class="btn green" id="next" type="button" style="display:none">Next Question</button></div>
 </div></section>
 
 <section class="action" id="action"><div class="container">
@@ -117,7 +120,7 @@ section{padding:85px 30px}
 <label><input class="habit" type="checkbox"> I will reuse items when possible.</label>
 <label><input class="habit" type="checkbox"> I will handle e-waste responsibly.</label>
 </div>
-<div class="progress"><div id="bar"></div></div><p id="percent">0% commitment</p>
+<div class="progress" id="commitment-progress" role="progressbar" aria-label="Commitments selected" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="bar"></div></div><p id="percent">0% commitment</p>
 </div></section>
 
 <section id="sts"><div class="container">
@@ -133,25 +136,129 @@ section{padding:85px 30px}
 <footer><b>🌱 EcoSort — IT for the SDGs</b><br>BSIT STS 101 Midterm Project • SDG 12</footer>
 
 <script>
-const menu=document.getElementById('menu'),links=document.getElementById('links');
-menu.onclick=()=>links.classList.toggle('open');
-document.querySelectorAll('.links a').forEach(a=>a.onclick=()=>links.classList.remove('open'));
+const menu = document.getElementById('menu');
+const links = document.getElementById('links');
+function closeMenu() {
+  links.classList.remove('open');
+  menu.setAttribute('aria-expanded', 'false');
+  menu.setAttribute('aria-label', 'Open navigation menu');
+}
+menu.addEventListener('click', () => {
+  const expanded = links.classList.toggle('open');
+  menu.setAttribute('aria-expanded', String(expanded));
+  menu.setAttribute('aria-label', expanded ? 'Close navigation menu' : 'Open navigation menu');
+});
+document.querySelectorAll('.links a').forEach(a => a.addEventListener('click', closeMenu));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && links.classList.contains('open')) {
+    closeMenu();
+    menu.focus();
+  }
+});
 
-const quiz=[
-["Which practice helps reduce unnecessary waste?",["Buy more disposable items","Reuse suitable items","Mix all waste together","Throw electronics anywhere"],1],
-["Which item needs special handling?",["Banana peel","Clean cardboard","Old battery","Fruit skin"],2],
-["Why is waste segregation useful?",["It makes sorting and recovery easier","It increases mixed waste","It removes recycling","It makes all waste biodegradable"],0],
-["What is the Technology part of STS in EcoSort?",["Technology has no role","A website can share information and provide interactive tools","Technology creates all waste","Science and society are unrelated"],1]
+const quiz = [
+  ["Which practice helps reduce unnecessary waste?", ["Buy more disposable items", "Reuse suitable items", "Mix all waste together", "Throw electronics anywhere"], 1],
+  ["Which item needs special handling?", ["Banana peel", "Clean cardboard", "Old battery", "Fruit skin"], 2],
+  ["Why is waste segregation useful?", ["It makes sorting and recovery easier", "It increases mixed waste", "It removes recycling", "It makes all waste biodegradable"], 0],
+  ["What is the Technology part of STS in EcoSort?", ["Technology has no role", "A website can share information and provide interactive tools", "Technology creates all waste", "Science and society are unrelated"], 1]
 ];
-let n=0,score=0;
-const qn=document.getElementById('qn'),q=document.getElementById('question'),ans=document.getElementById('answers'),res=document.getElementById('result'),next=document.getElementById('next');
-function load(){qn.textContent=`Question ${n+1} of ${quiz.length}`;q.textContent=quiz[n][0];ans.innerHTML='';res.textContent='';next.style.display='none';quiz[n][1].forEach((x,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=x;b.onclick=()=>choose(i);ans.appendChild(b)})}
-function choose(i){let bs=document.querySelectorAll('.answer');bs.forEach(b=>b.disabled=true);if(i===quiz[n][2]){score++;bs[i].classList.add('correct');res.textContent='Correct! 🌱'}else{bs[i].classList.add('wrong');bs[quiz[n][2]].classList.add('correct');res.textContent='Not quite — the highlighted answer is correct.'}next.style.display='inline-block'}
-next.onclick=()=>{n++;if(n<quiz.length)load();else{qn.textContent='Quiz complete!';q.textContent=`You scored ${score} out of ${quiz.length}.`;ans.innerHTML='';res.textContent=score===quiz.length?'Excellent! ♻️':'Good effort! Review the Sort Guide and try again.';next.textContent='Try Again';next.onclick=()=>{n=0;score=0;next.textContent='Next Question';next.onclick=arguments.callee;load()}}};load();
+let n = 0;
+let score = 0;
+let answered = false;
+const qn = document.getElementById('qn');
+const q = document.getElementById('question');
+const ans = document.getElementById('answers');
+const res = document.getElementById('result');
+const next = document.getElementById('next');
+function loadQuestion() {
+  answered = false;
+  qn.textContent = `Question ${n + 1} of ${quiz.length}`;
+  q.textContent = quiz[n][0];
+  ans.replaceChildren();
+  res.textContent = '';
+  next.style.display = 'none';
+  quiz[n][1].forEach((choice, i) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'answer';
+    button.textContent = choice;
+    button.addEventListener('click', () => choose(i));
+    ans.appendChild(button);
+  });
+}
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  const buttons = ans.querySelectorAll('.answer');
+  buttons.forEach(button => { button.disabled = true; });
+  if (i === quiz[n][2]) {
+    score++;
+    buttons[i].classList.add('correct');
+    res.textContent = 'Correct! 🌱';
+  } else {
+    buttons[i].classList.add('wrong');
+    buttons[quiz[n][2]].classList.add('correct');
+    res.textContent = 'Not quite — the highlighted answer is correct.';
+  }
+  next.style.display = 'inline-block';
+}
+function advanceQuiz() {
+  if (!answered) return;
+  n++;
+  if (n < quiz.length) {
+    loadQuestion();
+    q.focus();
+  } else {
+    qn.textContent = 'Quiz complete!';
+    q.textContent = `You scored ${score} out of ${quiz.length}.`;
+    ans.replaceChildren();
+    res.textContent = score === quiz.length ? 'Excellent! ♻️' : 'Good effort! Review the Sort Guide and try again.';
+    next.textContent = 'Try Again';
+    next.removeEventListener('click', advanceQuiz);
+    next.addEventListener('click', restartQuiz);
+  }
+}
+function restartQuiz() {
+  n = 0;
+  score = 0;
+  next.textContent = 'Next Question';
+  next.removeEventListener('click', restartQuiz);
+  next.addEventListener('click', advanceQuiz);
+  loadQuestion();
+  q.focus();
+}
+q.setAttribute('tabindex', '-1');
+next.addEventListener('click', advanceQuiz);
+loadQuestion();
 
-const habits=document.querySelectorAll('.habit'),bar=document.getElementById('bar'),percent=document.getElementById('percent');
-function update(){let c=[...habits].filter(x=>x.checked).length,p=Math.round(c/4*100);bar.style.width=p+'%';percent.textContent=p+'% commitment';localStorage.eco=JSON.stringify([...habits].map(x=>x.checked))}
-let saved=JSON.parse(localStorage.eco||'[]');habits.forEach((h,i)=>{h.checked=saved[i]||false;h.onchange=update});update();
+const habits = document.querySelectorAll('.habit');
+const bar = document.getElementById('bar');
+const percent = document.getElementById('percent');
+const commitmentProgress = document.getElementById('commitment-progress');
+function updateCommitment() {
+  const count = [...habits].filter(input => input.checked).length;
+  const value = Math.round(count / habits.length * 100);
+  bar.style.width = value + '%';
+  percent.textContent = value + '% commitment';
+  commitmentProgress.setAttribute('aria-valuenow', String(value));
+  try {
+    localStorage.setItem('eco', JSON.stringify([...habits].map(input => input.checked)));
+  } catch (error) {
+    // The checkboxes still work if browser storage is unavailable.
+  }
+}
+let saved = [];
+try {
+  const stored = JSON.parse(localStorage.getItem('eco') || '[]');
+  if (Array.isArray(stored)) saved = stored;
+} catch (error) {
+  // Ignore malformed or inaccessible saved data and start with unchecked habits.
+}
+habits.forEach((habit, i) => {
+  habit.checked = saved[i] === true;
+  habit.addEventListener('change', updateCommitment);
+});
+updateCommitment();
 </script>
 </body>
 </html>
