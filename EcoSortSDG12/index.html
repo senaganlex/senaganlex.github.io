@@ -6,82 +6,473 @@
 <title>EcoSort | SDG 12</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%23e8f7ed%22%2F%3E%3Cpath%20d%3D%22M49%2013C29%2014%2016%2023%2016%2038c0%208%206%2013%2013%2013%2016%200%2024-18%2020-38Z%22%20fill%3D%22none%22%20stroke%3D%22%2317623e%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M14%2052c7-13%2017-22%2029-30%22%20fill%3D%22none%22%20stroke%3D%22%2317623e%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <style>
-*{box-sizing:border-box;scroll-behavior:smooth}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f8f4;color:#18352a;line-height:1.6}
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);box-shadow:0 2px 15px #174f3a18}
-nav{max-width:1100px;margin:auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:22px;font-weight:800;color:#17623e;text-decoration:none}
-.logo span{font-size:25px}
-.menu{border:0;background:#e8f3eb;color:#17623e;border-radius:10px;padding:9px 12px;font-size:20px;cursor:pointer}
-.links{display:none;position:absolute;top:100%;left:0;right:0;background:white;padding:15px 20px;box-shadow:0 8px 20px #0001}
-.links.open{display:grid;gap:12px}
-.links a{text-decoration:none;color:#214238;font-weight:700;padding:8px}
-section[id]{scroll-margin-top:76px}
-:focus-visible{outline:3px solid #d89b1c;outline-offset:3px}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-.hero{padding:65px 20px 45px;background:linear-gradient(145deg,#e8f7ed,#d4eddd);overflow:hidden}
-.hero-inner{max-width:1100px;margin:auto}
-.badge{display:inline-block;background:#17623e;color:white;padding:7px 12px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:.7px}
-h1{font-size:48px;line-height:1.03;margin:18px 0 15px}
-h1 span{color:#25804f}
-.hero p{font-size:17px;color:#52685f;max-width:650px}
-.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
-.btn{padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:800;display:inline-block;border:2px solid #17623e}
-.btn.green{background:#17623e;color:white}.btn.white{color:#17623e;background:white}
-.hero-visual{margin:35px auto 0;max-width:390px;background:white;border-radius:28px;padding:30px;text-align:center;box-shadow:0 15px 35px #174f3a1a}
-.hero-visual .big{font-size:75px}.hero-visual h3{margin:5px 0;font-size:24px}
-.steps{background:#17623e;color:white;padding:25px 20px}
-.steps-grid{max-width:1100px;margin:auto;display:grid;gap:14px}
-.step{display:flex;gap:13px;align-items:center;padding:12px;border-bottom:1px solid #ffffff30}
-.step:last-child{border:0}.num{font-size:25px;font-weight:900;color:#bce6ca}
-section{padding:60px 20px}.container{max-width:1100px;margin:auto}
-.kicker{color:#25804f;font-weight:900;font-size:12px;letter-spacing:1.5px}
-h2{font-size:34px;line-height:1.15;margin:9px 0 15px}
-.intro{color:#61746c;max-width:760px}
-.cards{display:grid;gap:16px;margin-top:30px}
-.card{background:white;border:1px solid #dce9df;border-radius:20px;padding:25px;box-shadow:0 8px 25px #174f3a0b}
-.icon{font-size:36px}.card h3{margin:10px 0 6px;font-size:21px}.card p{color:#65756e;margin:0}
-.guide{background:#eaf5ed}
-.bin{border-radius:20px;padding:25px;background:white;border-left:7px solid #5b9c62}
-.bin.blue{border-color:#5791bd}.bin.gray{border-color:#999}.bin.purple{border-color:#9b67b4}
-.quiz{background:white;border:1px solid #dce9df;border-radius:20px;padding:25px;box-shadow:0 10px 30px #174f3a0c}
-.answers{display:grid;gap:10px;margin:20px 0}.answer{padding:14px;border:1px solid #d8e5dc;background:#f8fbf8;border-radius:11px;text-align:left;font-size:15px;cursor:pointer}.answer.correct{background:#dff3e4;border-color:#54a16c}.answer.wrong{background:#f9e3df;border-color:#cc7166}
-#result{font-weight:800;min-height:24px}.progress{height:13px;background:#dce8df;border-radius:20px;overflow:hidden}.progress div{height:100%;width:0;background:#25804f;transition:.3s}
-.action{background:#17623e;color:white}.action .kicker{color:#b9e1c8}.action p{color:#d8ece0}
-.checks{display:grid;gap:12px;margin:25px 0}.checks label{background:#ffffff14;border:1px solid #ffffff2a;padding:14px;border-radius:12px}.checks input{transform:scale(1.2);margin-right:9px}
-.sts{display:grid;gap:16px}.sts .card{text-align:center}.sts .icon{font-size:42px}
-.cta{text-align:center;background:#d9efdf}.cta h2{max-width:650px;margin:0 auto 15px}
-footer{background:#102f24;color:white;padding:30px 20px;text-align:center;font-size:13px}
-@media(min-width:760px){
-nav{padding:14px 30px}
-.hero{padding:90px 30px}.hero-inner{display:grid;grid-template-columns:1.3fr .7fr;align-items:center;gap:50px}h1{font-size:68px}.hero-visual{margin:0}
-.steps-grid{grid-template-columns:repeat(3,1fr)}.step{border:0}.cards.three{grid-template-columns:repeat(3,1fr)}.cards.four{grid-template-columns:repeat(4,1fr)}.sts{grid-template-columns:repeat(3,1fr)}
-section{padding:85px 30px}
+* {
+  box-sizing:border-box;
+  scroll-behavior:smooth
+}
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f8f4;
+  color:#18352a;
+  line-height:1.6
+}
+header {
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 2px 15px #174f3a18
+}
+nav {
+  max-width:1100px;
+  margin:auto;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+.logo {
+  font-size:22px;
+  font-weight:800;
+  color:#17623e;
+  text-decoration:none
+}
+.logo span {
+  font-size:25px
+}
+.menu {
+  border:0;
+  background:#e8f3eb;
+  color:#17623e;
+  border-radius:10px;
+  padding:9px 12px;
+  font-size:20px;
+  cursor:pointer
+}
+.links {
+  display:none;
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:white;
+  padding:15px 20px;
+  box-shadow:0 8px 20px #0001
+}
+.links.open {
+  display:grid;
+  gap:12px
+}
+.links a {
+  text-decoration:none;
+  color:#214238;
+  font-weight:700;
+  padding:8px
+}
+section[id] {
+  scroll-margin-top:76px
+}
+:focus-visible {
+  outline:3px solid #d89b1c;
+  outline-offset:3px
+}
+@media(prefers-reduced-motion:reduce) {
+  * {
+    scroll-behavior:auto!important;
+    transition:none!important
+  }
+}
+.hero {
+  padding:65px 20px 45px;
+  background:linear-gradient(145deg,#e8f7ed,#d4eddd);
+  overflow:hidden
+}
+.hero-inner {
+  max-width:1100px;
+  margin:auto
+}
+.badge {
+  display:inline-block;
+  background:#17623e;
+  color:white;
+  padding:7px 12px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.7px
+}
+h1 {
+  font-size:48px;
+  line-height:1.03;
+  margin:18px 0 15px
+}
+h1 span {
+  color:#25804f
+}
+.hero p {
+  font-size:17px;
+  color:#52685f;
+  max-width:650px
+}
+.buttons {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:25px
+}
+.btn {
+  padding:13px 18px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:800;
+  display:inline-block;
+  border:2px solid #17623e
+}
+.btn.green {
+  background:#17623e;
+  color:white
+}
+.btn.white {
+  color:#17623e;
+  background:white
+}
+.hero-visual {
+  margin:35px auto 0;
+  max-width:390px;
+  background:white;
+  border-radius:28px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 15px 35px #174f3a1a
+}
+.hero-visual .big {
+  font-size:75px
+}
+.hero-visual h3 {
+  margin:5px 0;
+  font-size:24px
+}
+.steps {
+  background:#17623e;
+  color:white;
+  padding:25px 20px
+}
+.steps-grid {
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  gap:14px
+}
+.step {
+  display:flex;
+  gap:13px;
+  align-items:center;
+  padding:12px;
+  border-bottom:1px solid #ffffff30
+}
+.step:last-child {
+  border:0
+}
+.num {
+  font-size:25px;
+  font-weight:900;
+  color:#bce6ca
+}
+section {
+  padding:60px 20px
+}
+.container {
+  max-width:1100px;
+  margin:auto
+}
+.kicker {
+  color:#25804f;
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:1.5px
+}
+h2 {
+  font-size:34px;
+  line-height:1.15;
+  margin:9px 0 15px
+}
+.intro {
+  color:#61746c;
+  max-width:760px
+}
+.cards {
+  display:grid;
+  gap:16px;
+  margin-top:30px
+}
+.card {
+  background:white;
+  border:1px solid #dce9df;
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 8px 25px #174f3a0b
+}
+.icon {
+  font-size:36px
+}
+.card h3 {
+  margin:10px 0 6px;
+  font-size:21px
+}
+.card p {
+  color:#65756e;
+  margin:0
+}
+.guide {
+  background:#eaf5ed
+}
+.bin {
+  border-radius:20px;
+  padding:25px;
+  background:white;
+  border-left:7px solid #5b9c62
+}
+.bin.blue {
+  border-color:#5791bd
+}
+.bin.gray {
+  border-color:#999
+}
+.bin.purple {
+  border-color:#9b67b4
+}
+.quiz {
+  background:white;
+  border:1px solid #dce9df;
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 10px 30px #174f3a0c
+}
+.answers {
+  display:grid;
+  gap:10px;
+  margin:20px 0
+}
+.answer {
+  padding:14px;
+  border:1px solid #d8e5dc;
+  background:#f8fbf8;
+  border-radius:11px;
+  text-align:left;
+  font-size:15px;
+  cursor:pointer
+}
+.answer.correct {
+  background:#dff3e4;
+  border-color:#54a16c
+}
+.answer.wrong {
+  background:#f9e3df;
+  border-color:#cc7166
+}
+#result {
+  font-weight:800;
+  min-height:24px
+}
+.progress {
+  height:13px;
+  background:#dce8df;
+  border-radius:20px;
+  overflow:hidden
+}
+.progress div {
+  height:100%;
+  width:0;
+  background:#25804f;
+  transition:.3s
+}
+.action {
+  background:#17623e;
+  color:white
+}
+.action .kicker {
+  color:#b9e1c8
+}
+.action p {
+  color:#d8ece0
+}
+.checks {
+  display:grid;
+  gap:12px;
+  margin:25px 0
+}
+.checks label {
+  background:#ffffff14;
+  border:1px solid #ffffff2a;
+  padding:14px;
+  border-radius:12px
+}
+.checks input {
+  transform:scale(1.2);
+  margin-right:9px
+}
+.sts {
+  display:grid;
+  gap:16px
+}
+.sts .card {
+  text-align:center
+}
+.sts .icon {
+  font-size:42px
+}
+.cta {
+  text-align:center;
+  background:#d9efdf
+}
+.cta h2 {
+  max-width:650px;
+  margin:0 auto 15px
+}
+footer {
+  background:#102f24;
+  color:white;
+  padding:30px 20px;
+  text-align:center;
+  font-size:13px
+}
+@media(min-width:760px) {
+  nav {
+    padding:14px 30px
+  }
+  .hero {
+    padding:90px 30px
+  }
+  .hero-inner {
+    display:grid;
+    grid-template-columns:1.3fr .7fr;
+    align-items:center;
+    gap:50px
+  }
+  h1 {
+    font-size:68px
+  }
+  .hero-visual {
+    margin:0
+  }
+  .steps-grid {
+    grid-template-columns:repeat(3,1fr)
+  }
+  .step {
+    border:0
+  }
+  .cards.three {
+    grid-template-columns:repeat(3,1fr)
+  }
+  .cards.four {
+    grid-template-columns:repeat(4,1fr)
+  }
+  .sts {
+    grid-template-columns:repeat(3,1fr)
+  }
+  section {
+    padding:85px 30px
+  }
 }
 
-/* Self-contained rounded line icons; no external fonts, scripts, or asset requests. */
-.solar-icon{display:inline-block;width:1em;height:1em;vertical-align:-.12em;flex-shrink:0}
-.logo{display:inline-flex;align-items:center;gap:7px}
-.logo span{display:inline-flex;align-items:center}
-.logo .solar-icon{width:25px;height:25px}
-.menu{display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
-.menu .solar-icon{width:23px;height:23px}
-.btn .solar-icon{width:18px;height:18px;vertical-align:-.22em;margin-right:5px}
-.hero-visual .big{display:flex;justify-content:center;align-items:center;color:#25804f}
-.hero-visual .big .solar-icon{width:80px;height:80px}
-.icon{display:flex;align-items:center;color:#25804f}
-.icon .solar-icon{width:38px;height:38px}
-.bin.blue .icon{color:#5791bd}.bin.gray .icon{color:#777}.bin.purple .icon{color:#9b67b4}
-.sts .icon{justify-content:center}
-.sts .icon .solar-icon{width:44px;height:44px}
-footer .solar-icon{width:16px;height:16px;vertical-align:-.2em}
+/* Self-contained rounded line icons;
+no external fonts, scripts, or asset requests. */
+.solar-icon {
+  display:inline-block;
+  width:1em;
+  height:1em;
+  vertical-align:-.12em;
+  flex-shrink:0
+}
+.logo {
+  display:inline-flex;
+  align-items:center;
+  gap:7px
+}
+.logo span {
+  display:inline-flex;
+  align-items:center
+}
+.logo .solar-icon {
+  width:25px;
+  height:25px
+}
+.menu {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-left:auto
+}
+.menu .solar-icon {
+  width:23px;
+  height:23px
+}
+.btn .solar-icon {
+  width:18px;
+  height:18px;
+  vertical-align:-.22em;
+  margin-right:5px
+}
+.hero-visual .big {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#25804f
+}
+.hero-visual .big .solar-icon {
+  width:80px;
+  height:80px
+}
+.icon {
+  display:flex;
+  align-items:center;
+  color:#25804f
+}
+.icon .solar-icon {
+  width:38px;
+  height:38px
+}
+.bin.blue .icon {
+  color:#5791bd
+}
+.bin.gray .icon {
+  color:#777
+}
+.bin.purple .icon {
+  color:#9b67b4
+}
+.sts .icon {
+  justify-content:center
+}
+.sts .icon .solar-icon {
+  width:44px;
+  height:44px
+}
+footer .solar-icon {
+  width:16px;
+  height:16px;
+  vertical-align:-.2em
+}
+
 /* Mobile/tablet navigation stays collapsed until the full link row fits. */
-@media(min-width:980px){
-  .menu{display:none}
-  .links,.links.open{display:flex;position:static;padding:0;box-shadow:none;gap:18px;background:transparent}
-  .links a{padding:5px;font-size:14px}
+@media(min-width:980px) {
+  .menu {
+    display:none
+  }
+  .links,.links.open {
+    display:flex;
+    position:static;
+    padding:0;
+    box-shadow:none;
+    gap:18px;
+    background:transparent
+  }
+  .links a {
+    padding:5px;
+    font-size:14px
+  }
 }
-
 </style>
 </head>
 <body>
@@ -161,128 +552,185 @@ footer .solar-icon{width:16px;height:16px;vertical-align:-.2em}
 <footer><b><svg class="solar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 4C10 4 5 8 5 15a5 5 0 0 0 5 5c7 0 10-7 10-16Z"/><path d="M4 21c3-6 7-9 12-12"/></svg> EcoSort — IT for the SDGs</b><br>BSIT STS 101 Midterm Project • SDG 12</footer>
 
 <script>
-const menu = document.getElementById('menu');
-const links = document.getElementById('links');
+// NAVIGATION
+var menu = document.getElementById('menu');
+var links = document.getElementById('links');
+
 function closeMenu() {
   links.classList.remove('open');
   menu.setAttribute('aria-expanded', 'false');
   menu.setAttribute('aria-label', 'Open navigation menu');
 }
-menu.addEventListener('click', () => {
-  const expanded = links.classList.toggle('open');
-  menu.setAttribute('aria-expanded', String(expanded));
-  menu.setAttribute('aria-label', expanded ? 'Close navigation menu' : 'Open navigation menu');
+
+menu.addEventListener('click', function () {
+  if (links.classList.contains('open')) {
+    closeMenu();
+  } else {
+    links.classList.add('open');
+    menu.setAttribute('aria-expanded', 'true');
+    menu.setAttribute('aria-label', 'Close navigation menu');
+  }
 });
-document.querySelectorAll('.links a').forEach(a => a.addEventListener('click', closeMenu));
-document.addEventListener('keydown', event => {
+
+var navigationLinks = document.querySelectorAll('.links a');
+for (var i = 0; i < navigationLinks.length; i++) {
+  navigationLinks[i].addEventListener('click', closeMenu);
+}
+
+document.addEventListener('keydown', function (event) {
   if (event.key === 'Escape' && links.classList.contains('open')) {
     closeMenu();
     menu.focus();
   }
 });
 
-const quiz = [
-  ["Which practice helps reduce unnecessary waste?", ["Buy more disposable items", "Reuse suitable items", "Mix all waste together", "Throw electronics anywhere"], 1],
-  ["Which item needs special handling?", ["Banana peel", "Clean cardboard", "Old battery", "Fruit skin"], 2],
-  ["Why is waste segregation useful?", ["It makes sorting and recovery easier", "It increases mixed waste", "It removes recycling", "It makes all waste biodegradable"], 0],
-  ["What is the Technology part of STS in EcoSort?", ["Technology has no role", "A website can share information and provide interactive tools", "Technology creates all waste", "Science and society are unrelated"], 1]
+// QUIZ: each question contains its text, four answers, and the correct answer number.
+var quiz = [
+  ['Which practice helps reduce unnecessary waste?',
+    ['Buy more disposable items', 'Reuse suitable items', 'Mix all waste together', 'Throw electronics anywhere'], 1],
+  ['Which item needs special handling?',
+    ['Banana peel', 'Clean cardboard', 'Old battery', 'Fruit skin'], 2],
+  ['Why is waste segregation useful?',
+    ['It makes sorting and recovery easier', 'It increases mixed waste', 'It removes recycling', 'It makes all waste biodegradable'], 0],
+  ['What is the Technology part of STS in EcoSort?',
+    ['Technology has no role', 'A website can share information and provide interactive tools', 'Technology creates all waste', 'Science and society are unrelated'], 1]
 ];
-let n = 0;
-let score = 0;
-let answered = false;
-const qn = document.getElementById('qn');
-const q = document.getElementById('question');
-const ans = document.getElementById('answers');
-const res = document.getElementById('result');
-const next = document.getElementById('next');
-function loadQuestion() {
+
+var questionNumber = 0;
+var score = 0;
+var answered = false;
+var questionCount = document.getElementById('qn');
+var questionText = document.getElementById('question');
+var answerBox = document.getElementById('answers');
+var result = document.getElementById('result');
+var nextButton = document.getElementById('next');
+
+function showQuestion() {
   answered = false;
-  qn.textContent = `Question ${n + 1} of ${quiz.length}`;
-  q.textContent = quiz[n][0];
-  ans.replaceChildren();
-  res.textContent = '';
-  next.style.display = 'none';
-  quiz[n][1].forEach((choice, i) => {
-    const button = document.createElement('button');
+  questionCount.textContent = 'Question ' + (questionNumber + 1) + ' of ' + quiz.length;
+  questionText.textContent = quiz[questionNumber][0];
+  answerBox.innerHTML = '';
+  result.textContent = '';
+  nextButton.style.display = 'none';
+
+  var choices = quiz[questionNumber][1];
+  for (var i = 0; i < choices.length; i++) {
+    var button = document.createElement('button');
     button.type = 'button';
     button.className = 'answer';
-    button.textContent = choice;
-    button.addEventListener('click', () => choose(i));
-    ans.appendChild(button);
-  });
-}
-function choose(i) {
-  if (answered) return;
-  answered = true;
-  const buttons = ans.querySelectorAll('.answer');
-  buttons.forEach(button => { button.disabled = true; });
-  if (i === quiz[n][2]) {
-    score++;
-    buttons[i].classList.add('correct');
-    res.textContent = 'Correct! 🌱';
-  } else {
-    buttons[i].classList.add('wrong');
-    buttons[quiz[n][2]].classList.add('correct');
-    res.textContent = 'Not quite — the highlighted answer is correct.';
-  }
-  next.style.display = 'inline-block';
-}
-function advanceQuiz() {
-  if (!answered) return;
-  n++;
-  if (n < quiz.length) {
-    loadQuestion();
-    q.focus();
-  } else {
-    qn.textContent = 'Quiz complete!';
-    q.textContent = `You scored ${score} out of ${quiz.length}.`;
-    ans.replaceChildren();
-    res.textContent = score === quiz.length ? 'Excellent! ♻️' : 'Good effort! Review the Sort Guide and try again.';
-    next.textContent = 'Try Again';
-    next.removeEventListener('click', advanceQuiz);
-    next.addEventListener('click', restartQuiz);
+    button.textContent = choices[i];
+    button.addEventListener('click', makeAnswerHandler(i));
+    answerBox.appendChild(button);
   }
 }
-function restartQuiz() {
-  n = 0;
-  score = 0;
-  next.textContent = 'Next Question';
-  next.removeEventListener('click', restartQuiz);
-  next.addEventListener('click', advanceQuiz);
-  loadQuestion();
-  q.focus();
-}
-q.setAttribute('tabindex', '-1');
-next.addEventListener('click', advanceQuiz);
-loadQuestion();
 
-const habits = document.querySelectorAll('.habit');
-const bar = document.getElementById('bar');
-const percent = document.getElementById('percent');
-const commitmentProgress = document.getElementById('commitment-progress');
-function updateCommitment() {
-  const count = [...habits].filter(input => input.checked).length;
-  const value = Math.round(count / habits.length * 100);
-  bar.style.width = value + '%';
-  percent.textContent = value + '% commitment';
-  commitmentProgress.setAttribute('aria-valuenow', String(value));
-  try {
-    localStorage.setItem('eco', JSON.stringify([...habits].map(input => input.checked)));
-  } catch (error) {
-    // The checkboxes still work if browser storage is unavailable.
+function makeAnswerHandler(answerNumber) {
+  return function () {
+    checkAnswer(answerNumber);
+  };
+}
+
+function checkAnswer(selectedAnswer) {
+  if (answered) {
+    return;
+  }
+  answered = true;
+
+  var buttons = answerBox.querySelectorAll('.answer');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = true;
+  }
+
+  var correctAnswer = quiz[questionNumber][2];
+  if (selectedAnswer === correctAnswer) {
+    score++;
+    buttons[selectedAnswer].classList.add('correct');
+    result.textContent = 'Correct! 🌱';
+  } else {
+    buttons[selectedAnswer].classList.add('wrong');
+    buttons[correctAnswer].classList.add('correct');
+    result.textContent = 'Not quite — the highlighted answer is correct.';
+  }
+  nextButton.style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  if (nextButton.textContent === 'Try Again') {
+    questionNumber = 0;
+    score = 0;
+    nextButton.textContent = 'Next Question';
+    showQuestion();
+    questionText.focus();
+    return;
+  }
+
+  if (!answered) {
+    return;
+  }
+  questionNumber++;
+  if (questionNumber < quiz.length) {
+    showQuestion();
+    questionText.focus();
+  } else {
+    questionCount.textContent = 'Quiz complete!';
+    questionText.textContent = 'You scored ' + score + ' out of ' + quiz.length + '.';
+    answerBox.innerHTML = '';
+    if (score === quiz.length) {
+      result.textContent = 'Excellent! ♻️';
+    } else {
+      result.textContent = 'Good effort! Review the Sort Guide and try again.';
+    }
+    nextButton.textContent = 'Try Again';
   }
 }
-let saved = [];
-try {
-  const stored = JSON.parse(localStorage.getItem('eco') || '[]');
-  if (Array.isArray(stored)) saved = stored;
-} catch (error) {
-  // Ignore malformed or inaccessible saved data and start with unchecked habits.
+
+questionText.setAttribute('tabindex', '-1');
+nextButton.addEventListener('click', nextQuestion);
+showQuestion();
+
+// COMMITMENT CHECKBOXES
+var habits = document.querySelectorAll('.habit');
+var bar = document.getElementById('bar');
+var percent = document.getElementById('percent');
+var progress = document.getElementById('commitment-progress');
+
+function updateCommitment() {
+  var checked = 0;
+  var values = [];
+  for (var i = 0; i < habits.length; i++) {
+    if (habits[i].checked) {
+      checked++;
+    }
+    values.push(habits[i].checked);
+  }
+
+  var amount = Math.round(checked / habits.length * 100);
+  bar.style.width = amount + '%';
+  percent.textContent = amount + '% commitment';
+  progress.setAttribute('aria-valuenow', String(amount));
+
+  // Keep the tracker working even if the browser cannot save data.
+  try {
+    localStorage.setItem('eco', JSON.stringify(values));
+  } catch (error) {
+    // Saving is optional.
+  }
 }
-habits.forEach((habit, i) => {
-  habit.checked = saved[i] === true;
-  habit.addEventListener('change', updateCommitment);
-});
+
+var saved = [];
+try {
+  var stored = JSON.parse(localStorage.getItem('eco') || '[]');
+  if (Array.isArray(stored)) {
+    saved = stored;
+  }
+} catch (error) {
+  // Start with unchecked boxes if saved data cannot be read.
+}
+
+for (var i = 0; i < habits.length; i++) {
+  habits[i].checked = saved[i] === true;
+  habits[i].addEventListener('change', updateCommitment);
+}
 updateCommitment();
 </script>
 </body>
