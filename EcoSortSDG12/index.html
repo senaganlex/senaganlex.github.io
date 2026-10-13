@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoSort | SDG 12</title>
+<style>
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f8f4;color:#18352a;line-height:1.6}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);box-shadow:0 2px 15px #174f3a18}
+nav{max-width:1100px;margin:auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:800;color:#17623e;text-decoration:none}
+.logo span{font-size:25px}
+.menu{border:0;background:#e8f3eb;color:#17623e;border-radius:10px;padding:9px 12px;font-size:20px;cursor:pointer}
+.links{display:none;position:absolute;top:62px;left:0;right:0;background:white;padding:15px 20px;box-shadow:0 8px 20px #0001}
+.links.open{display:grid;gap:12px}
+.links a{text-decoration:none;color:#214238;font-weight:700;padding:8px}
+.hero{padding:65px 20px 45px;background:linear-gradient(145deg,#e8f7ed,#d4eddd);overflow:hidden}
+.hero-inner{max-width:1100px;margin:auto}
+.badge{display:inline-block;background:#17623e;color:white;padding:7px 12px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:.7px}
+h1{font-size:48px;line-height:1.03;margin:18px 0 15px}
+h1 span{color:#25804f}
+.hero p{font-size:17px;color:#52685f;max-width:650px}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+.btn{padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:800;display:inline-block;border:2px solid #17623e}
+.btn.green{background:#17623e;color:white}.btn.white{color:#17623e;background:white}
+.hero-visual{margin:35px auto 0;max-width:390px;background:white;border-radius:28px;padding:30px;text-align:center;box-shadow:0 15px 35px #174f3a1a}
+.hero-visual .big{font-size:75px}.hero-visual h3{margin:5px 0;font-size:24px}
+.steps{background:#17623e;color:white;padding:25px 20px}
+.steps-grid{max-width:1100px;margin:auto;display:grid;gap:14px}
+.step{display:flex;gap:13px;align-items:center;padding:12px;border-bottom:1px solid #ffffff30}
+.step:last-child{border:0}.num{font-size:25px;font-weight:900;color:#bce6ca}
+section{padding:60px 20px}.container{max-width:1100px;margin:auto}
+.kicker{color:#25804f;font-weight:900;font-size:12px;letter-spacing:1.5px}
+h2{font-size:34px;line-height:1.15;margin:9px 0 15px}
+.intro{color:#61746c;max-width:760px}
+.cards{display:grid;gap:16px;margin-top:30px}
+.card{background:white;border:1px solid #dce9df;border-radius:20px;padding:25px;box-shadow:0 8px 25px #174f3a0b}
+.icon{font-size:36px}.card h3{margin:10px 0 6px;font-size:21px}.card p{color:#65756e;margin:0}
+.guide{background:#eaf5ed}
+.bin{border-radius:20px;padding:25px;background:white;border-left:7px solid #5b9c62}
+.bin.blue{border-color:#5791bd}.bin.gray{border-color:#999}.bin.purple{border-color:#9b67b4}
+.quiz{background:white;border:1px solid #dce9df;border-radius:20px;padding:25px;box-shadow:0 10px 30px #174f3a0c}
+.answers{display:grid;gap:10px;margin:20px 0}.answer{padding:14px;border:1px solid #d8e5dc;background:#f8fbf8;border-radius:11px;text-align:left;font-size:15px;cursor:pointer}.answer.correct{background:#dff3e4;border-color:#54a16c}.answer.wrong{background:#f9e3df;border-color:#cc7166}
+#result{font-weight:800;min-height:24px}.progress{height:13px;background:#dce8df;border-radius:20px;overflow:hidden}.progress div{height:100%;width:0;background:#25804f;transition:.3s}
+.action{background:#17623e;color:white}.action .kicker{color:#b9e1c8}.action p{color:#d8ece0}
+.checks{display:grid;gap:12px;margin:25px 0}.checks label{background:#ffffff14;border:1px solid #ffffff2a;padding:14px;border-radius:12px}.checks input{transform:scale(1.2);margin-right:9px}
+.sts{display:grid;gap:16px}.sts .card{text-align:center}.sts .icon{font-size:42px}
+.cta{text-align:center;background:#d9efdf}.cta h2{max-width:650px;margin:0 auto 15px}
+footer{background:#102f24;color:white;padding:30px 20px;text-align:center;font-size:13px}
+@media(min-width:760px){
+nav{padding:14px 30px}.menu{display:none}.links{display:flex!important;position:static;padding:0;box-shadow:none;gap:18px;background:transparent}.links a{padding:5px;font-size:14px}
+.hero{padding:90px 30px}.hero-inner{display:grid;grid-template-columns:1.3fr .7fr;align-items:center;gap:50px}h1{font-size:68px}.hero-visual{margin:0}
+.steps-grid{grid-template-columns:repeat(3,1fr)}.step{border:0}.cards.three{grid-template-columns:repeat(3,1fr)}.cards.four{grid-template-columns:repeat(4,1fr)}.sts{grid-template-columns:repeat(3,1fr)}
+section{padding:85px 30px}
+}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a class="logo" href="#home"><span>🌱</span> EcoSort</a>
+<button class="menu" id="menu">☰</button>
+<div class="links" id="links">
+<a href="#home">Home</a><a href="#problem">Problem</a><a href="#guide">Sort Guide</a><a href="#quiz">Quiz</a><a href="#action">Take Action</a><a href="#sts">STS</a>
+</div>
+</nav>
+</header>
+
+<section class="hero" id="home">
+<div class="hero-inner">
+<div>
+<span class="badge">SDG 12 • RESPONSIBLE CONSUMPTION</span>
+<h1>Sort Today.<br><span>Protect Tomorrow.</span></h1>
+<p>EcoSort is a student-made awareness campaign that encourages proper waste segregation and responsible consumption.</p>
+<div class="buttons"><a class="btn green" href="#guide">♻️ Learn to Sort</a><a class="btn white" href="#action">✓ Take Action</a></div>
+</div>
+<div class="hero-visual"><div class="big">♻️</div><h3>Small actions matter.</h3><p>Know your waste. Sort it correctly. Reduce what you throw away.</p></div>
+</div>
+</section>
+
+<div class="steps"><div class="steps-grid">
+<div class="step"><span class="num">01</span><b>Know the problem</b></div>
+<div class="step"><span class="num">02</span><b>Learn proper sorting</b></div>
+<div class="step"><span class="num">03</span><b>Practice responsible habits</b></div>
+</div></div>
+
+<section id="problem"><div class="container">
+<div class="kicker">THE PROBLEM</div><h2>Why does waste segregation matter?</h2>
+<p class="intro">When different types of waste are mixed together, useful recyclable materials can become harder to recover, while other waste may require different handling. Lack of information can make proper segregation difficult.</p>
+<div class="cards three">
+<div class="card"><div class="icon">🗑️</div><h3>Mixed Waste</h3><p>Putting different waste types in one container can make sorting and recovery more difficult.</p></div>
+<div class="card"><div class="icon">📱</div><h3>E-Waste</h3><p>Old electronic devices should not simply be treated like ordinary household waste.</p></div>
+<div class="card"><div class="icon">🛒</div><h3>Overconsumption</h3><p>Buying only what we need and choosing reusable items can reduce unnecessary waste.</p></div>
+</div>
+</div></section>
+
+<section class="guide" id="guide"><div class="container">
+<div class="kicker">SORT GUIDE</div><h2>Where does it belong?</h2><p class="intro">Use this simple guide as a starting point. Follow your local waste-management rules when they differ.</p>
+<div class="cards four">
+<div class="bin"><div class="icon">🍌</div><h3>Biodegradable</h3><p>Food scraps, fruit and vegetable waste, and other biodegradable materials.</p></div>
+<div class="bin blue"><div class="icon">📦</div><h3>Recyclable</h3><p>Clean paper, cardboard, and suitable recyclable containers.</p></div>
+<div class="bin gray"><div class="icon">🧻</div><h3>Residual</h3><p>Waste that cannot be composted or practically recycled.</p></div>
+<div class="bin purple"><div class="icon">🔋</div><h3>Special / E-Waste</h3><p>Batteries and old electronics need appropriate collection or disposal channels.</p></div>
+</div></div></section>
+
+<section id="quiz"><div class="container">
+<div class="kicker">INTERACTIVE QUIZ</div><h2>Test your EcoSort knowledge</h2>
+<div class="quiz"><p id="qn"></p><h3 id="question"></h3><div class="answers" id="answers"></div><div id="result"></div><button class="btn green" id="next" style="display:none">Next Question</button></div>
+</div></section>
+
+<section class="action" id="action"><div class="container">
+<div class="kicker">TAKE ACTION</div><h2>Make a simple commitment.</h2><p>Check the habits you plan to practice.</p>
+<div class="checks">
+<label><input class="habit" type="checkbox"> I will separate my waste correctly.</label>
+<label><input class="habit" type="checkbox"> I will avoid unnecessary single-use items.</label>
+<label><input class="habit" type="checkbox"> I will reuse items when possible.</label>
+<label><input class="habit" type="checkbox"> I will handle e-waste responsibly.</label>
+</div>
+<div class="progress"><div id="bar"></div></div><p id="percent">0% commitment</p>
+</div></section>
+
+<section id="sts"><div class="container">
+<div class="kicker">SCIENCE • TECHNOLOGY • SOCIETY</div><h2>How EcoSort connects to STS</h2>
+<div class="sts">
+<div class="card"><div class="icon">🔬</div><h3>Science</h3><p>Science helps us understand materials, decomposition, recycling, and environmental effects of waste.</p></div>
+<div class="card"><div class="icon">💻</div><h3>Technology</h3><p>This website uses digital technology to present information and provide interactive tools.</p></div>
+<div class="card"><div class="icon">👥</div><h3>Society</h3><p>People's consumption and disposal habits affect communities. Technology can help spread practical awareness.</p></div>
+</div></div></section>
+
+<section class="cta"><h2>One better habit can start a bigger change.</h2><p>Learn • Sort • Reduce • Reuse • Share</p><a class="btn green" href="#home">Back to Top ↑</a></section>
+
+<footer><b>🌱 EcoSort — IT for the SDGs</b><br>BSIT STS 101 Midterm Project • SDG 12</footer>
+
+<script>
+const menu=document.getElementById('menu'),links=document.getElementById('links');
+menu.onclick=()=>links.classList.toggle('open');
+document.querySelectorAll('.links a').forEach(a=>a.onclick=()=>links.classList.remove('open'));
+
+const quiz=[
+["Which practice helps reduce unnecessary waste?",["Buy more disposable items","Reuse suitable items","Mix all waste together","Throw electronics anywhere"],1],
+["Which item needs special handling?",["Banana peel","Clean cardboard","Old battery","Fruit skin"],2],
+["Why is waste segregation useful?",["It makes sorting and recovery easier","It increases mixed waste","It removes recycling","It makes all waste biodegradable"],0],
+["What is the Technology part of STS in EcoSort?",["Technology has no role","A website can share information and provide interactive tools","Technology creates all waste","Science and society are unrelated"],1]
+];
+let n=0,score=0;
+const qn=document.getElementById('qn'),q=document.getElementById('question'),ans=document.getElementById('answers'),res=document.getElementById('result'),next=document.getElementById('next');
+function load(){qn.textContent=`Question ${n+1} of ${quiz.length}`;q.textContent=quiz[n][0];ans.innerHTML='';res.textContent='';next.style.display='none';quiz[n][1].forEach((x,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=x;b.onclick=()=>choose(i);ans.appendChild(b)})}
+function choose(i){let bs=document.querySelectorAll('.answer');bs.forEach(b=>b.disabled=true);if(i===quiz[n][2]){score++;bs[i].classList.add('correct');res.textContent='Correct! 🌱'}else{bs[i].classList.add('wrong');bs[quiz[n][2]].classList.add('correct');res.textContent='Not quite — the highlighted answer is correct.'}next.style.display='inline-block'}
+next.onclick=()=>{n++;if(n<quiz.length)load();else{qn.textContent='Quiz complete!';q.textContent=`You scored ${score} out of ${quiz.length}.`;ans.innerHTML='';res.textContent=score===quiz.length?'Excellent! ♻️':'Good effort! Review the Sort Guide and try again.';next.textContent='Try Again';next.onclick=()=>{n=0;score=0;next.textContent='Next Question';next.onclick=arguments.callee;load()}}};load();
+
+const habits=document.querySelectorAll('.habit'),bar=document.getElementById('bar'),percent=document.getElementById('percent');
+function update(){let c=[...habits].filter(x=>x.checked).length,p=Math.round(c/4*100);bar.style.width=p+'%';percent.textContent=p+'% commitment';localStorage.eco=JSON.stringify([...habits].map(x=>x.checked))}
+let saved=JSON.parse(localStorage.eco||'[]');habits.forEach((h,i)=>{h.checked=saved[i]||false;h.onchange=update});update();
+</script>
+</body>
+</html>
