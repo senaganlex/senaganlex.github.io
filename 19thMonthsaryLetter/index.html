@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17121a">
+  <meta name="description" content="Nineteen months of finding home in each other. A personal anniversary letter, just for you.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="XIX — Nineteen Months, Still You">
+  <meta property="og:description" content="An anniversary letter about our little forever.">
+  <title>XIX — Nineteen Months, Still You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      color-scheme:dark;
+      --night:#17121a;--wine:#34212f;--plum:#553748;--berry:#9a6377;
+      --rose:#eab9b2;--peach:#f2ccc0;--gold:#d8b98a;--cream:#faf4eb;--paper:#f5eee4;
+      --ink:#32232b;--muted:#7d696f;--line:rgba(246,226,219,.18);
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',Arial,sans-serif;
+      --script:'Caveat',cursive;--ease:cubic-bezier(.19,1,.22,1);
+      --page:min(1320px,calc(100% - clamp(36px,8vw,144px)));
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:90px;background:var(--night)}
+    body{margin:0;min-width:320px;font-family:var(--sans);background:var(--night);color:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:clip}
+    button,a{-webkit-tap-highlight-color:transparent}
+    button{font:inherit;color:inherit}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--rose);outline-offset:5px}
+    ::selection{background:var(--rose);color:var(--ink)}
+    [hidden]{display:none!important}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+    .skip-link{position:fixed;left:16px;top:12px;z-index:120;padding:12px 18px;background:var(--cream);color:var(--ink);transform:translateY(-150%)}
+    .skip-link:focus{transform:none}
+    .grain{position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.14;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    .progress-track{position:fixed;top:0;left:0;right:0;z-index:100;height:2px;background:transparent;pointer-events:none}
+    .progress-track span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#b87988,#ead0a4);transform:scaleX(0);transform-origin:left center;will-change:transform}
+    .site-header{position:fixed;inset:0 0 auto;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:max(17px,env(safe-area-inset-top)) clamp(22px,4.9vw,80px) 17px;border-bottom:1px solid transparent;transition:background .45s,border-color .45s,backdrop-filter .45s}
+    .site-header.scrolled{background:rgba(23,18,26,.88);border-bottom-color:rgba(255,255,255,.09);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+    .brand{display:flex;align-items:center;gap:13px;flex-shrink:0}
+    .brand-glyph{display:grid;place-items:center;border:1px solid rgba(234,185,178,.65);border-radius:50%;height:36px;width:36px;font:italic 25px/.8 var(--serif);color:var(--rose)}
+    .brand-words{display:flex;flex-direction:column;gap:4px}
+    .brand-words b{font:600 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase}
+    .brand-words small{font:italic 13px/1 var(--serif);letter-spacing:.025em;color:var(--rose)}
+    .nav{display:flex;gap:clamp(15px,2.8vw,42px);align-items:center}
+    .nav a{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(250,244,235,.74);white-space:nowrap;transition:color .25s}
+    .nav a:hover,.nav a:focus-visible{color:var(--rose)}
+    .nav .nav-cta{border:1px solid rgba(234,185,178,.6);padding:12px 16px;border-radius:100px;color:var(--rose)}
+    .container{width:var(--page);margin-inline:auto}
+    .eyebrow{display:flex;align-items:center;gap:12px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase}
+    .eyebrow::before{content:'';width:30px;height:1px;background:currentColor;flex:none}
+    .btn{display:inline-flex;justify-content:center;align-items:center;gap:14px;min-height:54px;border-radius:100px;border:1px solid transparent;padding:0 24px;cursor:pointer;font:700 10px/1.2 var(--sans);text-transform:uppercase;letter-spacing:.16em;transition:background .3s,color .3s,border-color .3s,transform .3s,box-shadow .3s}
+    .btn:hover{transform:translateY(-3px)}
+    .btn-light{color:var(--ink);background:var(--cream)}
+    .btn-light:hover{background:white;box-shadow:0 15px 35px rgba(0,0,0,.17)}
+    .btn-outline{background:transparent;border-color:rgba(250,244,235,.4);color:var(--cream)}
+    .btn-outline:hover{background:rgba(255,255,255,.08);border-color:var(--rose)}
+    .btn-dark{background:var(--wine);color:var(--cream)}
+    .btn-dark:hover{background:#513044}
+    .btn-paper{background:transparent;color:var(--wine);border-color:rgba(80,44,61,.3)}
+    .btn-paper:hover{background:rgba(80,44,61,.07)}
+    /* Prologue: a deep-violet private sky, with a WebGL sculpture behind an arched portrait. */
+    .hero{position:relative;min-height:100svh;min-height:max(770px,100svh);display:flex;align-items:center;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 72% 41%,#402b40 0%,#281b2b 33%,#17121a 72%)}
+    .hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 74% 50%,rgba(230,141,156,.13),transparent 37%),radial-gradient(ellipse at 20% 80%,rgba(200,138,166,.08),transparent 37%)}
+    #cosmos{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;mix-blend-mode:screen;opacity:.85}
+    .hero-engraving{position:absolute;right:-.1em;bottom:-.31em;z-index:-1;font:400 clamp(340px,49vw,850px)/1 var(--serif);letter-spacing:-.1em;color:rgba(255,235,220,.038);pointer-events:none;white-space:nowrap}
+    .hero-stars{position:absolute;inset:0;pointer-events:none;z-index:-1;background-image:radial-gradient(1px 1px at 16% 32%,#fff7e5 60%,transparent),radial-gradient(2px 2px at 74% 14%,#ffe8dc 50%,transparent),radial-gradient(1px 1px at 91% 78%,#fff7e5 60%,transparent),radial-gradient(1px 1px at 43% 19%,#ffe8dc 60%,transparent);opacity:.44}
+    .hero .container{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);align-items:center;gap:clamp(22px,3vw,68px);padding-top:clamp(138px,13vw,188px);padding-bottom:116px;position:relative}
+    .hero-copy{position:relative;z-index:2}
+    .hero-copy .eyebrow{color:var(--rose)}
+    .hero h1{font:400 clamp(84px,10vw,165px)/.79 var(--serif);letter-spacing:-.065em;margin:30px 0 0;max-width:860px}
+    .hero h1 span{display:block;white-space:nowrap}
+    .hero h1 em{font-weight:400;color:var(--rose);padding-right:.1em}
+    .hero h1 .last-line{margin-left:.23em}
+    .hero-lede{margin:36px 0 0;max-width:490px;color:rgba(250,244,235,.68);font-size:clamp(14px,1.25vw,16px);line-height:1.85}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+    .hero-date{margin-top:55px;display:flex;align-items:center;gap:19px;font-size:10px;letter-spacing:.19em;text-transform:uppercase;color:rgba(250,244,235,.5)}
+    .hero-date i{display:block;width:34px;height:1px;background:rgba(250,244,235,.3)}
+    .portrait-scene{position:relative;min-width:0;display:grid;place-items:center;height:min(650px,58vw)}
+    .portrait-orbit{position:absolute;aspect-ratio:1;width:118%;border:1px solid rgba(232,200,163,.2);border-radius:50%;transform:rotate(-19deg);pointer-events:none}
+    .portrait-orbit::before,.portrait-orbit::after{content:'';position:absolute;inset:9%;border:1px solid rgba(232,200,163,.12);border-radius:50%}
+    .portrait-orbit::after{inset:21%;border-color:rgba(232,200,163,.12)}
+    .portrait-object{position:relative;width:clamp(246px,27.5vw,408px);max-width:81%;aspect-ratio:.75;isolation:isolate;transform:rotate(3.5deg);filter:drop-shadow(0 30px 48px rgba(8,3,11,.38));transition:transform .9s var(--ease)}
+    .portrait-object:hover{transform:rotate(0deg) translateY(-8px)}
+    .portrait-arch{position:absolute;inset:0;border-radius:49% 49% 3px 3px / 37% 37% 3px 3px;background:linear-gradient(135deg,#a76a7c,#513143 55%,#322132);overflow:hidden;border:9px solid #e9d3bd;box-shadow:0 0 0 1px #b8917a,0 0 0 11px rgba(255,240,215,.055)}
+    .portrait-arch img{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:saturate(.79) sepia(.13) contrast(1.02)}
+    .portrait-arch::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,15,25,.06),transparent 40%,rgba(34,18,28,.45));pointer-events:none}
+    .portrait-placeholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:35px;color:#ffe2d8;font:italic 30px var(--serif)}
+    .portrait-object.photo-missing img{visibility:hidden}
+    .portrait-plaque{position:absolute;left:-11%;bottom:9%;width:121%;padding:16px 12px 17px;background:#f3e5d8;color:var(--wine);text-align:center;transform:rotate(-7deg);box-shadow:0 8px 22px rgba(11,4,13,.22)}
+    .portrait-plaque span{display:block;font:500 clamp(19px,2.6vw,32px)/1.1 var(--script)}
+    .portrait-plaque small{font:700 8px/1.2 var(--sans);letter-spacing:.23em;text-transform:uppercase}
+    .portrait-spark{position:absolute;right:-12%;top:9%;font:400 65px/1 var(--serif);color:var(--gold);text-shadow:0 0 20px rgba(255,221,175,.42)}
+    .portrait-index{position:absolute;right:-11%;bottom:-8%;font:italic 70px/1 var(--serif);color:rgba(250,244,235,.8)}
+    .hero-scroll{position:absolute;left:clamp(24px,5vw,82px);bottom:38px;display:flex;align-items:center;gap:13px;color:rgba(255,245,237,.49);font-size:9px;letter-spacing:.19em;text-transform:uppercase}
+    .hero-scroll::before{content:'';display:block;width:32px;height:1px;background:var(--rose)}
+    .asterisk{font:400 25px/1 var(--serif);color:var(--gold)}
+    .interlude{position:relative;padding:42px 20px;background:#f2e8df;color:var(--wine);border-bottom:1px solid rgba(92,51,68,.1)}
+    .interlude-inner{display:flex;justify-content:center;align-items:center;gap:clamp(20px,4vw,58px);text-align:center}
+    .interlude span:not(.asterisk){font:italic clamp(22px,3vw,40px)/1 var(--serif)}
+    /* The story becomes a literary index, not a conventional card grid. */
+    .chapter{position:relative;padding:clamp(105px,12vw,190px) 0;background:var(--cream);color:var(--ink);overflow:hidden}
+    .chapter-label{font:700 10px/1 var(--sans);text-transform:uppercase;letter-spacing:.23em;color:#9a6274}
+    .story-layout{display:grid;grid-template-columns:minmax(0,.87fr) minmax(0,1.13fr);gap:clamp(48px,8vw,134px)}
+    .story-intro{align-self:start;position:sticky;top:130px}
+    .section-display{font:400 clamp(64px,8vw,125px)/.83 var(--serif);letter-spacing:-.055em;margin:23px 0 0}
+    .section-display em{color:#9e687c;font-weight:400}
+    .section-description{max-width:390px;font-size:15px;line-height:1.94;color:#74636b;margin-top:29px}
+    .story-aside-quote{border-left:1px solid #b78d88;padding-left:19px;margin-top:50px;max-width:360px;font:italic 27px/1.15 var(--serif);color:#91697a}
+    .story-list{list-style:none;padding:0;margin:0;border-top:1px solid #d9cfc8}
+    .story-list li{border-bottom:1px solid #d9cfc8;padding:27px 0 32px;display:grid;grid-template-columns:53px 1fr;gap:16px;transition:background .3s}
+    .story-list li:hover{background:rgba(153,97,119,.035)}
+    .story-num{padding-top:7px;font:700 10px/1 var(--sans);letter-spacing:.15em;color:#a57380}
+    .story-list h3{font:400 clamp(30px,3.3vw,50px)/1.02 var(--serif);letter-spacing:-.025em;margin:0}
+    .story-list p{font-size:14px;line-height:1.83;color:#76656c;margin:12px 0 0;max-width:570px}
+    .chapter-decoration{position:absolute;right:-2vw;top:70px;font:italic 240px/1 var(--serif);color:rgba(153,97,119,.045);pointer-events:none}
+    /* Nineteen reasons: an illuminated keepsake index. */
+    .reasons{position:relative;padding:clamp(115px,11vw,165px) 0;background:radial-gradient(circle at 0 5%,#4a2d3f,transparent 43%),#241922;overflow:hidden}
+    .reasons::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 87% 73%,rgba(153,93,123,.16),transparent 35%)}
+    .reasons-head{position:relative;display:flex;align-items:end;justify-content:space-between;gap:40px;margin-bottom:65px}
+    .reasons .section-display{max-width:780px}
+    .reasons .section-display em{color:var(--rose)}
+    .reasons-subtitle{max-width:248px;font:italic 26px/1.2 var(--serif);color:rgba(250,244,235,.65);margin:0 0 5px}
+    .reasons-list{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;margin:0;padding:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .reasons-list li{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:36px;min-height:200px;padding:25px clamp(17px,2.2vw,33px) 26px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .35s}
+    .reasons-list li:hover{background:rgba(235,187,185,.055)}
+    .reasons-list .reason-no{font:700 10px/1 var(--sans);letter-spacing:.17em;color:#d2a3a9}
+    .reasons-list p{font:400 clamp(23px,2.2vw,34px)/1.04 var(--serif);letter-spacing:-.015em;margin:0;color:#f4e9e0}
+    .reasons-list li:nth-child(5n+2) p{font-style:italic;color:#e4bfbf}
+    .reasons-list li.final-reason{background:rgba(217,164,160,.12);grid-column:span 2}
+    .reasons-list li.final-reason p{font:italic clamp(32px,3.2vw,48px)/1 var(--serif);color:var(--rose);max-width:490px}
+    .reasons-list li.final-reason::after{content:'♡';position:absolute;right:26px;top:14px;color:rgba(234,185,178,.35);font:100px/1 var(--serif)}
+    /* Envelope ritual: real semantic letter content, available without JavaScript. */
+    .letter-chapter{position:relative;padding:clamp(110px,12vw,180px) 0;background:radial-gradient(circle at 88% 5%,rgba(233,194,186,.23),transparent 34%),var(--paper);color:var(--ink)}
+    .letter-intro{text-align:center;max-width:850px;margin:0 auto 65px}
+    .letter-intro .chapter-label{display:block}
+    .letter-intro .section-display{font-size:clamp(70px,8vw,116px)}
+    .letter-intro p{max-width:510px;margin:25px auto 0;color:#7a6970;font-size:15px;line-height:1.8}
+    .letter-station{width:min(840px,100%);margin-inline:auto;position:relative}
+    .letter-station::before{content:'';position:absolute;width:120%;height:90%;top:8%;left:-10%;z-index:0;border:1px solid rgba(117,76,83,.1);border-radius:50%;pointer-events:none}
+    .letter-envelope{position:relative;isolation:isolate;width:min(610px,100%);min-height:410px;margin:auto;display:grid;place-items:center;border:1px solid rgba(92,52,58,.23);background:linear-gradient(137deg,#e8ccbf,#d9b5ac 70%,#c99ca0);box-shadow:0 40px 80px rgba(79,44,54,.17),0 12px 24px rgba(79,44,54,.09);overflow:hidden;perspective:1000px}
+    .letter-envelope::before{content:'';position:absolute;inset:0;clip-path:polygon(0 100%,50% 42%,100% 100%);background:linear-gradient(165deg,#ecd2c4,#d3ada4);z-index:1;pointer-events:none}
+    .letter-envelope::after{content:'';position:absolute;inset:0;background:linear-gradient(35deg,transparent 49.8%,rgba(103,70,75,.14) 50%,transparent 50.3%),linear-gradient(-35deg,transparent 49.8%,rgba(103,70,75,.14) 50%,transparent 50.3%);opacity:.25;pointer-events:none}
+    .envelope-flap{position:absolute;left:0;right:0;top:0;height:54%;background:linear-gradient(180deg,#efd8ca,#dbb9ad);clip-path:polygon(0 0,100% 0,50% 100%);z-index:2;transform-origin:center top;backface-visibility:hidden}
+    .envelope-content{z-index:3;position:relative;text-align:center;padding:110px 20px 50px;display:flex;flex-direction:column;align-items:center}
+    .seal-button{display:grid;place-items:center;width:86px;height:86px;margin-bottom:18px;border:4px double rgba(255,226,209,.31);border-radius:50%;background:radial-gradient(circle at 34% 27%,#ae6a77,#71374d 70%,#542438);color:#fff0e7;font:italic 45px/.8 var(--serif);box-shadow:0 14px 30px rgba(86,33,51,.25)}
+    .envelope-content h3{font:500 43px/1 var(--script);color:#743c4b;margin:0 0 8px;transform:rotate(-3deg)}
+    .envelope-content p{font:italic 21px/1.2 var(--serif);color:#825963;margin:0 0 20px}
+    .envelope-content .btn{min-height:47px}
+    .envelope-bottom-mark{position:absolute;bottom:22px;right:26px;font:700 9px/1 var(--sans);letter-spacing:.2em;color:#865f6a;z-index:3}
+    .letter-paper{position:relative;z-index:1;width:min(810px,100%);margin:0 auto;padding:clamp(34px,6.8vw,85px);background:repeating-linear-gradient(0deg,transparent 0,transparent 39px,rgba(118,87,86,.055) 40px),linear-gradient(155deg,#fffdf8,#f8f2e8);border:1px solid #e2d6c9;box-shadow:0 45px 90px rgba(91,63,65,.14),0 10px 24px rgba(91,63,65,.07)}
+    .letter-paper::before{content:'';position:absolute;inset:15px;border:1px solid rgba(144,103,108,.13);pointer-events:none}
+    .paper-head{display:flex;justify-content:space-between;gap:16px;color:#967480;font:700 10px/1.5 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+    .paper-salutation{font:400 clamp(51px,6vw,77px)/1 var(--script);color:#82475b;margin:39px 0 12px}
+    .paper-body{font:400 clamp(24px,2.7vw,31px)/1.52 var(--script);color:#4d3840}
+    .paper-body p{margin:0 0 20px}
+    .paper-signature{display:flex;flex-direction:column;align-items:end;margin-top:38px;text-align:right}
+    .paper-signature strong{font:500 54px/1 var(--script);color:#924e65}
+    .paper-signature small{font:700 9px/1.5 var(--sans);letter-spacing:.19em;color:#97747d;text-transform:uppercase;margin-top:7px}
+    .letter-controls{display:flex;flex-wrap:wrap;gap:11px;margin-top:38px;padding-top:28px;border-top:1px solid rgba(116,74,85,.18)}
+    .letter-controls .btn{min-height:46px;padding-inline:18px;font-size:9px}
+    .letter-note{font:italic 24px/1.1 var(--serif);color:#9c7a7d;text-align:center;margin:26px 0 0}
+    /* Epilogue: quieter and more intimate than the opening. */
+    .end{position:relative;min-height:80svh;display:grid;align-items:center;text-align:center;overflow:hidden;background:radial-gradient(ellipse at center,#4d3142 0%,#241923 47%,#17121a 100%);padding:120px 20px}
+    .end::before{content:'XIX';position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font:400 clamp(270px,43vw,670px)/1 var(--serif);letter-spacing:-.12em;color:rgba(255,245,237,.035);pointer-events:none}
+    .end-inner{position:relative;max-width:880px;margin:auto}
+    .end .eyebrow{justify-content:center;color:var(--rose)}
+    .end h2{font:400 clamp(80px,10.5vw,160px)/.78 var(--serif);letter-spacing:-.055em;margin:30px 0 0}
+    .end h2 em{color:var(--rose);font-weight:400}
+    .end p{font-size:15px;line-height:1.9;color:rgba(250,244,235,.66);max-width:500px;margin:35px auto 35px}
+    .end-small{display:block;font:500 33px/1 var(--script);color:#e7bcb7;margin-top:60px}
+    .site-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px clamp(24px,5vw,80px);color:rgba(250,244,235,.45);font-size:10px;letter-spacing:.13em;text-transform:uppercase;background:#130f16;border-top:1px solid rgba(255,255,255,.08)}
+    .site-footer a{color:var(--rose)}
+    .toast{position:fixed;left:50%;bottom:max(26px,env(safe-area-inset-bottom));z-index:110;min-width:190px;max-width:calc(100vw - 30px);text-align:center;padding:14px 22px;border:1px solid rgba(255,232,224,.3);border-radius:50px;background:rgba(38,25,36,.93);color:#fff4ec;box-shadow:0 16px 40px rgba(0,0,0,.3);font-size:12px;line-height:1.4;opacity:0;transform:translate(-50%,15px);pointer-events:none;transition:opacity .25s,transform .3s}
+    .toast.visible{opacity:1;transform:translate(-50%,0)}
+    .floating-heart{position:fixed;z-index:85;pointer-events:none;font:400 25px/1 var(--serif);color:#ffcad0;filter:drop-shadow(0 0 4px rgba(255,153,167,.4));will-change:transform,opacity}
+    .ambient-petal{position:fixed;z-index:85;pointer-events:none;width:11px;height:19px;border-radius:90% 5% 90% 5%;background:linear-gradient(145deg,#ffd6c8,#b86d87);opacity:.82;will-change:transform,opacity}
+    @media(max-width:1100px){
+      .hero h1{font-size:clamp(74px,9.5vw,123px)}
+      .hero .container{grid-template-columns:1fr .8fr;gap:10px}
+      .portrait-scene{height:550px}
+      .reasons-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    @media(max-width:800px){
+      :root{--page:min(680px,calc(100% - 42px))}
+      .nav a:not(.nav-cta){display:none}
+      .hero{min-height:0}
+      .hero .container{grid-template-columns:1fr;text-align:center;padding-top:143px;padding-bottom:80px;gap:22px}
+      .hero-copy .eyebrow{justify-content:center}
+      .hero h1{font-size:clamp(80px,14.5vw,122px);margin-top:24px}
+      .hero-lede{margin-inline:auto}
+      .hero-actions{justify-content:center}
+      .hero-date{justify-content:center;margin-top:36px}
+      .portrait-scene{height:540px}
+      .portrait-object{width:340px}
+      .portrait-orbit{width:430px}
+      .hero-scroll{display:none}
+      .story-layout{grid-template-columns:1fr;gap:48px}
+      .story-intro{position:static}
+      .story-aside-quote{display:none}
+      .reasons-head{align-items:start;flex-direction:column;gap:14px;margin-bottom:37px}
+      .reasons-subtitle{max-width:500px}
+      .reasons-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .letter-station::before{display:none}
+    }
+    @media(max-width:520px){
+      :root{--page:calc(100% - 36px)}
+      .site-header{padding:16px 18px}
+      .brand-glyph{width:32px;height:32px;font-size:22px}
+      .brand-words b{font-size:9px;letter-spacing:.16em}
+      .nav .nav-cta{padding:11px 13px;font-size:9px}
+      .hero .container{padding-top:139px;padding-bottom:65px}
+      .hero h1{font-size:clamp(64px,16.8vw,91px)}
+      .hero h1 .last-line{margin-left:0}
+      .hero-lede{margin-top:26px;font-size:14px}
+      .hero-actions{flex-direction:column}
+      .hero-actions .btn{width:100%}
+      .hero-date{font-size:9px}
+      .portrait-scene{height:450px}
+      .portrait-object{width:min(300px,73vw)}
+      .portrait-orbit{width:min(395px,96vw)}
+      .portrait-spark{right:-5%;font-size:45px}
+      .portrait-index{right:0;font-size:50px}
+      .interlude{padding:28px 12px}
+      .interlude-inner{gap:12px}
+      .interlude span:not(.asterisk){font-size:19px}
+      .interlude .asterisk{font-size:17px}
+      .section-display{font-size:clamp(60px,14.5vw,86px)}
+      .chapter{padding-block:96px}
+      .story-list h3{font-size:36px}
+      .story-list li{grid-template-columns:32px 1fr;padding:22px 0 27px}
+      .reasons{padding:96px 0}
+      .reasons-list li{min-height:174px;padding:18px 14px 20px;gap:24px}
+      .reasons-list p{font-size:clamp(23px,5.9vw,29px)}
+      .reasons-list li.final-reason p{font-size:31px}
+      .reasons-list li.final-reason::after{font-size:65px;right:14px}
+      .letter-chapter{padding:95px 0}
+      .letter-intro{margin-bottom:42px}
+      .letter-intro .section-display{font-size:clamp(65px,15vw,90px)}
+      .letter-envelope{min-height:350px}
+      .envelope-content{padding-top:90px}
+      .seal-button{height:72px;width:72px;font-size:39px}
+      .letter-paper{padding:45px 26px 40px}
+      .letter-paper::before{inset:10px}
+      .paper-head{font-size:9px;flex-direction:column;gap:5px}
+      .paper-salutation{margin-top:28px;font-size:61px}
+      .paper-body{font-size:25px;line-height:1.5}
+      .letter-controls{flex-direction:column}
+      .letter-controls .btn{width:100%}
+      .end{padding:96px 16px;min-height:70svh}
+      .end h2{font-size:clamp(72px,17vw,110px)}
+      .site-footer{flex-direction:column;text-align:center;gap:9px}
+    }
+    @media(max-width:420px){
+      .brand-words{display:none}
+    }
+    @media(max-width:360px){
+      .brand-words small{display:none}
+      .hero h1{font-size:62px}
+      .reasons-list li{min-height:190px}
+      .reasons-list p{font-size:22px}
+      .paper-body{font-size:23px}
+    }
+    @media(hover:none){.portrait-object:hover{transform:rotate(3.5deg)}.btn:hover{transform:none}}
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+      #cosmos{display:none}
+    }
+    @media print{
+      @page{margin:17mm}
+      :root{color-scheme:light}
+      html,body{background:#fff!important;color:#111!important}
+      .site-header,.grain,.progress-track,.hero,.interlude,.chapter,.reasons,.end,.site-footer,.toast,.letter-intro,.letter-envelope,.letter-controls,.letter-note{display:none!important}
+      .letter-chapter{padding:0!important;background:white!important}
+      .letter-station,.letter-paper{margin:0;width:100%;max-width:none;background:white!important;border:0;box-shadow:none!important}
+      .letter-paper{padding:10px!important}
+      .letter-paper::before{display:none}
+      .paper-body{font-size:21px;color:#111}
+      .paper-signature strong,.paper-salutation{color:#444}
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to the story</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header" id="siteHeader">
+    <a class="brand" href="#home" aria-label="Back to the beginning">
+      <span class="brand-glyph" aria-hidden="true">xix</span>
+      <span class="brand-words"><b>Our little forever</b><small>a love letter in nineteen chapters</small></span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#story">Our story</a><a href="#reasons">19 reasons</a><a class="nav-cta" href="#letter">Open your letter ↗</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="heroTitle">
+      <canvas id="cosmos" aria-hidden="true"></canvas>
+      <div class="hero-stars" aria-hidden="true"></div><div class="hero-engraving" aria-hidden="true">19</div>
+      <div class="container">
+        <div class="hero-copy">
+          <div class="eyebrow" data-intro>October 18, 2026 <span aria-hidden="true">✳</span> Month nineteen</div>
+          <h1 id="heroTitle" data-intro><span>Nineteen</span><span>months.</span><span class="last-line"><em>Still you.</em></span></h1>
+          <p class="hero-lede" data-intro>Somehow, all the ordinary days became a story I never want to stop writing. Nineteen months of laughter, patience, growing, and finding my way back to you.</p>
+          <div class="hero-actions" data-intro><a class="btn btn-light" href="#story">Step into our story <span aria-hidden="true">↘</span></a><button class="btn btn-outline" type="button" id="heroLove">A little love for you ♡</button></div>
+          <div class="hero-date" data-intro><span>One year. Seven months. A thousand little moments.</span><i aria-hidden="true"></i><span class="asterisk" aria-hidden="true">✳</span></div>
+        </div>
+        <div class="portrait-scene" aria-label="A photograph of us together">
+          <div class="portrait-orbit" aria-hidden="true"></div>
+          <div class="portrait-object" id="portraitObject" data-intro>
+            <div class="portrait-arch">
+              <div class="portrait-placeholder" aria-hidden="true">my favorite place<br>is beside you</div>
+              <img id="couplePhoto" alt="A photograph of us together" fetchpriority="high" src="https://raw.githubusercontent.com/senaganlex/senaganlex.github.io/refs/heads/main/18thMonthsaryLetter/assets/2026-09-18%2015.21.44.jpg">
+            </div>
+            <div class="portrait-plaque"><span>my favorite place is beside you ♡</span><small>the memories we keep closest</small></div>
+            <span class="portrait-spark" aria-hidden="true">✳</span><span class="portrait-index" aria-hidden="true">19</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">Scroll, love. There’s more.</div>
+    </section>
+    <div class="interlude" aria-label="A little piece of us">
+      <div class="interlude-inner"><span class="asterisk" aria-hidden="true">✳</span><span>the beautiful thing about us is that we keep choosing us.</span><span class="asterisk" aria-hidden="true">✳</span></div>
+    </div>
+    <section class="chapter" id="story" aria-labelledby="storyTitle">
+      <div class="chapter-decoration" aria-hidden="true">I.</div>
+      <div class="container story-layout">
+        <div class="story-intro reveal">
+          <span class="chapter-label">Chapter I / The little moments</span>
+          <h2 class="section-display" id="storyTitle">All the<br>ways we <em>became us.</em></h2>
+          <p class="section-description">Not a perfect story. Our story. The soft days, the difficult ones, the silly conversations, and all the ordinary moments that somehow became everything.</p>
+          <p class="story-aside-quote">“Somewhere between the small things, you began to feel like home.”</p>
+        </div>
+        <ol class="story-list">
+          <li class="reveal"><span class="story-num">01</span><div><h3>You became my favorite person.</h3><p>Somewhere between ordinary conversations and small moments, being with you started to feel like home.</p></div></li>
+          <li class="reveal"><span class="story-num">02</span><div><h3>You make heavy days lighter.</h3><p>Kana imong tinuod nga katawa remains one of my favorite sounds — the kind that can change the mood of an entire day.</p></div></li>
+          <li class="reveal"><span class="story-num">03</span><div><h3>Love is also patience.</h3><p>We have had trials and misunderstandings, but I still want to meet those days with gentleness, patience, and us.</p></div></li>
+          <li class="reveal"><span class="story-num">04</span><div><h3>Peace looks like sitting beside you.</h3><p>Late-night talks, soft kisses, comfortable silence — the small things are often the memories I keep closest.</p></div></li>
+          <li class="reveal"><span class="story-num">05</span><div><h3>I still choose us.</h3><p>Not because everything is easy, but because every version of us has taught me that love is something we keep choosing.</p></div></li>
+          <li class="reveal"><span class="story-num">06</span><div><h3>There is still so much ahead.</h3><p>More laughter. More softness. More growing. More memories we have not even met yet.</p></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="reasons" id="reasons" aria-labelledby="reasonsTitle">
+      <div class="container">
+        <header class="reasons-head reveal"><div><span class="chapter-label" style="color:#d9a4aa">Chapter II / A little love inventory</span><h2 class="section-display" id="reasonsTitle">Nineteen reasons.<br><em>One person.</em></h2></div><p class="reasons-subtitle">Some things deserve to be said again and again.</p></header>
+        <ol class="reasons-list" aria-label="Nineteen things I love about you">
+          <li class="reveal"><span class="reason-no">01 / XIX</span><p>Your laugh when it is completely real.</p></li>
+          <li class="reveal"><span class="reason-no">02 / XIX</span><p>The comfort of simply being beside you.</p></li>
+          <li class="reveal"><span class="reason-no">03 / XIX</span><p>Our conversations that somehow run late.</p></li>
+          <li class="reveal"><span class="reason-no">04 / XIX</span><p>The softness we find after hard moments.</p></li>
+          <li class="reveal"><span class="reason-no">05 / XIX</span><p>Your little moods I have learned to understand.</p></li>
+          <li class="reveal"><span class="reason-no">06 / XIX</span><p>How ordinary days feel less ordinary with you.</p></li>
+          <li class="reveal"><span class="reason-no">07 / XIX</span><p>The way we keep finding our way back.</p></li>
+          <li class="reveal"><span class="reason-no">08 / XIX</span><p>Every soft kiss I still want more of.</p></li>
+          <li class="reveal"><span class="reason-no">09 / XIX</span><p>The memories only the two of us understand.</p></li>
+          <li class="reveal"><span class="reason-no">10 / XIX</span><p>The person I get to be when I am with you.</p></li>
+          <li class="reveal"><span class="reason-no">11 / XIX</span><p>Your presence on days I need peace.</p></li>
+          <li class="reveal"><span class="reason-no">12 / XIX</span><p>The silly things that become our favorite stories.</p></li>
+          <li class="reveal"><span class="reason-no">13 / XIX</span><p>Growing beside you, not just growing older.</p></li>
+          <li class="reveal"><span class="reason-no">14 / XIX</span><p>Learning each other again and again.</p></li>
+          <li class="reveal"><span class="reason-no">15 / XIX</span><p>The plans we have not lived yet.</p></li>
+          <li class="reveal"><span class="reason-no">16 / XIX</span><p>Choosing patience when love needs it.</p></li>
+          <li class="reveal"><span class="reason-no">17 / XIX</span><p>All the small ways you became part of my days.</p></li>
+          <li class="reveal"><span class="reason-no">18 / XIX</span><p>You — still, always, and every day after this.</p></li>
+          <li class="final-reason reveal"><span class="reason-no">19 / XIX · One more for this month</span><p>Even on our busiest days, the future I am working toward still has you in it.</p></li>
+        </ol>
+      </div>
+    </section>
+    <section class="letter-chapter" id="letter" aria-labelledby="letterTitle">
+      <div class="container">
+        <header class="letter-intro reveal"><span class="chapter-label">Chapter III / Just between you and me</span><h2 class="section-display" id="letterTitle">For you, <em>my baby.</em></h2><p>No grand speech. Just the words I want you to keep close, on our nineteenth month and on all the days after it.</p></header>
+        <div class="letter-station reveal" id="letterStation">
+          <div class="letter-envelope" id="letterEnvelope" hidden>
+            <div class="envelope-flap" id="envelopeFlap" aria-hidden="true"></div>
+            <div class="envelope-content"><span class="seal-button" aria-hidden="true">♡</span><h3>for you, my baby</h3><p>a little piece of my heart, folded into words</p><button class="btn btn-dark" id="openEnvelope" type="button" aria-controls="letterPaper" aria-expanded="false">Open your letter <span aria-hidden="true">↗</span></button></div>
+            <span class="envelope-bottom-mark" aria-hidden="true">SEALED WITH LOVE · XIX</span>
+          </div>
+          <article class="letter-paper" id="letterPaper" aria-labelledby="letterGreeting">
+            <div class="paper-head"><span>October 18, 2026 · Our nineteenth month</span><span>Always, from me to you</span></div>
+            <h3 class="paper-salutation" id="letterGreeting" tabindex="-1">Baby,</h3>
+            <div class="paper-body" id="letterBody">
+              <p>Nineteen months in, Our 18th Month is where our trial together, went on the worst misunderstanding, failed communication, it is where nga gi try tang duha my by nakita atong vulnerable sides and started to undestand each other better, and through communication we becoming the best versions of ourselves for each other, so we will hope that our 19th month will be full of laughter, love, mwuah mwuah, ugh ugh dzaaaaaaaaa kana, and continue to understand each other better and be better for each other</p>
+              <p>But still, here's to more late-night conversations, more soft kisses, more moments we'll never forget, and more love that just keeps growing between us. Every little thing feels precious when it's with you, and I can't wait for all the memories we still have left to make.</p>
+              <p>I love you always, in every way, every single day my babyyyyyyyyyyyyyyyyyyyy 💕</p>
+            </div>
+            <div class="paper-signature"><strong>Always yours ♡</strong><small>Nineteen months & endlessly counting</small></div>
+            <div class="letter-controls"><button type="button" class="btn btn-dark" id="letterLove">Send some love ♡</button><button type="button" class="btn btn-paper" id="celebrate">A little celebration ✳</button><button type="button" class="btn btn-paper" id="copyLetter">Copy this letter ↗</button><button type="button" class="btn btn-paper" id="closeEnvelope">Fold it again ↶</button></div>
+          </article>
+          <p class="letter-note">take your time reading, my baby ♡</p>
+        </div>
+      </div>
+    </section>
+    <section class="end" aria-labelledby="endTitle"><div class="end-inner reveal"><span class="eyebrow">The end of this page. Never the end of us.</span><h2 id="endTitle">And the next.<br><em>And the next.</em></h2><p>More soft days, more growing, more memories, more finding each other — one ordinary, beautiful day at a time.</p><a href="#home" class="btn btn-outline">Back to the beginning <span aria-hidden="true">↑</span></a><span class="end-small">still you, always you.</span></div></section>
+  </main>
+  <footer class="site-footer"><span>Made with all my baby · XIX</span><span>October 18, 2026 · <a href="#letter">Read your letter again ♡</a></span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}
+  </script>
+  <script type="module">
+    // Core interactions intentionally do not depend on CDNs, GSAP or WebGL.
+    const q = (s) => document.querySelector(s);
+    const reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const reduced = () => reduceQuery.matches;
+    const envelope = q('#letterEnvelope');
+    const paper = q('#letterPaper');
+    const flap = q('#envelopeFlap');
+    const openButton = q('#openEnvelope');
+    const toast = q('#toast');
+    const hero = q('#home');
+    let gsap = null, toastTimeout, isOpen = false, letterBusy = false;
+    function notify(message){
+      toast.textContent = message; toast.classList.add('visible');
+      clearTimeout(toastTimeout); toastTimeout = setTimeout(() => toast.classList.remove('visible'), 2800);
+    }
+    // Native letter remains visible whenever scripts are disabled or fail to parse.
+    envelope.hidden = false;
+    paper.hidden = true;
+    function setOpenState(open){isOpen = open;openButton.setAttribute('aria-expanded',String(open));}
+    function openLetter(){
+      if (isOpen || letterBusy) return;
+      letterBusy = true;
+      const finish = () => {
+        envelope.hidden = true;paper.hidden = false;setOpenState(true);letterBusy = false;
+        if(gsap && !reduced()){
+          gsap.fromTo(paper,{autoAlpha:0,y:26,scale:.97},{autoAlpha:1,y:0,scale:1,duration:.95,ease:'power3.out',clearProps:'all',onComplete:()=>q('#letterGreeting').focus({preventScroll:true})});
+        } else q('#letterGreeting').focus({preventScroll:true});
+        notify('This one is just for you, my baby ♡');
+        sendLove(innerWidth*.52,innerHeight*.53,13);
+      };
+      if(gsap && !reduced()){
+        gsap.to(flap,{rotateX:-170,duration:.65,ease:'power2.inOut',onComplete:()=>{
+          gsap.to(envelope,{y:22,autoAlpha:0,scale:.97,duration:.42,ease:'power2.in',onComplete:()=>{gsap.set(envelope,{clearProps:'all'});gsap.set(flap,{clearProps:'all'});finish();}});
+        }});
+      } else finish();
+    }
+    function closeLetter(){
+      if(!isOpen || letterBusy)return;
+      letterBusy = true;
+      const finish=()=>{
+        paper.hidden=true;envelope.hidden=false;setOpenState(false);letterBusy=false;
+        if(gsap && !reduced())gsap.fromTo(envelope,{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:.6,ease:'power2.out',clearProps:'all'});
+        openButton.focus({preventScroll:true});notify('Safely tucked away, until you read it again.');
+      };
+      if(gsap&&!reduced())gsap.to(paper,{autoAlpha:0,y:16,duration:.33,onComplete:()=>{gsap.set(paper,{clearProps:'all'});finish();}});
+      else finish();
+    }
+    openButton.addEventListener('click',openLetter);
+    q('#closeEnvelope').addEventListener('click',closeLetter);
+    function sendLove(x,y,count=20){
+      if(reduced()){notify('A little love, sent your way ♡');return;}
+      const glyphs=['♡','♥','✳','✦'];
+      for(let i=0;i<Math.min(count,34);i++){
+        const node=document.createElement('span');node.className='floating-heart';node.textContent=glyphs[i%glyphs.length];
+        node.style.left=`${Math.max(5,Math.min(innerWidth-30,x))}px`;
+        node.style.top=`${Math.max(15,Math.min(innerHeight-30,y))}px`;
+        node.style.fontSize=`${16+Math.random()*22}px`;document.body.appendChild(node);
+        const dx=(Math.random()-.5)*250,dy=-105-Math.random()*210,turn=(Math.random()-.5)*110;
+        if(gsap){
+          const life=1.55+Math.random()*.8;
+          gsap.fromTo(node,{x:0,y:8,rotation:0,scale:.4},{x:dx,y:dy,rotation:turn,scale:1.25,duration:life,ease:'power2.out',onComplete:()=>node.remove()});
+          gsap.timeline().fromTo(node,{opacity:0},{opacity:1,duration:.2}).to(node,{opacity:0,duration:.6},life-.7);
+        }
+        else{node.animate([{transform:'translate(0,8px) scale(.4)',opacity:0},{opacity:1,offset:.18},{transform:`translate(${dx}px,${dy}px) rotate(${turn}deg) scale(1.2)`,opacity:0}],{duration:1900+Math.random()*800,easing:'ease-out'}).onfinish=()=>node.remove();}
+      }
+    }
+    function celebrate(){
+      if(reduced()){notify('Happy 19th monthsary, baby ♡');return;}
+      for(let i=0;i<36;i++){
+        const petal=document.createElement('span');petal.className='ambient-petal';
+        petal.style.left=`${Math.random()*100}vw`;petal.style.top='-30px';document.body.appendChild(petal);
+        const duration=4200+Math.random()*2800,dx=(Math.random()-.5)*220,turn=(Math.random()-.5)*1080;
+        petal.animate([{transform:'translate(0,-20px) rotate(0deg)',opacity:0},{opacity:.86,offset:.15},{transform:`translate(${dx}px,${innerHeight+100}px) rotate(${turn}deg)`,opacity:0}],{duration,delay:Math.random()*900,easing:'linear'}).onfinish=()=>petal.remove();
+      }
+      sendLove(innerWidth*.5,innerHeight*.77,28);notify('Happy nineteenth monthsary, my baby ♡');
+    }
+    q('#heroLove').addEventListener('click',()=>sendLove(innerWidth*.3,innerHeight*.72));
+    q('#letterLove').addEventListener('click',()=>sendLove(innerWidth*.57,innerHeight*.74,26));
+    q('#celebrate').addEventListener('click',celebrate);
+    q('#copyLetter').addEventListener('click',async()=>{
+      const text=`Baby,\n\n${[...q('#letterBody').querySelectorAll('p')].map(p=>p.textContent.trim()).join('\n\n')}\n\nAlways yours ♡`;
+      try{
+        if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(text);
+        else{
+          const field=document.createElement('textarea');field.value=text;field.style.position='fixed';field.style.opacity='0';document.body.appendChild(field);field.select();
+          const okay=document.execCommand('copy');field.remove();if(!okay)throw new Error('Clipboard unavailable');
+        }
+        notify('Your letter has been copied ♡');
+      }catch{notify('Copy is unavailable here. You can select the letter text instead.');}
+    });
+    const photo=q('#couplePhoto');
+    const markMissing=()=>q('#portraitObject').classList.add('photo-missing');
+    photo.addEventListener('error',markMissing);
+    if(photo.complete&&!photo.naturalWidth)markMissing();
+    const header=q('#siteHeader'),bar=q('#progressBar');
+    let scrollPending=false;
+    function syncScroll(){const available=document.documentElement.scrollHeight-innerHeight;const ratio=available>0?Math.min(1,scrollY/available):0;header.classList.toggle('scrolled',scrollY>24);bar.style.transform=`scaleX(${ratio})`;scrollPending=false;}
+    addEventListener('scroll',()=>{if(!scrollPending){scrollPending=true;requestAnimationFrame(syncScroll)}},{passive:true});
+    addEventListener('resize',syncScroll,{passive:true});syncScroll();
+    let wasEnvelopeHidden,wasPaperHidden;
+    addEventListener('beforeprint',()=>{wasEnvelopeHidden=envelope.hidden;wasPaperHidden=paper.hidden;envelope.hidden=true;paper.hidden=false;});
+    addEventListener('afterprint',()=>{envelope.hidden=wasEnvelopeHidden;paper.hidden=wasPaperHidden;});
+    // Entrance + on-scroll typography animation: progressive GSAP enhancement.
+    async function initGSAP(){
+      if(reduced())return;
+      try{
+        const mod=await import('https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm');
+        gsap=mod.gsap||mod.default?.gsap||mod.default;
+        if(!gsap?.fromTo)throw new Error('GSAP export unavailable');
+        const intro=[...document.querySelectorAll('[data-intro]')];
+        intro.forEach(el=>{el.style.willChange='opacity,transform'});
+        gsap.fromTo(intro,{opacity:0,y:27},{opacity:1,y:0,duration:1.15,stagger:.13,ease:'power3.out',clearProps:'all'});
+        const reveals=[...document.querySelectorAll('.reveal')];
+        if(!('IntersectionObserver' in window))return;
+        const observer=new IntersectionObserver((entries)=>{
+          entries.forEach(entry=>{if(!entry.isIntersecting)return;observer.unobserve(entry.target);
+            gsap.fromTo(entry.target,{opacity:0,y:35},{opacity:1,y:0,duration:.8,ease:'power2.out',clearProps:'all'});
+          });
+        },{threshold:.09,rootMargin:'0px 0px -25px 0px'});
+        reveals.forEach(el=>observer.observe(el));
+      }catch(err){console.info('GSAP optional; native animations retained.',err);}
+    }
+    // Custom WebGL2 shaders render softly blooming constellations and a luminous orbit.
+    // Only this atmospheric scene is postprocessed; DOM text and photograph remain crisp.
+    async function initWebGL(){
+      if(reduced())return;
+      const canvas=q('#cosmos');let context;
+      try{context=canvas.getContext('webgl2',{alpha:true,antialias:false,premultipliedAlpha:false,powerPreference:'low-power'});}catch{}
+      if(!context){canvas.hidden=true;return;}
+      try{
+        const THREE=await import('three');
+        const scene=new THREE.Scene();
+        const camera=new THREE.PerspectiveCamera(43,1,.1,70);camera.position.set(0,0,10);
+        const renderer=new THREE.WebGLRenderer({canvas,context,alpha:true,antialias:false,powerPreference:'low-power'});
+        renderer.outputColorSpace=THREE.SRGBColorSpace;
+        renderer.toneMapping=THREE.ACESFilmicToneMapping;
+        const clock=new THREE.Clock();
+        const group=new THREE.Group();scene.add(group);
+        // GLSL shader #1: translucent, iridescent atmospheric sphere.
+        const orbGeometry=new THREE.SphereGeometry(2.22,64,48);
+        const orbMaterial=new THREE.ShaderMaterial({
+          transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+          uniforms:{uTime:{value:0}},
+          vertexShader:`varying vec3 vNormal; varying vec3 vPosition; varying vec2 vUv; void main(){vUv=uv;vNormal=normalize(normalMatrix*normal);vPosition=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+          fragmentShader:`precision highp float;varying vec3 vNormal;varying vec3 vPosition;varying vec2 vUv;uniform float uTime;
+            void main(){float fresnel=pow(1.-abs(dot(normalize(vNormal),vec3(0.,0.,1.))),3.5);
+              float waves=sin(vUv.y*33.+sin(vUv.x*19.+uTime*.11)*3.-uTime*.21)*.5+.5;
+              float filaments=pow(waves,9.)*.18;
+              vec3 rose=vec3(.72,.30,.43),gold=vec3(1.,.72,.50);
+              vec3 color=mix(rose,gold,smoothstep(.12,.93,vUv.y));
+              float a=.017+fresnel*.29+filaments*fresnel;
+              gl_FragColor=vec4(color*(1.1+fresnel*.6),a);}`
+        });
+        const orb=new THREE.Mesh(orbGeometry,orbMaterial);group.add(orb);
+        // Delicate orbital paths provide depth and a restrained highlight for bloom.
+        const ringGeo=new THREE.TorusGeometry(2.75,.009,5,230);
+        const ringMat=new THREE.MeshBasicMaterial({color:0xe6baaa,transparent:true,opacity:.25,blending:THREE.AdditiveBlending,depthWrite:false});
+        const ring1=new THREE.Mesh(ringGeo,ringMat);ring1.rotation.set(.63,.41,.14);group.add(ring1);
+        const ring2=new THREE.Mesh(ringGeo,ringMat.clone());ring2.rotation.set(1.12,.17,-.5);group.add(ring2);
+        const count=innerWidth<700?150:370;
+        const coords=new Float32Array(count*3),sizes=new Float32Array(count),phases=new Float32Array(count);
+        for(let i=0;i<count;i++){
+          const a=Math.random()*Math.PI*2,r=2.5+Math.random()*5.2;
+          coords[i*3]=Math.cos(a)*r;coords[i*3+1]=Math.sin(a)*r*.75;coords[i*3+2]=(Math.random()-.5)*5;
+          sizes[i]=1.1+Math.random()*3.0;phases[i]=Math.random()*Math.PI*2;
+        }
+        const dustGeo=new THREE.BufferGeometry();dustGeo.setAttribute('position',new THREE.BufferAttribute(coords,3));dustGeo.setAttribute('aSize',new THREE.BufferAttribute(sizes,1));dustGeo.setAttribute('aPhase',new THREE.BufferAttribute(phases,1));
+        // GLSL shader #2: tiny organic stars, with point-sprite Gaussian falloff.
+        const dustMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+          uniforms:{uTime:{value:0},uPixel:{value:1}},
+          vertexShader:`attribute float aSize;attribute float aPhase;uniform float uTime;uniform float uPixel;varying float vTwinkle;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;gl_PointSize=min(19.,aSize*uPixel*(17./max(2.,-mv.z)));vTwinkle=.50+.50*sin(uTime*.75+aPhase);}`,
+          fragmentShader:`precision mediump float;varying float vTwinkle;void main(){vec2 p=gl_PointCoord-.5;float d=dot(p,p);float a=exp(-d*17.)*(.19+.56*vTwinkle);gl_FragColor=vec4(1.,.75,.74,a);}`
+        });
+        const dust=new THREE.Points(dustGeo,dustMat);scene.add(dust);
+        let composer=null;
+        // Selective cinematic bloom is limited to the canvas and lower-power devices skip it.
+        const deviceMemory=navigator.deviceMemory||4;
+        if(innerWidth>=780 && deviceMemory>=4){
+          try{
+            const [{EffectComposer},{RenderPass},{UnrealBloomPass},{OutputPass}]=await Promise.all([
+              import('three/addons/postprocessing/EffectComposer.js'),
+              import('three/addons/postprocessing/RenderPass.js'),
+              import('three/addons/postprocessing/UnrealBloomPass.js'),
+              import('three/addons/postprocessing/OutputPass.js')
+            ]);
+            composer=new EffectComposer(renderer);
+            composer.addPass(new RenderPass(scene,camera));
+            composer.addPass(new UnrealBloomPass(new THREE.Vector2(1,1),.32,.52,.85));
+            composer.addPass(new OutputPass());
+          }catch(err){console.info('Bloom unavailable; standard WebGL rendering retained.',err);composer?.dispose?.();composer=null;}
+        }
+        let running=true,visible=true,frame=0,disposed=false;const pointer={x:0,y:0};
+        function resize(){
+          const width=hero.clientWidth,height=hero.clientHeight;
+          if(!width||!height)return;
+          const dpr=Math.min(devicePixelRatio||1,innerWidth<780?1.25:1.65);
+          renderer.setPixelRatio(dpr);renderer.setSize(width,height,false);
+          camera.aspect=width/height;camera.updateProjectionMatrix();composer?.setSize(width,height);
+          dustMat.uniforms.uPixel.value=dpr;
+          group.position.x=width<800?0:1.73;group.position.y=width<800?-1.05:.08;
+          group.scale.setScalar(width<550?.68:width<800?.9:1);
+        }
+        function render(){
+          if(!running||disposed)return;frame=requestAnimationFrame(render);
+          if(!visible||document.hidden)return;
+          const t=clock.getElapsedTime();orbMaterial.uniforms.uTime.value=t;dustMat.uniforms.uTime.value=t;
+          group.rotation.y+=((pointer.x*.07)-group.rotation.y)*.018;
+          group.rotation.x+=((pointer.y*.055)-group.rotation.x)*.018;
+          ring1.rotation.z=t*.016;ring2.rotation.z=-t*.011;
+          dust.rotation.z=t*.002;
+          if(composer)composer.render();else renderer.render(scene,camera);
+        }
+        const onPointer=(event)=>{pointer.x=(event.clientX/Math.max(innerWidth,1)-.5)*2;pointer.y=(event.clientY/Math.max(innerHeight,1)-.5)*2};
+        const onResize=()=>resize();
+        const onLoss=(event)=>{event.preventDefault();running=false;cancelAnimationFrame(frame);canvas.hidden=true};
+        const intersect=new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??false;},{threshold:0});
+        intersect.observe(hero);
+        window.addEventListener('pointermove',onPointer,{passive:true});window.addEventListener('resize',onResize,{passive:true});
+        canvas.addEventListener('webglcontextlost',onLoss,{once:true});
+        const onMotion=()=>{if(reduced()){running=false;cancelAnimationFrame(frame);canvas.hidden=true;}};
+        reduceQuery.addEventListener?.('change',onMotion);
+        resize();render();
+        addEventListener('pagehide',()=>{
+          disposed=true;running=false;cancelAnimationFrame(frame);intersect.disconnect();
+          window.removeEventListener('pointermove',onPointer);window.removeEventListener('resize',onResize);
+          reduceQuery.removeEventListener?.('change',onMotion);
+          orbGeometry.dispose();orbMaterial.dispose();ringGeo.dispose();ringMat.dispose();ring2.material.dispose();dustGeo.dispose();dustMat.dispose();composer?.dispose?.();renderer.dispose();
+        },{once:true});
+      }catch(err){canvas.hidden=true;console.info('WebGL scene unavailable; CSS artwork retained.',err);}
+    }
+    // Async enhancement startup does not block the letter or content.
+    void initGSAP();void initWebGL();
+  </script>
+</body>
+</html>
